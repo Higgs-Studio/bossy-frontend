@@ -28,10 +28,11 @@ export default async function DashboardPage() {
 
   // Check if task is missed (no check-in by end of day)
   const today = new Date().toISOString().split('T')[0];
-  const isMissed =
+  const isMissed = Boolean(
     todayTask &&
     !checkIn &&
-    todayTask.task_date < today;
+    todayTask.task_date < today
+  );
 
   return (
     <DashboardContent
