@@ -21,7 +21,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   );
 
   return (
-    <div className="min-h-[100dvh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-50 relative overflow-hidden">
+    <div className="min-h-[100dvh] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-50 relative overflow-hidden">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center mb-8">
@@ -29,12 +29,12 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             Bossy
           </h1>
         </div>
-        <h2 className="text-center text-4xl font-bold text-slate-900 mb-2">
+        <h2 className="text-center text-3xl sm:text-4xl font-bold text-slate-900 mb-2">
           {mode === 'signin'
             ? 'Welcome Back'
             : 'Hire Your AI Boss'}
         </h2>
-        <p className="text-center text-slate-600 mb-8">
+        <p className="text-center text-sm sm:text-base text-slate-600 mb-8">
           {mode === 'signin'
             ? 'Your AI accountability boss is waiting'
             : 'Start your AI-powered accountability journey'}
@@ -42,7 +42,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
       </div>
 
       <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <div className="bg-white rounded-2xl shadow-xl border-2 border-slate-200 p-8">
+        <div className="bg-white rounded-2xl shadow-xl border-2 border-slate-200 p-6 sm:p-8">
           <form className="space-y-6" action={formAction}>
           <input type="hidden" name="redirect" value={redirect || ''} />
           <input type="hidden" name="priceId" value={priceId || ''} />

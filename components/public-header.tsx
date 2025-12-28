@@ -1,7 +1,27 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { MobileMenu } from '@/components/mobile-menu';
 
 export function PublicHeader() {
+  const navLinks = [
+    { href: '/#features', label: 'Features' },
+    { href: '/#how-it-works', label: 'How It Works' },
+    { href: '/pricing', label: 'Pricing' },
+  ];
+
+  const mobileActions = (
+    <>
+      <Button variant="ghost" asChild className="w-full justify-start min-h-[44px]">
+        <Link href="/sign-in">Sign In</Link>
+      </Button>
+      <Button asChild className="w-full min-h-[44px]">
+        <Link href="/sign-up">Get Started</Link>
+      </Button>
+    </>
+  );
+
   return (
     <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,7 +54,7 @@ export function PublicHeader() {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
           </nav>
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <Button variant="ghost" asChild>
               <Link href="/sign-in">Sign In</Link>
             </Button>
@@ -42,6 +62,7 @@ export function PublicHeader() {
               <Link href="/sign-up">Get Started</Link>
             </Button>
           </div>
+          <MobileMenu links={navLinks} actions={mobileActions} />
         </div>
       </div>
     </header>

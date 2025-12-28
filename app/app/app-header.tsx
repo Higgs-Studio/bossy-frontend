@@ -1,81 +1,61 @@
 'use client';
 
 import Link from 'next/link';
-import { Suspense } from 'react';
-import { Button } from '@/components/ui/button';
-import { PublicUserMenu } from './public-user-menu';
 import { MobileMenu } from '@/components/mobile-menu';
 
-function Header() {
-  const navLinks = [
-    { href: '/#features', label: 'Features' },
-    { href: '/#how-it-works', label: 'How It Works' },
-    { href: '/pricing', label: 'Pricing' },
-  ];
+interface AppHeaderProps {
+  userMenu: React.ReactNode;
+}
 
-  const mobileActions = (
-    <>
-      <Button variant="ghost" asChild className="w-full justify-start min-h-[44px]">
-        <Link href="/sign-in">Sign In</Link>
-      </Button>
-      <Button asChild className="w-full min-h-[44px]">
-        <Link href="/sign-up">Get Started</Link>
-      </Button>
-    </>
-  );
+export function AppHeader({ userMenu }: AppHeaderProps) {
+  const navLinks = [
+    { href: '/app/dashboard', label: 'Dashboard' },
+    { href: '/app/goal', label: 'Goal' },
+    { href: '/app/boss', label: 'Boss' },
+  ];
 
   return (
     <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center group">
+          <Link href="/app/dashboard" className="flex items-center group">
             <span className="text-xl font-bold text-slate-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-200">
               Bossy
             </span>
           </Link>
           <nav className="hidden md:flex items-center space-x-8">
-            <Link 
-              href="/#features" 
+            <Link
+              href="/app/dashboard"
               className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors relative group"
             >
-              Features
+              Dashboard
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
-            <Link 
-              href="/#how-it-works" 
+            <Link
+              href="/app/goal"
               className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors relative group"
             >
-              How It Works
+              Goal
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
-            <Link 
-              href="/pricing" 
+            <Link
+              href="/app/boss"
               className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors relative group"
             >
-              Pricing
+              Boss
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
           </nav>
-          <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/sign-in">Sign In</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/sign-up">Get Started</Link>
-            </Button>
+          <div className="hidden md:flex items-center">
+            {userMenu}
           </div>
-          <MobileMenu links={navLinks} actions={mobileActions} />
+          <div className="md:hidden flex items-center gap-2">
+            {userMenu}
+            <MobileMenu links={navLinks} />
+          </div>
         </div>
       </div>
     </header>
   );
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="flex flex-col min-h-screen">
-      <Header />
-      {children}
-    </section>
-  );
-}

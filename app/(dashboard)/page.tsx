@@ -12,7 +12,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden bg-gradient-to-br from-white via-indigo-50/30 to-white">
+      <section className="relative py-12 sm:py-16 lg:py-24 xl:py-32 overflow-hidden bg-gradient-to-br from-white via-indigo-50/30 to-white">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
@@ -27,14 +27,14 @@ export default function HomePage() {
               </div>
               <span className="text-sm font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{t.hero?.badge || 'AI-Powered Accountability Boss'}</span>
             </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight mb-6">
               {t.hero?.title || 'Hire Your Personal'}
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mt-2">{t.hero?.titleHighlight || 'AI Accountability Boss'}</span>
             </h1>
-            <p className="text-xl sm:text-2xl text-slate-600 mb-6 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl lg:text-2xl text-slate-600 mb-6 leading-relaxed max-w-3xl mx-auto">
               {t.hero?.subtitle || 'Stop setting goals you never complete. Your AI boss holds you accountable every single day.'}
             </p>
-            <p className="text-lg text-slate-500 mb-10 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-slate-500 mb-10 max-w-2xl mx-auto">
               {t.hero?.description || 'No negotiations. No excuses. Just consistent daily action and real results.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -59,7 +59,7 @@ export default function HomePage() {
                 </Link>
               </Button>
             </div>
-            <div className="flex items-center justify-center gap-8 text-sm text-slate-600">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm sm:text-base text-slate-600">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-indigo-600" />
                 <span>{t.hero?.freeToStart || 'Free to start'}</span>
@@ -78,35 +78,35 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-gradient-to-r from-slate-900 via-indigo-900 to-slate-900">
+      <section className="py-12 sm:py-16 bg-gradient-to-r from-slate-900 via-indigo-900 to-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-2xl font-bold text-white mb-2">{t.stats?.title || 'Your AI Boss Never Sleeps'}</h2>
-            <p className="text-indigo-200">{t.stats?.subtitle || 'Consistent accountability, 24/7 tracking, zero tolerance for excuses'}</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">{t.stats?.title || 'Your AI Boss Never Sleeps'}</h2>
+            <p className="text-sm sm:text-base text-indigo-200">{t.stats?.subtitle || 'Consistent accountability, 24/7 tracking, zero tolerance for excuses'}</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2">98%</div>
-              <div className="text-slate-300">{t.stats?.completionRate || 'Completion Rate'}</div>
+              <div className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2">98%</div>
+              <div className="text-sm sm:text-base text-slate-300">{t.stats?.completionRate || 'Completion Rate'}</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2">10K+</div>
-              <div className="text-slate-300">{t.stats?.usersAccountable || 'Users Accountable'}</div>
+              <div className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2">10K+</div>
+              <div className="text-sm sm:text-base text-slate-300">{t.stats?.usersAccountable || 'Users Accountable'}</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2">50K+</div>
-              <div className="text-slate-300">{t.stats?.goalsCompleted || 'Goals Completed'}</div>
+              <div className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2">50K+</div>
+              <div className="text-sm sm:text-base text-slate-300">{t.stats?.goalsCompleted || 'Goals Completed'}</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2">24/7</div>
-              <div className="text-slate-300">{t.stats?.aiMonitoring || 'AI Monitoring'}</div>
+              <div className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-2">24/7</div>
+              <div className="text-sm sm:text-base text-slate-300">{t.stats?.aiMonitoring || 'AI Monitoring'}</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Meet Your AI Boss Section */}
-      <section className="py-24 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 relative overflow-hidden">
+      <section className="py-12 sm:py-16 lg:py-24 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-72 h-72 bg-indigo-500 rounded-full blur-3xl"></div>
@@ -236,13 +236,13 @@ export default function HomePage() {
       </section>
 
       {/* Product Preview Section */}
-      <section className="py-24 bg-white">
+      <section className="py-12 sm:py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
               {t.preview?.seeItInAction || 'See It In Action'}
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
               Experience the power of daily accountability with a clean, focused interface designed to keep you on track
             </p>
           </div>
@@ -395,18 +395,18 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 bg-slate-50">
+      <section id="features" className="py-12 sm:py-16 lg:py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
               {t.features?.title || 'Everything You Need to Stay Accountable'}
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
               {t.features?.subtitle || 'Powerful features designed to help you build consistency and achieve your goals'}
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-8 bg-white rounded-xl border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="p-6 lg:p-8 bg-white rounded-xl border-2 border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
               <div className="w-12 h-12 rounded-lg bg-indigo-600 flex items-center justify-center mb-6">
                 <TrendingUp className="h-6 w-6 text-white" />
               </div>
@@ -418,7 +418,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-8 bg-white rounded-xl border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
+            <div className="p-6 lg:p-8 bg-white rounded-xl border-2 border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
               <div className="w-12 h-12 rounded-lg bg-indigo-600 flex items-center justify-center mb-6">
                 <Clock className="h-6 w-6 text-white" />
               </div>
@@ -430,7 +430,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-8 bg-white rounded-xl border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
+            <div className="p-6 lg:p-8 bg-white rounded-xl border-2 border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
               <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-indigo-500/30">
                 <Shield className="h-6 w-6 text-white" />
               </div>
@@ -442,7 +442,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-8 bg-white rounded-xl border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
+            <div className="p-6 lg:p-8 bg-white rounded-xl border-2 border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
               <div className="w-12 h-12 rounded-lg bg-indigo-600 flex items-center justify-center mb-6">
                 <BarChart3 className="h-6 w-6 text-white" />
               </div>
@@ -454,7 +454,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-8 bg-white rounded-xl border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
+            <div className="p-6 lg:p-8 bg-white rounded-xl border-2 border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
               <div className="w-12 h-12 rounded-lg bg-indigo-600 flex items-center justify-center mb-6">
                 <Zap className="h-6 w-6 text-white" />
               </div>
@@ -466,7 +466,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-8 bg-white rounded-xl border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
+            <div className="p-6 lg:p-8 bg-white rounded-xl border-2 border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200">
               <div className="w-12 h-12 rounded-lg bg-indigo-600 flex items-center justify-center mb-6">
                 <Award className="h-6 w-6 text-white" />
               </div>
@@ -482,13 +482,13 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-24 bg-white">
+      <section id="how-it-works" className="py-12 sm:py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
               {t.howItWorks?.title || 'Simple Process, Powerful Results'}
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
               {t.howItWorks?.subtitle || 'Get started in minutes and build the consistency habit that transforms lives'}
             </p>
           </div>
@@ -536,7 +536,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-12 sm:py-16 lg:py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
@@ -547,7 +547,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="p-6 lg:p-8 bg-slate-50 rounded-xl border-2 border-slate-200">
               <div className="flex items-center gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
@@ -569,7 +569,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="p-8 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="p-6 lg:p-8 bg-slate-50 rounded-xl border-2 border-slate-200">
               <div className="flex items-center gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
@@ -591,7 +591,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="p-8 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="p-6 lg:p-8 bg-slate-50 rounded-xl border-2 border-slate-200">
               <div className="flex items-center gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
@@ -617,7 +617,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 relative overflow-hidden">
+      <section className="py-12 sm:py-16 lg:py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 relative overflow-hidden">
         {/* Decorative background */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-10 left-20 w-64 h-64 bg-white rounded-full blur-3xl"></div>

@@ -22,10 +22,10 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline rounded-md"
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-lg gap-1.5 px-3 has-[>svg]:px-2.5 text-xs",
-        lg: "h-11 rounded-lg px-6 has-[>svg]:px-4 text-base font-semibold shadow-lg hover:shadow-xl",
-        icon: "size-9 rounded-lg"
+        default: "min-h-[44px] px-4 py-2 has-[>svg]:px-3",
+        sm: "min-h-[44px] rounded-lg gap-1.5 px-3 has-[>svg]:px-2.5 text-xs",
+        lg: "min-h-[48px] rounded-lg px-6 has-[>svg]:px-4 text-base font-semibold shadow-lg hover:shadow-xl",
+        icon: "size-[44px] rounded-lg"
       }
     },
     defaultVariants: {

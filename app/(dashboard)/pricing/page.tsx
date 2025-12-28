@@ -20,16 +20,16 @@ export default async function PricingPage() {
   return (
     <>
       <PublicHeader />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-br from-gray-50 to-white min-h-screen">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 bg-gradient-to-br from-gray-50 to-white min-h-screen">
+        <div className="text-center mb-12 sm:mb-16">
+          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
             Simple Pricing
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
           Start free. Upgrade when you need more accountability power.
         </p>
       </div>
-      <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-3xl mx-auto">
         <PricingCard
           name="Free"
           price={0}
@@ -85,7 +85,7 @@ function PricingCard({
   const isPro = !isFree;
   
   return (
-    <div className={`relative pt-8 border-2 rounded-2xl p-8 transition-all duration-300 hover:shadow-xl ${
+    <div className={`relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl ${
       isPro 
         ? 'border-primary/30 bg-gradient-to-br from-white to-primary/5 shadow-lg' 
         : 'border-slate-200 bg-white hover:shadow-lg'
