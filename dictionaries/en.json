@@ -1,0 +1,178 @@
+{
+  "common": {
+    "appName": "Bossy",
+    "signIn": "Sign In",
+    "signUp": "Get Started",
+    "getStarted": "Get Started",
+    "features": "Features",
+    "howItWorks": "How It Works",
+    "pricing": "Pricing"
+  },
+  "hero": {
+    "badge": "AI-Powered Accountability Boss",
+    "title": "Hire Your Personal",
+    "titleHighlight": "AI Accountability Boss",
+    "subtitle": "Stop setting goals you never complete. Your AI boss holds you accountable every single day.",
+    "description": "No negotiations. No excuses. Just consistent daily action and real results.",
+    "cta": "Start Free Today",
+    "secondaryCta": "See How It Works",
+    "freeToStart": "Free to start",
+    "noCreditCard": "No credit card",
+    "cancelAnytime": "Cancel anytime"
+  },
+  "stats": {
+    "title": "Your AI Boss Never Sleeps",
+    "subtitle": "Consistent accountability, 24/7 tracking, zero tolerance for excuses",
+    "completionRate": "Completion Rate",
+    "usersAccountable": "Users Accountable",
+    "goalsCompleted": "Goals Completed",
+    "aiMonitoring": "AI Monitoring"
+  },
+  "bossSection": {
+    "badge": "AI-Powered",
+    "title": "Meet Your",
+    "titleHighlight": "AI Accountability Boss",
+    "description": "Unlike traditional goal tracking apps, Bossy gives you a direct, no-nonsense AI boss who monitors your progress and holds you accountable every single day.",
+    "cta": "Hire Your AI Boss Now",
+    "features": {
+      "realtime": {
+        "title": "Real-Time Feedback",
+        "description": "Your AI boss responds instantly to every check-in with personalized feedback"
+      },
+      "noNegotiations": {
+        "title": "No Negotiations",
+        "description": "Commitments are final. Your AI boss doesn't accept excuses—only results"
+      },
+      "pattern": {
+        "title": "Pattern Recognition",
+        "description": "AI tracks your consistency and escalates feedback when you fall off track"
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Welcome Back",
+      "subtitle": "Your AI accountability boss is waiting"
+    },
+    "signUp": {
+      "title": "Hire Your AI Boss",
+      "subtitle": "Start your AI-powered accountability journey"
+    },
+    "email": "Email",
+    "password": "Password",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "newToPlatform": "New to Bossy?",
+    "alreadyHaveAccount": "Already have an account?",
+    "createAccount": "Create an account",
+    "signInExisting": "Sign in to existing account"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "noGoal": {
+      "title": "No active goal",
+      "description": "Create a goal to get started with daily accountability.",
+      "cta": "Create Goal"
+    },
+    "activeGoal": "Active Goal",
+    "inProgress": "In Progress",
+    "todaysTask": "Today's Task",
+    "activityHistory": "Activity History",
+    "goalManagement": "Goal Management",
+    "markComplete": "Mark Goal Complete",
+    "abandonGoal": "Abandon Goal",
+    "managementDescription": "Manage your active goal. Remember: commitments matter."
+  },
+  "goal": {
+    "createTitle": "Create Your Goal",
+    "title": "Goal Title",
+    "titlePlaceholder": "e.g., Build a SaaS product",
+    "titleHelp": "Be specific and concrete. This goal cannot be edited once created.",
+    "timeHorizon": "Time Horizon",
+    "timeHorizonHelp": "How long will you commit to this goal?",
+    "intensity": "Intensity",
+    "intensityHelp": "How much daily commitment are you making?",
+    "chooseBoss": "Choose Your AI Boss",
+    "chooseBossHelp": "Select the accountability style that motivates you",
+    "startDate": "Start Date",
+    "startDateHelp": "Choose when you want to start your accountability journey.",
+    "create": "Create Goal",
+    "creating": "Creating Goal..."
+  },
+  "features": {
+    "title": "Everything You Need to Stay Accountable",
+    "subtitle": "Powerful features designed to help you build consistency and achieve your goals",
+    "goalSetting": {
+      "title": "Goal Setting",
+      "description": "Define clear, time-bound goals with custom intensity levels. Once set, commit fully—no editing, no backing out."
+    },
+    "dailyCheckins": {
+      "title": "Daily Check-ins",
+      "description": "Track your progress every single day. Build momentum with consistent check-ins and see your streak grow."
+    },
+    "aiBoss": {
+      "title": "AI Boss",
+      "description": "Your AI accountability boss monitors your progress 24/7. Miss a day? You'll hear about it. Stay consistent? You'll be acknowledged."
+    },
+    "progressTracking": {
+      "title": "Progress Tracking",
+      "description": "Visualize your journey with detailed progress tracking. See how far you've come and stay motivated."
+    },
+    "streakBuilding": {
+      "title": "Streak Building",
+      "description": "Build powerful habits through consistent daily action. Watch your streak counter climb higher every day."
+    },
+    "achievements": {
+      "title": "Achievement System",
+      "description": "Earn recognition for hitting milestones. Celebrate your wins and stay motivated on your journey."
+    }
+  },
+  "howItWorks": {
+    "title": "Simple Process, Powerful Results",
+    "subtitle": "Get started in minutes and build the consistency habit that transforms lives",
+    "step1": {
+      "title": "Set Your Goal",
+      "description": "Define what you want to achieve, choose your timeline (14, 30, or 60 days), and select your intensity level. Make it specific and meaningful."
+    },
+    "step2": {
+      "title": "Daily Check-ins",
+      "description": "Every day, log in and mark your progress. Did you do the work? Be honest with yourself. The system tracks everything."
+    },
+    "step3": {
+      "title": "Build Momentum",
+      "description": "Watch your streak grow, receive feedback from your accountability partner, and experience the compound effect of daily consistency."
+    }
+  },
+  "testimonials": {
+    "title": "Trusted by Achievers",
+    "subtitle": "See what our users are saying about their transformation"
+  },
+  "cta": {
+    "badge": "Your AI Boss is Ready",
+    "title": "Ready to Hire Your",
+    "titleLine2": "AI Accountability Boss?",
+    "subtitle": "Join thousands of people who've stopped making excuses and started achieving their goals with AI-powered accountability.",
+    "button": "Start Free—Hire Your Boss",
+    "secondaryButton": "View Pricing",
+    "features": "Free to start • No credit card required • Your AI boss is ready 24/7"
+  },
+  "preview": {
+    "seeItInAction": "See It In Action",
+    "dashboard": "Dashboard",
+    "activeGoal": "Active Goal",
+    "inProgress": "In Progress",
+    "intensity": "Intensity",
+    "high": "High",
+    "goalProgress": "Goal Progress",
+    "complete": "Complete",
+    "started": "Started",
+    "ends": "Ends",
+    "todaysTask": "Today's Task",
+    "workMinutes": "Work 90 minutes on:",
+    "pending": "Pending",
+    "markDone": "Mark Done",
+    "activityHistory": "Activity History",
+    "lastMessages": "Last 3 messages"
+  }
+}
+

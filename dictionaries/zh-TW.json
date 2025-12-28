@@ -1,0 +1,177 @@
+{
+    "common": {
+        "appName": "Bossy",
+        "signIn": "登入",
+        "signUp": "立即開始",
+        "getStarted": "立即開始",
+        "features": "功能特色",
+        "howItWorks": "運作方式",
+        "pricing": "價格方案"
+    },
+    "hero": {
+        "badge": "AI驅動的問責老闆",
+        "title": "聘請你的專屬",
+        "titleHighlight": "AI問責老闆",
+        "subtitle": "別再設定你永遠無法完成的目標。你的AI老闆每天都會監督你的進度。",
+        "description": "沒有談判。沒有藉口。只有持續的每日行動和真實的成果。",
+        "cta": "免費開始",
+        "secondaryCta": "查看運作方式",
+        "freeToStart": "免費開始",
+        "noCreditCard": "無需信用卡",
+        "cancelAnytime": "隨時取消"
+    },
+    "stats": {
+        "title": "你的AI老闆永不休息",
+        "subtitle": "持續問責、全天候追蹤、對藉口零容忍",
+        "completionRate": "完成率",
+        "usersAccountable": "用戶數",
+        "goalsCompleted": "已完成目標",
+        "aiMonitoring": "AI監控"
+    },
+    "bossSection": {
+        "badge": "AI驅動",
+        "title": "認識你的",
+        "titleHighlight": "AI問責老闆",
+        "description": "與傳統的目標追蹤應用程式不同，Bossy為你提供一個直接、不廢話的AI老闆，每天監控你的進度並讓你負起責任。",
+        "cta": "立即聘請你的AI老闆",
+        "features": {
+            "realtime": {
+                "title": "即時回饋",
+                "description": "你的AI老闆會即時回應每次簽到，提供個人化的反饋"
+            },
+            "noNegotiations": {
+                "title": "不容談判",
+                "description": "承諾是最終的。你的AI老闆不接受藉口，只接受結果"
+            },
+            "pattern": {
+                "title": "模式識別",
+                "description": "AI追蹤你的一致性，當你偏離軌道時升級反饋"
+            }
+        }
+    },
+    "auth": {
+        "signIn": {
+            "title": "歡迎回來",
+            "subtitle": "你的AI問責老闆正在等待"
+        },
+        "signUp": {
+            "title": "聘請你的AI老闆",
+            "subtitle": "開始你的AI驅動問責之旅"
+        },
+        "email": "電子郵件",
+        "password": "密碼",
+        "enterEmail": "輸入你的電子郵件",
+        "enterPassword": "輸入你的密碼",
+        "newToPlatform": "首次使用Bossy？",
+        "alreadyHaveAccount": "已有帳號？",
+        "createAccount": "建立帳號",
+        "signInExisting": "登入現有帳號"
+    },
+    "dashboard": {
+        "title": "儀表板",
+        "noGoal": {
+            "title": "沒有進行中的目標",
+            "description": "建立目標以開始每日問責。",
+            "cta": "建立目標"
+        },
+        "activeGoal": "進行中的目標",
+        "inProgress": "進行中",
+        "todaysTask": "今日任務",
+        "activityHistory": "活動記錄",
+        "goalManagement": "目標管理",
+        "markComplete": "標記目標完成",
+        "abandonGoal": "放棄目標",
+        "managementDescription": "管理你的進行中目標。記住：承諾很重要。"
+    },
+    "goal": {
+        "createTitle": "建立你的目標",
+        "title": "目標標題",
+        "titlePlaceholder": "例如：建立一個SaaS產品",
+        "titleHelp": "請具體明確。目標一旦建立就無法編輯。",
+        "timeHorizon": "時間範圍",
+        "timeHorizonHelp": "你將承諾多長時間來完成這個目標？",
+        "intensity": "強度",
+        "intensityHelp": "你每天要投入多少承諾？",
+        "chooseBoss": "選擇你的AI老闆",
+        "chooseBossHelp": "選擇能激勵你的問責風格",
+        "startDate": "開始日期",
+        "startDateHelp": "選擇你想要開始問責之旅的日期。",
+        "create": "建立目標",
+        "creating": "正在建立目標..."
+    },
+    "features": {
+        "title": "一切你需要的功能來保持問責",
+        "subtitle": "強大的功能設計，幫助你建立一致性並實現目標",
+        "goalSetting": {
+            "title": "目標設定",
+            "description": "定義清晰、有時限的目標，並選擇客製化的強度等級。一旦設定，全力承諾——不能編輯，不能退縮。"
+        },
+        "dailyCheckins": {
+            "title": "每日簽到",
+            "description": "每天追蹤你的進度。通過持續的簽到建立動力，看著你的連續記錄增長。"
+        },
+        "aiBoss": {
+            "title": "AI老闆",
+            "description": "你的AI問責老闆全天候監控你的進度。錯過一天？你會聽到反饋。保持一致？你會得到認可。"
+        },
+        "progressTracking": {
+            "title": "進度追蹤",
+            "description": "通過詳細的進度追蹤來視覺化你的旅程。看看你已經走了多遠，保持動力。"
+        },
+        "streakBuilding": {
+            "title": "連續記錄建立",
+            "description": "通過持續的每日行動建立強大的習慣。看著你的連續計數器每天攀升。"
+        },
+        "achievements": {
+            "title": "成就系統",
+            "description": "達到里程碑時獲得認可。慶祝你的勝利，在旅程中保持動力。"
+        }
+    },
+    "howItWorks": {
+        "title": "簡單的流程，強大的成果",
+        "subtitle": "幾分鐘內開始，建立改變生活的一致性習慣",
+        "step1": {
+            "title": "設定你的目標",
+            "description": "定義你想要實現的目標，選擇你的時間表（14、30或60天），並選擇你的強度等級。讓它具體且有意義。"
+        },
+        "step2": {
+            "title": "每日簽到",
+            "description": "每天登入並標記你的進度。你有做到嗎？對自己誠實。系統會追蹤一切。"
+        },
+        "step3": {
+            "title": "建立動力",
+            "description": "看著你的連續記錄增長，從你的問責夥伴那裡獲得反饋，體驗每日一致性的複利效應。"
+        }
+    },
+    "testimonials": {
+        "title": "受到成功者信賴",
+        "subtitle": "看看我們的用戶對他們的轉變有何評價"
+    },
+    "cta": {
+        "badge": "你的AI老闆已準備就緒",
+        "title": "準備好聘請你的",
+        "titleLine2": "AI問責老闆了嗎？",
+        "subtitle": "加入數千名停止找藉口並通過AI驅動問責開始實現目標的人們。",
+        "button": "免費開始—聘請你的老闆",
+        "secondaryButton": "查看價格",
+        "features": "免費開始 • 無需信用卡 • 你的AI老闆全天候待命"
+    },
+    "preview": {
+        "seeItInAction": "實際操作演示",
+        "dashboard": "儀表板",
+        "activeGoal": "進行中的目標",
+        "inProgress": "進行中",
+        "intensity": "強度",
+        "high": "高",
+        "goalProgress": "目標進度",
+        "complete": "完成",
+        "started": "開始",
+        "ends": "結束",
+        "todaysTask": "今日任務",
+        "workMinutes": "工作90分鐘：",
+        "pending": "待處理",
+        "markDone": "標記完成",
+        "activityHistory": "活動記錄",
+        "lastMessages": "最近3則訊息"
+    }
+}

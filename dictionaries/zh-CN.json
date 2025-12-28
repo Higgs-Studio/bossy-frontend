@@ -1,0 +1,178 @@
+{
+  "common": {
+    "appName": "Bossy",
+    "signIn": "登录",
+    "signUp": "立即开始",
+    "getStarted": "立即开始",
+    "features": "功能特色",
+    "howItWorks": "运作方式",
+    "pricing": "价格方案"
+  },
+  "hero": {
+    "badge": "AI驱动的问责老板",
+    "title": "聘请你的专属",
+    "titleHighlight": "AI问责老板",
+    "subtitle": "别再设定你永远无法完成的目标。你的AI老板每天都会监督你的进度。",
+    "description": "没有谈判。没有借口。只有持续的每日行动和真实的成果。",
+    "cta": "免费开始",
+    "secondaryCta": "查看运作方式",
+    "freeToStart": "免费开始",
+    "noCreditCard": "无需信用卡",
+    "cancelAnytime": "随时取消"
+  },
+  "stats": {
+    "title": "你的AI老板永不休息",
+    "subtitle": "持续问责、全天候追踪、对借口零容忍",
+    "completionRate": "完成率",
+    "usersAccountable": "用户数",
+    "goalsCompleted": "已完成目标",
+    "aiMonitoring": "AI监控"
+  },
+  "bossSection": {
+    "badge": "AI驱动",
+    "title": "认识你的",
+    "titleHighlight": "AI问责老板",
+    "description": "与传统的目标追踪应用程序不同，Bossy为你提供一个直接、不废话的AI老板，每天监控你的进度并让你负起责任。",
+    "cta": "立即聘请你的AI老板",
+    "features": {
+      "realtime": {
+        "title": "实时反馈",
+        "description": "你的AI老板会即时回应每次签到，提供个性化的反馈"
+      },
+      "noNegotiations": {
+        "title": "不容谈判",
+        "description": "承诺是最终的。你的AI老板不接受借口，只接受结果"
+      },
+      "pattern": {
+        "title": "模式识别",
+        "description": "AI追踪你的一致性，当你偏离轨道时升级反馈"
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "欢迎回来",
+      "subtitle": "你的AI问责老板正在等待"
+    },
+    "signUp": {
+      "title": "聘请你的AI老板",
+      "subtitle": "开始你的AI驱动问责之旅"
+    },
+    "email": "电子邮件",
+    "password": "密码",
+    "enterEmail": "输入你的电子邮件",
+    "enterPassword": "输入你的密码",
+    "newToPlatform": "首次使用Bossy？",
+    "alreadyHaveAccount": "已有账号？",
+    "createAccount": "建立账号",
+    "signInExisting": "登录现有账号"
+  },
+  "dashboard": {
+    "title": "仪表板",
+    "noGoal": {
+      "title": "没有进行中的目标",
+      "description": "建立目标以开始每日问责。",
+      "cta": "建立目标"
+    },
+    "activeGoal": "进行中的目标",
+    "inProgress": "进行中",
+    "todaysTask": "今日任务",
+    "activityHistory": "活动记录",
+    "goalManagement": "目标管理",
+    "markComplete": "标记目标完成",
+    "abandonGoal": "放弃目标",
+    "managementDescription": "管理你的进行中目标。记住：承诺很重要。"
+  },
+  "goal": {
+    "createTitle": "建立你的目标",
+    "title": "目标标题",
+    "titlePlaceholder": "例如：建立一个SaaS产品",
+    "titleHelp": "请具体明确。目标一旦建立就无法编辑。",
+    "timeHorizon": "时间范围",
+    "timeHorizonHelp": "你将承诺多长时间来完成这个目标？",
+    "intensity": "强度",
+    "intensityHelp": "你每天要投入多少承诺？",
+    "chooseBoss": "选择你的AI老板",
+    "chooseBossHelp": "选择能激励你的问责风格",
+    "startDate": "开始日期",
+    "startDateHelp": "选择你想要开始问责之旅的日期。",
+    "create": "建立目标",
+    "creating": "正在建立目标..."
+  },
+  "features": {
+    "title": "一切你需要的功能来保持问责",
+    "subtitle": "强大的功能设计，帮助你建立一致性并实现目标",
+    "goalSetting": {
+      "title": "目标设定",
+      "description": "定义清晰、有时限的目标，并选择自定义的强度等级。一旦设定，全力承诺——不能编辑，不能退缩。"
+    },
+    "dailyCheckins": {
+      "title": "每日签到",
+      "description": "每天追踪你的进度。通过持续的签到建立动力，看着你的连续记录增长。"
+    },
+    "aiBoss": {
+      "title": "AI老板",
+      "description": "你的AI问责老板全天候监控你的进度。错过一天？你会听到反馈。保持一致？你会得到认可。"
+    },
+    "progressTracking": {
+      "title": "进度追踪",
+      "description": "通过详细的进度追踪来可视化你的旅程。看看你已经走了多远，保持动力。"
+    },
+    "streakBuilding": {
+      "title": "连续记录建立",
+      "description": "通过持续的每日行动建立强大的习惯。看着你的连续计数器每天攀升。"
+    },
+    "achievements": {
+      "title": "成就系统",
+      "description": "达到里程碑时获得认可。庆祝你的胜利，在旅程中保持动力。"
+    }
+  },
+  "howItWorks": {
+    "title": "简单的流程，强大的成果",
+    "subtitle": "几分钟内开始，建立改变生活的一致性习惯",
+    "step1": {
+      "title": "设定你的目标",
+      "description": "定义你想要实现的目标，选择你的时间表（14、30或60天），并选择你的强度等级。让它具体且有意义。"
+    },
+    "step2": {
+      "title": "每日签到",
+      "description": "每天登录并标记你的进度。你有做到吗？对自己诚实。系统会追踪一切。"
+    },
+    "step3": {
+      "title": "建立动力",
+      "description": "看着你的连续记录增长，从你的问责伙伴那里获得反馈，体验每日一致性的复利效应。"
+    }
+  },
+  "testimonials": {
+    "title": "受到成功者信赖",
+    "subtitle": "看看我们的用户对他们的转变有何评价"
+  },
+  "cta": {
+    "badge": "你的AI老板已准备就绪",
+    "title": "准备好聘请你的",
+    "titleLine2": "AI问责老板了吗？",
+    "subtitle": "加入数千名停止找借口并通过AI驱动问责开始实现目标的人们。",
+    "button": "免费开始—聘请你的老板",
+    "secondaryButton": "查看价格",
+    "features": "免费开始 • 无需信用卡 • 你的AI老板全天候待命"
+  },
+  "preview": {
+    "seeItInAction": "实际操作演示",
+    "dashboard": "仪表板",
+    "activeGoal": "进行中的目标",
+    "inProgress": "进行中",
+    "intensity": "强度",
+    "high": "高",
+    "goalProgress": "目标进度",
+    "complete": "完成",
+    "started": "开始",
+    "ends": "结束",
+    "todaysTask": "今日任务",
+    "workMinutes": "工作90分钟：",
+    "pending": "待处理",
+    "markDone": "标记完成",
+    "activityHistory": "活动记录",
+    "lastMessages": "最近3则消息"
+  }
+}
+
