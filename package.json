@@ -5,12 +5,14 @@
     "build": "next build",
     "start": "next start",
     "db:setup": "npx tsx lib/db/setup.ts",
-    "db:seed": "npx tsx lib/db/seed.ts",
+    "db:seed": "echo '⚠️  WARNING: Old seed script disabled. Use Supabase Auth to create users instead. See SUPABASE_SETUP.md'",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.89.0",
     "@tailwindcss/postcss": "4.1.7",
     "@types/node": "^22.15.18",
     "@types/react": "19.1.4",
