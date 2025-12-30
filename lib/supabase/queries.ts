@@ -124,8 +124,6 @@ export async function createGoal(data: {
     boss_type: data.bossType || 'execution',
   };
 
-  console.log('[DEBUG] createGoal - inserting with boss_type:', insertDataWithBossType);
-
   let { data: goal, error } = await supabase
     .from('goals')
     .insert(insertDataWithBossType)
@@ -134,7 +132,6 @@ export async function createGoal(data: {
 
   // If error is about missing boss_type column, retry without it
   if (error && error.code === 'PGRST204' && error.message?.includes('boss_type')) {
-    console.log('[DEBUG] createGoal - boss_type column not found, retrying without it');
     insertData = {
       ...insertData,
       // Don't include boss_type
@@ -151,13 +148,6 @@ export async function createGoal(data: {
   }
 
   if (error) {
-    console.error('[DEBUG] createGoal - Supabase error:', {
-      message: error.message,
-      details: error.details,
-      hint: error.hint,
-      code: error.code,
-      fullError: JSON.stringify(error, Object.getOwnPropertyNames(error))
-    });
     // Create a more descriptive error
     const errorMsg = error.message || error.details || error.hint || 'Database error';
 
@@ -169,7 +159,6 @@ export async function createGoal(data: {
     throw new Error(`Supabase error: ${errorMsg} (code: ${error.code || 'unknown'})`);
   }
 
-  console.log('[DEBUG] createGoal - success:', goal?.id);
   return goal as Goal;
 }
 
@@ -417,8 +406,6 @@ export async function updateGoal(
     ...(data.bossType !== undefined && { boss_type: data.bossType })
   };
 
-  console.log('[DEBUG] updateGoal - updating with:', updateDataWithBossType);
-
   let { data: updatedGoal, error } = await supabase
     .from('goals')
     .update(updateDataWithBossType)
@@ -429,7 +416,6 @@ export async function updateGoal(
 
   // If error is about missing boss_type column, retry without it
   if (error && error.code === 'PGRST204' && error.message?.includes('boss_type') && data.bossType !== undefined) {
-    console.log('[DEBUG] updateGoal - boss_type column not found, retrying without it');
     const updateDataWithoutBossType = { ...updateData };
 
     const { data: goalRetry, error: errorRetry } = await supabase
@@ -445,13 +431,6 @@ export async function updateGoal(
   }
 
   if (error) {
-    console.error('[DEBUG] updateGoal - Supabase error:', {
-      message: error.message,
-      details: error.details,
-      hint: error.hint,
-      code: error.code,
-      fullError: JSON.stringify(error, Object.getOwnPropertyNames(error))
-    });
     // Create a more descriptive error
     const errorMsg = error.message || error.details || error.hint || 'Database error';
 
@@ -463,7 +442,6 @@ export async function updateGoal(
     throw new Error(`Supabase error: ${errorMsg} (code: ${error.code || 'unknown'})`);
   }
 
-  console.log('[DEBUG] updateGoal - success:', updatedGoal?.id);
   return updatedGoal as Goal;
 }
 
