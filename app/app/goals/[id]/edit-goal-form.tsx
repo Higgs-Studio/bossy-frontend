@@ -66,44 +66,37 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             value={timeHorizonState}
                             onValueChange={setTimeHorizonState}
                             className="mt-3 space-y-3"
-                            required
                         >
-                            <div 
-                                onClick={() => setTimeHorizonState('14')}
+                            <label 
+                                htmlFor="edit-time-14"
                                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${timeHorizonState === '14'
                                     ? 'border-indigo-500 bg-indigo-50 shadow-sm'
                                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                                 }`}
                             >
-                                <RadioGroupItem value="14" id="edit-14" />
-                                <Label htmlFor="edit-14" className="font-medium cursor-pointer flex-1">
-                                    14 days
-                                </Label>
-                            </div>
-                            <div 
-                                onClick={() => setTimeHorizonState('30')}
+                                <RadioGroupItem value="14" id="edit-time-14" />
+                                <span className="font-medium flex-1">14 days</span>
+                            </label>
+                            <label 
+                                htmlFor="edit-time-30"
                                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${timeHorizonState === '30'
                                     ? 'border-indigo-500 bg-indigo-50 shadow-sm'
                                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                                 }`}
                             >
-                                <RadioGroupItem value="30" id="edit-30" />
-                                <Label htmlFor="edit-30" className="font-medium cursor-pointer flex-1">
-                                    30 days
-                                </Label>
-                            </div>
-                            <div 
-                                onClick={() => setTimeHorizonState('60')}
+                                <RadioGroupItem value="30" id="edit-time-30" />
+                                <span className="font-medium flex-1">30 days</span>
+                            </label>
+                            <label 
+                                htmlFor="edit-time-60"
                                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${timeHorizonState === '60'
                                     ? 'border-indigo-500 bg-indigo-50 shadow-sm'
                                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                                 }`}
                             >
-                                <RadioGroupItem value="60" id="edit-60" />
-                                <Label htmlFor="edit-60" className="font-medium cursor-pointer flex-1">
-                                    60 days
-                                </Label>
-                            </div>
+                                <RadioGroupItem value="60" id="edit-time-60" />
+                                <span className="font-medium flex-1">60 days</span>
+                            </label>
                         </RadioGroup>
                     </div>
 
@@ -114,47 +107,46 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             value={intensity}
                             onValueChange={(value) => setIntensity(value as 'low' | 'medium' | 'high')}
                             className="mt-3 space-y-3"
-                            required
                         >
-                            <div 
-                                onClick={() => setIntensity('low')}
+                            <label 
+                                htmlFor="edit-intensity-low"
                                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${intensity === 'low'
                                     ? 'border-indigo-500 bg-indigo-50 shadow-sm'
                                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                                 }`}
                             >
-                                <RadioGroupItem value="low" id="edit-low" />
-                                <Label htmlFor="edit-low" className="font-medium cursor-pointer flex-1">
+                                <RadioGroupItem value="low" id="edit-intensity-low" />
+                                <span className="font-medium cursor-pointer flex-1">
                                     <span className="block">Low</span>
                                     <span className="text-sm text-gray-600 font-normal">Light daily commitment</span>
-                                </Label>
-                            </div>
-                            <div 
-                                onClick={() => setIntensity('medium')}
+                                </span>
+                            </label>
+                            <label 
+                                htmlFor="edit-intensity-medium"
                                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${intensity === 'medium'
                                     ? 'border-indigo-500 bg-indigo-50 shadow-sm'
                                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                                 }`}
                             >
-                                <RadioGroupItem value="medium" id="edit-medium" />
-                                <Label htmlFor="edit-medium" className="font-medium cursor-pointer flex-1">
+                                <RadioGroupItem value="medium" id="edit-intensity-medium" />
+                                <span className="font-medium cursor-pointer flex-1">
                                     <span className="block">Medium</span>
                                     <span className="text-sm text-gray-600 font-normal">Moderate daily commitment</span>
-                                </Label>
-                            </div>
-                            <div 
-                                onClick={() => setIntensity('high')}
+                                </span>
+                            </label>
+                            <label 
+                                htmlFor="edit-intensity-high"
                                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${intensity === 'high'
                                     ? 'border-indigo-500 bg-indigo-50 shadow-sm'
                                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                                 }`}
                             >
-                                <RadioGroupItem value="high" id="edit-high" />
-                                <Label htmlFor="edit-high" className="font-medium cursor-pointer flex-1">
+                                <RadioGroupItem value="high" id="edit-intensity-high" />
+                                <span className="font-medium cursor-pointer flex-1">
                                     <span className="block">High</span>
                                     <span className="text-sm text-gray-600 font-normal">Significant daily commitment</span>
-                                </Label>
-                            </div>
+                                </span>
+                            </label>
                         </RadioGroup>
                     </div>
 

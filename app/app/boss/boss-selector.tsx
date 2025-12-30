@@ -4,7 +4,6 @@ import { useActionState, useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 import { BOSS_PERSONALITIES, getBossPersonality, type BossType } from '@/lib/boss/reactions';
 import { changeBossAction } from './actions';
 import { Loader2, CheckCircle2 } from 'lucide-react';
@@ -80,28 +79,28 @@ export function BossSelector({ currentBossType }: BossSelectorProps) {
               className="space-y-3"
             >
               {Object.values(BOSS_PERSONALITIES).map((bossOption) => (
-                <div
+                <label
                   key={bossOption.id}
-                  onClick={() => setSelectedBoss(bossOption.id)}
+                  htmlFor={`boss-${bossOption.id}`}
                   className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${
                     selectedBoss === bossOption.id
                       ? 'border-indigo-500 bg-indigo-50 shadow-sm'
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                   }`}
                 >
-                  <RadioGroupItem value={bossOption.id} id={bossOption.id} className="mt-1" />
-                  <Label htmlFor={bossOption.id} className="cursor-pointer flex-1">
-                    <div className="flex items-center gap-2 mb-1">
+                  <RadioGroupItem value={bossOption.id} id={`boss-${bossOption.id}`} className="mt-1" />
+                  <span className="cursor-pointer flex-1">
+                    <span className="flex items-center gap-2 mb-1">
                       <span className="font-semibold text-base">{bossOption.name}</span>
                       {currentBossType === bossOption.id && (
                         <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200">
                           Current
                         </span>
                       )}
-                    </div>
-                    <p className="text-sm text-gray-600">{bossOption.description}</p>
-                  </Label>
-                </div>
+                    </span>
+                    <span className="text-sm text-gray-600 block">{bossOption.description}</span>
+                  </span>
+                </label>
               ))}
             </RadioGroup>
 
