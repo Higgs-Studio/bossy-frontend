@@ -95,17 +95,18 @@ function log(
       timestamp: new Date().toISOString(),
       level,
       message,
-      ...(error instanceof Error && {
-        error: {
-          name: error.name,
-          message: error.message,
-          stack: error.stack,
-        },
-      }),
-      ...(error && !(error instanceof Error) && {
-        error: String(error),
-      }),
-      ...context,
+      ...(error instanceof Error
+        ? {
+            error: {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+            },
+          }
+        : error
+          ? { error: String(error) }
+          : {}),
+      ...(context || {}),
     };
 
     // In production, write structured JSON logs
