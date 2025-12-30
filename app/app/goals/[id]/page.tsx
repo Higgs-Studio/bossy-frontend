@@ -7,14 +7,17 @@ import { TaskList } from './task-list';
 export default async function EditGoalPage({
     params,
 }: {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }) {
     const user = await getUser();
     if (!user) {
         redirect('/sign-in');
     }
 
-    const goal = await getGoalById(params.id, user.id);
+    // In Next.js 15, params is a Promise
+    const { id } = await params;
+
+    const goal = await getGoalById(id, user.id);
     if (!goal) {
         redirect('/app/goals');
     }

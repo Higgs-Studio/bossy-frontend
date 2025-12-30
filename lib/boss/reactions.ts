@@ -9,7 +9,6 @@ export type BossPersonality = {
   id: BossType;
   name: string;
   description: string;
-  avatar: string;
   rules: string[];
   tone: string;
 };
@@ -19,7 +18,6 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
     id: 'execution',
     name: 'The Execution Boss',
     description: 'Direct, no-nonsense accountability. This boss does not negotiate.',
-    avatar: '💼',
     rules: [
       'You commit. You execute. No excuses.',
       'Daily check-ins are non-negotiable.',
@@ -32,7 +30,6 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
     id: 'supportive',
     name: 'The Supportive Coach',
     description: 'Encouraging and understanding, but still holds you accountable.',
-    avatar: '🌟',
     rules: [
       'Progress over perfection—every step counts.',
       'Mistakes are learning opportunities.',
@@ -45,7 +42,6 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
     id: 'mentor',
     name: 'The Wise Mentor',
     description: 'Strategic guidance with thoughtful accountability.',
-    avatar: '🎓',
     rules: [
       'Reflect on your "why" before each action.',
       'Learn from both successes and setbacks.',
@@ -58,7 +54,6 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
     id: 'drill-sergeant',
     name: 'The Drill Sergeant',
     description: 'Intense, demanding, and pushing you to your limits.',
-    avatar: '⚡',
     rules: [
       'Excuses are not accepted. Period.',
       'You said you wanted this—prove it.',
@@ -164,4 +159,3 @@ function getMissedFeedback(bossType: BossType, consecutiveMisses: number): BossR
 export function getBossPersonality(bossType?: BossType): BossPersonality {
   return BOSS_PERSONALITIES[bossType || 'execution'];
 }
-

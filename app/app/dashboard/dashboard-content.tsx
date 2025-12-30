@@ -122,7 +122,7 @@ export function DashboardContent({
                                             <div className="flex items-center gap-2 text-slate-600">
                                                 <Clock className="h-4 w-4" />
                                                 <span>
-                                                    {new Date(activeGoal.start_date).toLocaleDateString()} - {new Date(activeGoal.end_date).toLocaleDateString()}
+                                                    {new Date(activeGoal.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - {new Date(activeGoal.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                                 </span>
                                             </div>
                                         </div>

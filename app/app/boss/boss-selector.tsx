@@ -25,12 +25,9 @@ export function BossSelector({ currentBossType }: BossSelectorProps) {
       {/* Current Boss Display */}
       <Card className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200">
         <CardHeader className="border-b border-slate-200">
-          <div className="flex items-center gap-3">
-            <span className="text-4xl">{boss.avatar}</span>
-            <div>
-              <CardTitle className="text-2xl">{boss.name}</CardTitle>
-              <p className="text-sm text-slate-600 mt-1">Your AI Accountability Partner</p>
-            </div>
+          <div>
+            <CardTitle className="text-2xl">{boss.name}</CardTitle>
+            <p className="text-sm text-slate-600 mt-1">Your AI Accountability Partner</p>
           </div>
         </CardHeader>
         <CardContent className="space-y-6 pt-6">
@@ -80,16 +77,16 @@ export function BossSelector({ currentBossType }: BossSelectorProps) {
               {Object.values(BOSS_PERSONALITIES).map((bossOption) => (
                 <div
                   key={bossOption.id}
+                  onClick={() => setSelectedBoss(bossOption.id)}
                   className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${
                     selectedBoss === bossOption.id
-                      ? 'border-primary/30 bg-primary/5 hover:bg-primary/10'
-                      : 'border-gray-200 hover:border-primary/30 hover:bg-white'
+                      ? 'border-indigo-500 bg-indigo-50 shadow-sm'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                   }`}
                 >
                   <RadioGroupItem value={bossOption.id} id={bossOption.id} className="mt-1" />
                   <Label htmlFor={bossOption.id} className="cursor-pointer flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-2xl">{bossOption.avatar}</span>
                       <span className="font-semibold text-base">{bossOption.name}</span>
                       {currentBossType === bossOption.id && (
                         <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200">
@@ -137,4 +134,3 @@ export function BossSelector({ currentBossType }: BossSelectorProps) {
     </div>
   );
 }
-
