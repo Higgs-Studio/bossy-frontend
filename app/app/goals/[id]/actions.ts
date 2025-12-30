@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { getUser } from '@/lib/supabase/get-session';
 import { createTask, updateTask, deleteTask } from '@/lib/supabase/queries';
+import { logError, getErrorMessage } from '@/lib/utils/logger';
 
 export async function createTaskAction(
   prevState: any,
@@ -33,11 +34,9 @@ export async function createTaskAction(
     revalidatePath(`/app/goals/${goalId}`);
     return { success: true };
   } catch (error) {
-    console.error('Create task error:', error);
-    if (error instanceof Error) {
-      return { error: error.message };
-    }
-    return { error: 'Failed to create task. Please try again.' };
+    logError('Create task error', error, { userId: user.id, goalId });
+    const errorMessage = getErrorMessage(error);
+    return { error: errorMessage || 'Failed to create task. Please try again.' };
   }
 }
 
@@ -66,11 +65,9 @@ export async function updateTaskAction(
     revalidatePath(`/app/goals/${goalId}`);
     return { success: true };
   } catch (error) {
-    console.error('Update task error:', error);
-    if (error instanceof Error) {
-      return { error: error.message };
-    }
-    return { error: 'Failed to update task. Please try again.' };
+    logError('Update task error', error, { userId: user.id, taskId, goalId });
+    const errorMessage = getErrorMessage(error);
+    return { error: errorMessage || 'Failed to update task. Please try again.' };
   }
 }
 
@@ -96,11 +93,9 @@ export async function deleteTaskAction(
     revalidatePath(`/app/goals/${goalId}`);
     return { success: true };
   } catch (error) {
-    console.error('Delete task error:', error);
-    if (error instanceof Error) {
-      return { error: error.message };
-    }
-    return { error: 'Failed to delete task. Please try again.' };
+    logError('Delete task error', error, { userId: user.id, taskId, goalId });
+    const errorMessage = getErrorMessage(error);
+    return { error: errorMessage || 'Failed to delete task. Please try again.' };
   }
 }
 

@@ -10,6 +10,7 @@ import {
   getGoalById,
   getUserBossType,
 } from '@/lib/supabase/queries';
+import { logError, getErrorMessage } from '@/lib/utils/logger';
 
 export async function createGoalAction(
   prevState: any,
@@ -77,17 +78,8 @@ export async function createGoalAction(
       throw error;
     }
 
-    console.error('Create goal error:', error);
-
-    let errorMessage = 'Unknown error';
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    } else if (error && typeof error === 'object' && 'message' in error) {
-      errorMessage = String(error.message);
-    } else {
-      errorMessage = String(error);
-    }
-
+    logError('Create goal error', error, { userId: user.id, title });
+    const errorMessage = getErrorMessage(error);
     return { error: `Failed to create goal: ${errorMessage}` };
   }
 }
@@ -145,17 +137,8 @@ export async function updateGoalAction(
       throw error;
     }
 
-    console.error('Update goal error:', error);
-
-    let errorMessage = 'Unknown error';
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    } else if (error && typeof error === 'object' && 'message' in error) {
-      errorMessage = String(error.message);
-    } else {
-      errorMessage = String(error);
-    }
-
+    logError('Update goal error', error, { userId: user.id, goalId });
+    const errorMessage = getErrorMessage(error);
     return { error: `Failed to update goal: ${errorMessage}` };
   }
 }
@@ -188,7 +171,7 @@ export async function deleteGoalAction(
     ) {
       throw error;
     }
-    console.error('Delete goal error:', error);
+    logError('Delete goal error', error, { userId: user.id, goalId });
     return { error: 'Failed to delete goal. Please try again.' };
   }
 }

@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { getUser } from '@/lib/supabase/get-session';
 import { setUserBossType } from '@/lib/supabase/queries';
 import type { BossType } from '@/lib/boss/reactions';
+import { logError } from '@/lib/utils/logger';
 
 export async function changeBossAction(
   prevState: any,
@@ -31,7 +32,7 @@ export async function changeBossAction(
     revalidatePath('/app/boss');
     return { success: true };
   } catch (error) {
-    console.error('Error changing boss:', error);
+    logError('Error changing boss', error, { userId: user.id, bossType });
     return { error: 'Failed to change boss. Please try again.' };
   }
 }

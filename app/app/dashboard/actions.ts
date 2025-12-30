@@ -13,6 +13,7 @@ import {
   getActiveGoal,
 } from '@/lib/supabase/queries';
 import { getBossReaction } from '@/lib/boss/reactions';
+import { logError } from '@/lib/utils/logger';
 
 export async function checkInAction(
   prevState: any,
@@ -60,7 +61,7 @@ export async function checkInAction(
 
     return { success: 'Check-in recorded!' };
   } catch (error) {
-    console.error('Check-in error:', error);
+    logError('Check-in error', error, { userId: user.id, taskId });
     return { error: 'Failed to record check-in' };
   }
 }
@@ -102,7 +103,7 @@ export async function markMissedAction(
 
     return { success: 'Missed check-in recorded' };
   } catch (error) {
-    console.error('Mark missed error:', error);
+    logError('Mark missed error', error, { userId: user.id, taskId });
     return { error: 'Failed to record missed check-in' };
   }
 }
@@ -135,7 +136,7 @@ export async function abandonGoalAction(
 
     redirect('/app/goal');
   } catch (error) {
-    console.error('Abandon goal error:', error);
+    logError('Abandon goal error', error, { userId: user.id, goalId });
     return { error: 'Failed to abandon goal' };
   }
 }
@@ -168,7 +169,7 @@ export async function completeGoalAction(
 
     redirect('/app/goal');
   } catch (error) {
-    console.error('Complete goal error:', error);
+    logError('Complete goal error', error, { userId: user.id, goalId });
     return { error: 'Failed to complete goal' };
   }
 }
