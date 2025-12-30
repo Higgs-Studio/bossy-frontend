@@ -16,36 +16,36 @@ export default async function ProfilePage() {
   const subscriptionData = await getTeamForUser();
 
   return (
-    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white">
+    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
-          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
             Profile
           </h1>
-          <p className="text-slate-600 text-lg">Manage your account and subscription</p>
+          <p className="text-muted-foreground text-lg">Manage your account and subscription</p>
         </div>
 
         {/* Account Information */}
-        <Card className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200">
+        <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <User className="h-5 w-5 text-slate-600" />
+              <User className="h-5 w-5 text-muted-foreground" />
               <CardTitle>Account Information</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-600">Email</label>
-                <p className="text-base text-slate-900 mt-1">{user.email || 'Not set'}</p>
+                <label className="text-sm font-medium text-muted-foreground">Email</label>
+                <p className="text-base text-foreground mt-1">{user.email || 'Not set'}</p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-600">User ID</label>
-                <p className="text-base text-slate-900 mt-1 font-mono text-sm">{user.id}</p>
+                <label className="text-sm font-medium text-muted-foreground">User ID</label>
+                <p className="text-base text-foreground mt-1 font-mono text-sm">{user.id}</p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-600">Account Created</label>
-                <p className="text-base text-slate-900 mt-1">
+                <label className="text-sm font-medium text-muted-foreground">Account Created</label>
+                <p className="text-base text-foreground mt-1">
                   {user.created_at
                     ? new Date(user.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -60,10 +60,10 @@ export default async function ProfilePage() {
         </Card>
 
         {/* Subscription Management */}
-        <Card className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200">
+        <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5 text-slate-600" />
+              <CreditCard className="h-5 w-5 text-muted-foreground" />
               <CardTitle>Subscription</CardTitle>
             </div>
           </CardHeader>
@@ -72,14 +72,14 @@ export default async function ProfilePage() {
               {subscriptionData ? (
                 <>
                   <div>
-                    <label className="text-sm font-medium text-slate-600">Status</label>
-                    <p className="text-base text-slate-900 mt-1">
+                    <label className="text-sm font-medium text-muted-foreground">Status</label>
+                    <p className="text-base text-foreground mt-1">
                       <span
                         className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
                           subscriptionData.subscriptionStatus === 'active' ||
                           subscriptionData.subscriptionStatus === 'trialing'
-                            ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
-                            : 'bg-slate-100 text-slate-700 border border-slate-200'
+                            ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
+                            : 'bg-muted text-foreground border border-border'
                         }`}
                       >
                         {subscriptionData.subscriptionStatus
@@ -91,8 +91,8 @@ export default async function ProfilePage() {
                   </div>
                   {subscriptionData.planName && (
                     <div>
-                      <label className="text-sm font-medium text-slate-600">Plan</label>
-                      <p className="text-base text-slate-900 mt-1">{subscriptionData.planName}</p>
+                      <label className="text-sm font-medium text-muted-foreground">Plan</label>
+                      <p className="text-base text-foreground mt-1">{subscriptionData.planName}</p>
                     </div>
                   )}
                   {subscriptionData.stripeCustomerId && (
@@ -108,7 +108,7 @@ export default async function ProfilePage() {
                 </>
               ) : (
                 <div className="text-center py-6">
-                  <p className="text-slate-600 mb-4">No active subscription</p>
+                  <p className="text-muted-foreground mb-4">No active subscription</p>
                   <Button asChild>
                     <a href="/pricing">View Pricing Plans</a>
                   </Button>

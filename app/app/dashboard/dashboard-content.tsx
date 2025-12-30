@@ -68,26 +68,26 @@ export function DashboardContent({
     const progress = calculateProgress();
 
     return (
-        <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white">
+        <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
             <div className="max-w-4xl mx-auto space-y-6">
                 <div>
-                    <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">
+                    <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
                         Dashboard
                     </h1>
-                    <p className="text-slate-600 text-lg">{today}</p>
+                    <p className="text-muted-foreground text-lg">{today}</p>
                 </div>
 
                 {!activeGoal ? (
-                    <Card className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200">
+                    <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                         <CardContent className="pt-6">
                             <div className="text-center py-12">
-                                <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 mb-6">
-                                    <Target className="h-10 w-10 text-slate-400" />
+                                <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-br from-muted to-muted/80 mb-6">
+                                    <Target className="h-10 w-10 text-muted-foreground" />
                                 </div>
-                                <h3 className="text-xl font-semibold text-slate-900 mb-3">
+                                <h3 className="text-xl font-semibold text-foreground mb-3">
                                     No active goal
                                 </h3>
-                                <p className="text-slate-600 mb-6 max-w-md mx-auto">
+                                <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                                     Create a goal to get started with daily accountability.
                                 </p>
                                 <Button size="lg" asChild>
@@ -98,11 +98,11 @@ export function DashboardContent({
                     </Card>
                 ) : (
                     <>
-                        <Card className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200">
+                        <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                             <CardHeader>
                                 <div className="flex items-center justify-between">
                                     <CardTitle>Active Goal</CardTitle>
-                                    <span className="text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+                                    <span className="text-xs font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
                                         In Progress
                                     </span>
                                 </div>
@@ -110,16 +110,16 @@ export function DashboardContent({
                             <CardContent>
                                 <div className="space-y-4">
                                     <div>
-                                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{activeGoal.title}</h3>
+                                        <h3 className="text-2xl font-bold text-foreground mb-3">{activeGoal.title}</h3>
                                         <div className="flex flex-wrap items-center gap-4 text-sm mb-4">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-slate-600">Intensity:</span>
-                                                <span className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-semibold capitalize border border-indigo-200">
+                                                <span className="text-muted-foreground">Intensity:</span>
+                                                <span className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold capitalize border border-indigo-500/20">
                                                     {activeGoal.intensity}
                                                 </span>
                                             </div>
-                                            <span className="text-slate-400">•</span>
-                                            <div className="flex items-center gap-2 text-slate-600">
+                                            <span className="text-muted-foreground/50">•</span>
+                                            <div className="flex items-center gap-2 text-muted-foreground">
                                                 <Clock className="h-4 w-4" />
                                                 <span>
                                                     {new Date(activeGoal.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - {new Date(activeGoal.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
@@ -129,19 +129,19 @@ export function DashboardContent({
                                     </div>
                                     <div className="space-y-3">
                                         <div className="flex justify-between text-sm items-center">
-                                            <span className="text-slate-600 font-medium">Goal Progress</span>
+                                            <span className="text-muted-foreground font-medium">Goal Progress</span>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-slate-900 font-bold text-lg">{Math.round(progress)}%</span>
-                                                <span className="text-slate-500 text-xs">Complete</span>
+                                                <span className="text-foreground font-bold text-lg">{Math.round(progress)}%</span>
+                                                <span className="text-muted-foreground text-xs">Complete</span>
                                             </div>
                                         </div>
-                                        <div className="relative h-3 bg-slate-100 rounded-full overflow-hidden">
+                                        <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                                             <div
                                                 className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full transition-all duration-500 ease-out"
                                                 style={{ width: `${progress}%` }}
                                             />
                                         </div>
-                                        <div className="flex justify-between text-xs text-slate-500">
+                                        <div className="flex justify-between text-xs text-muted-foreground">
                                             <span>Started {new Date(activeGoal.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                                             <span>Ends {new Date(activeGoal.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                                         </div>
@@ -151,13 +151,13 @@ export function DashboardContent({
                         </Card>
 
                         {/* Goal Management Card */}
-                        <Card className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200">
+                        <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                             <CardHeader>
                                 <CardTitle>Goal Management</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
-                                    <p className="text-sm text-slate-600 mb-4">
+                                    <p className="text-sm text-muted-foreground mb-4">
                                         Manage your active goal. Remember: commitments matter.
                                     </p>
                                     <div className="flex flex-col sm:flex-row gap-3">
@@ -184,7 +184,7 @@ export function DashboardContent({
                                             <Button 
                                                 type="submit" 
                                                 variant="outline"
-                                                className="w-full border-2 border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-slate-400"
+                                                className="w-full border-2 border-border text-foreground hover:bg-muted hover:border-border/80"
                                                 disabled={isAbandonPending}
                                             >
                                                 {isAbandonPending ? (
@@ -199,7 +199,7 @@ export function DashboardContent({
                                         </form>
                                     </div>
                                     {(abandonState?.error || completeState?.error) && (
-                                        <div className="text-red-700 text-sm bg-red-50 p-3 rounded-lg border border-red-200">
+                                        <div className="text-red-700 dark:text-red-400 text-sm bg-red-50 dark:bg-red-950/50 p-3 rounded-lg border border-red-200 dark:border-red-900">
                                             {abandonState?.error || completeState?.error}
                                         </div>
                                     )}
@@ -208,40 +208,40 @@ export function DashboardContent({
                         </Card>
 
                         {todayTask && (
-                            <Card className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200">
+                            <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                                 <CardHeader>
                                     <div className="flex items-center justify-between">
                                         <CardTitle>Today&apos;s Task</CardTitle>
-                                        <span className="text-xs text-slate-500">
+                                        <span className="text-xs text-muted-foreground">
                                             {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </span>
                                     </div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-6">
-                                        <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                                            <p className="text-base text-slate-800 leading-relaxed font-medium">{todayTask.task_text}</p>
+                                        <div className="p-4 bg-muted/50 rounded-lg border border-border">
+                                            <p className="text-base text-foreground leading-relaxed font-medium">{todayTask.task_text}</p>
                                         </div>
 
                                         <div className="flex items-center gap-3">
                                             {checkInStatus === 'completed' && (
-                                                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-50 border border-slate-200">
-                                                    <CheckCircle2 className="h-4 w-4 text-slate-600" />
-                                                    <span className="text-slate-700 font-medium text-sm">
+                                                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 border border-border">
+                                                    <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+                                                    <span className="text-foreground font-medium text-sm">
                                                         Completed
                                                     </span>
                                                 </div>
                                             )}
                                             {checkInStatus === 'missed' && (
-                                                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-50 border border-slate-200">
-                                                    <XCircle className="h-4 w-4 text-slate-600" />
-                                                    <span className="text-slate-700 font-medium text-sm">Missed</span>
+                                                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 border border-border">
+                                                    <XCircle className="h-4 w-4 text-muted-foreground" />
+                                                    <span className="text-foreground font-medium text-sm">Missed</span>
                                                 </div>
                                             )}
                                             {checkInStatus === 'pending' && (
-                                                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-50 border border-slate-200">
-                                                    <Clock className="h-4 w-4 text-slate-600" />
-                                                    <span className="text-slate-700 font-medium text-sm">
+                                                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 border border-border">
+                                                    <Clock className="h-4 w-4 text-muted-foreground" />
+                                                    <span className="text-foreground font-medium text-sm">
                                                         Pending
                                                     </span>
                                                 </div>
@@ -285,11 +285,11 @@ export function DashboardContent({
                         )}
 
                         {recentEvents.length > 0 && (
-                            <Card className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200">
+                            <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                                 <CardHeader>
                                     <div className="flex items-center justify-between">
                                         <CardTitle>Activity History</CardTitle>
-                                        <span className="text-xs font-medium text-slate-600">Last {recentEvents.length} messages</span>
+                                        <span className="text-xs font-medium text-muted-foreground">Last {recentEvents.length} messages</span>
                                     </div>
                                 </CardHeader>
                                 <CardContent>
@@ -299,12 +299,12 @@ export function DashboardContent({
                                             return (
                                                 <div
                                                     key={event.id}
-                                                    className="p-5 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all duration-200"
+                                                    className="p-5 bg-muted/50 rounded-lg border border-border hover:border-border/80 hover:shadow-sm transition-all duration-200"
                                                 >
-                                                    <p className="text-base text-slate-800 leading-relaxed font-medium mb-2">
+                                                    <p className="text-base text-foreground leading-relaxed font-medium mb-2">
                                                         {context?.message || 'No message'}
                                                     </p>
-                                                    <p className="text-xs text-slate-500 font-medium">
+                                                    <p className="text-xs text-muted-foreground font-medium">
                                                         {new Date(event.created_at).toLocaleDateString('en-US', {
                                                             weekday: 'long',
                                                             year: 'numeric',

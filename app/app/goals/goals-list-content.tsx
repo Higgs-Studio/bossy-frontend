@@ -52,12 +52,12 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
   };
 
   return (
-    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white">
+    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">Goals</h1>
-            <p className="text-slate-600 text-lg">Manage all your goals</p>
+            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">Goals</h1>
+            <p className="text-muted-foreground text-lg">Manage all your goals</p>
           </div>
           <Button asChild size="lg">
             <Link href="/app/goal">
@@ -68,7 +68,7 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-4">
+        <div className="flex flex-wrap gap-2 border-b border-border pb-4">
           {(['all', 'active', 'completed', 'abandoned'] as const).map((status) => (
             <button
               key={status}
@@ -76,7 +76,7 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 filter === status
                   ? 'bg-indigo-600 text-white'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  : 'bg-muted text-foreground hover:bg-muted/80'
               }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -91,14 +91,14 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
 
         {/* Goals List */}
         {filteredGoals.length === 0 ? (
-          <Card className="border border-slate-200">
+          <Card className="border border-border">
             <CardContent className="pt-6">
               <div className="text-center py-12">
-                <Target className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">
                   No goals found
                 </h3>
-                <p className="text-slate-600 mb-6">
+                <p className="text-muted-foreground mb-6">
                   {filter === 'all'
                     ? "You haven't created any goals yet."
                     : `You don't have any ${filter} goals.`}
@@ -118,7 +118,7 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
               return (
                 <Card
                   key={goal.id}
-                  className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200"
+                  className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200"
                 >
                   <CardHeader>
                     <div className="flex items-start justify-between gap-2">
@@ -140,7 +140,7 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
                       </div>
 
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-sm text-slate-600">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Calendar className="h-4 w-4" />
                           <span>
                             {new Date(goal.start_date).toLocaleDateString()} -{' '}
@@ -150,11 +150,11 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
 
                         {goal.status === 'active' && (
                           <div className="space-y-1">
-                            <div className="flex justify-between text-xs text-slate-600">
+                            <div className="flex justify-between text-xs text-muted-foreground">
                               <span>Progress</span>
                               <span>{Math.round(progress)}%</span>
                             </div>
-                            <div className="relative h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div className="relative h-2 bg-muted rounded-full overflow-hidden">
                               <div
                                 className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full transition-all duration-500"
                                 style={{ width: `${progress}%` }}
@@ -182,7 +182,7 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
                             type="submit"
                             variant="outline"
                             size="sm"
-                            className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
+                            className="w-full text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50"
                             disabled={isDeletePending}
                           >
                             <Trash2 className="mr-2 h-3 w-3" />
@@ -192,7 +192,7 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
                       </div>
 
                       {deleteState?.error && (
-                        <div className="text-red-600 text-xs bg-red-50 p-2 rounded border border-red-200">
+                        <div className="text-red-600 dark:text-red-400 text-xs bg-red-50 dark:bg-red-950/50 p-2 rounded border border-red-200 dark:border-red-900">
                           {deleteState.error}
                         </div>
                       )}

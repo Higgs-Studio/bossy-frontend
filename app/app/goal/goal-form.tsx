@@ -15,7 +15,7 @@ export function GoalForm() {
   const [intensity, setIntensity] = useState('medium');
 
   return (
-    <Card className="border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200">
+    <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Target className="h-5 w-5 text-primary" />
@@ -38,14 +38,14 @@ export function GoalForm() {
               maxLength={200}
               placeholder="e.g., Build a SaaS product"
             />
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               Be specific and concrete. This goal cannot be edited once created.
             </p>
           </div>
 
-          <div className="space-y-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+          <div className="space-y-4 p-4 bg-muted/50 rounded-xl border border-border">
             <Label className="text-base font-semibold">Time Horizon</Label>
-            <p className="text-sm text-gray-600 -mt-2">How long will you commit to this goal?</p>
+            <p className="text-sm text-muted-foreground -mt-2">How long will you commit to this goal?</p>
             <RadioGroup
               value={timeHorizon}
               onValueChange={setTimeHorizon}
@@ -54,8 +54,8 @@ export function GoalForm() {
               <label 
                 htmlFor="time-14"
                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${timeHorizon === '14'
-                  ? 'border-indigo-500 bg-indigo-50 shadow-sm'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                  : 'border-border hover:border-border/80 hover:bg-muted/50'
                 }`}
               >
                 <RadioGroupItem value="14" id="time-14" />
@@ -64,8 +64,8 @@ export function GoalForm() {
               <label 
                 htmlFor="time-30"
                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${timeHorizon === '30'
-                  ? 'border-indigo-500 bg-indigo-50 shadow-sm'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                  : 'border-border hover:border-border/80 hover:bg-muted/50'
                 }`}
               >
                 <RadioGroupItem value="30" id="time-30" />
@@ -74,8 +74,8 @@ export function GoalForm() {
               <label 
                 htmlFor="time-60"
                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${timeHorizon === '60'
-                  ? 'border-indigo-500 bg-indigo-50 shadow-sm'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                  : 'border-border hover:border-border/80 hover:bg-muted/50'
                 }`}
               >
                 <RadioGroupItem value="60" id="time-60" />
@@ -84,9 +84,9 @@ export function GoalForm() {
             </RadioGroup>
           </div>
 
-          <div className="space-y-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+          <div className="space-y-4 p-4 bg-muted/50 rounded-xl border border-border">
             <Label className="text-base font-semibold">Intensity</Label>
-            <p className="text-sm text-gray-600 -mt-2">How much daily commitment are you making?</p>
+            <p className="text-sm text-muted-foreground -mt-2">How much daily commitment are you making?</p>
             <RadioGroup
               value={intensity}
               onValueChange={setIntensity}
@@ -95,40 +95,40 @@ export function GoalForm() {
               <label 
                 htmlFor="intensity-low"
                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${intensity === 'low'
-                  ? 'border-indigo-500 bg-indigo-50 shadow-sm'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                  : 'border-border hover:border-border/80 hover:bg-muted/50'
                 }`}
               >
                 <RadioGroupItem value="low" id="intensity-low" />
                 <span className="font-medium cursor-pointer flex-1">
                   <span className="block">Low</span>
-                  <span className="text-sm text-gray-600 font-normal">Light daily commitment</span>
+                  <span className="text-sm text-muted-foreground font-normal">Light daily commitment</span>
                 </span>
               </label>
               <label 
                 htmlFor="intensity-medium"
                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${intensity === 'medium'
-                  ? 'border-indigo-500 bg-indigo-50 shadow-sm'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                  : 'border-border hover:border-border/80 hover:bg-muted/50'
                 }`}
               >
                 <RadioGroupItem value="medium" id="intensity-medium" />
                 <span className="font-medium cursor-pointer flex-1">
                   <span className="block">Medium</span>
-                  <span className="text-sm text-gray-600 font-normal">Moderate daily commitment</span>
+                  <span className="text-sm text-muted-foreground font-normal">Moderate daily commitment</span>
                 </span>
               </label>
               <label 
                 htmlFor="intensity-high"
                 className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${intensity === 'high'
-                  ? 'border-indigo-500 bg-indigo-50 shadow-sm'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                  : 'border-border hover:border-border/80 hover:bg-muted/50'
                 }`}
               >
                 <RadioGroupItem value="high" id="intensity-high" />
                 <span className="font-medium cursor-pointer flex-1">
                   <span className="block">High</span>
-                  <span className="text-sm text-gray-600 font-normal">Significant daily commitment</span>
+                  <span className="text-sm text-muted-foreground font-normal">Significant daily commitment</span>
                 </span>
               </label>
             </RadioGroup>
@@ -144,7 +144,7 @@ export function GoalForm() {
               defaultValue={new Date().toISOString().split('T')[0]}
               min={new Date().toISOString().split('T')[0]}
             />
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               Choose when you want to start your accountability journey.
             </p>
           </div>
