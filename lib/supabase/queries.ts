@@ -106,21 +106,70 @@ export async function createGoal(data: {
   bossType?: BossType;
 }) {
   const supabase = await createClient();
-  const { data: goal, error } = await supabase
+
+  // Try with boss_type first
+  let insertData: any = {
+    user_id: data.userId,
+    title: data.title,
+    intensity: data.intensity,
+    start_date: data.startDate,
+    end_date: data.endDate,
+    status: 'active',
+  };
+
+  // Only include boss_type if we have it (column might not exist in older schemas)
+  // We'll try with it first, and if it fails with PGRST204, retry without it
+  const insertDataWithBossType = {
+    ...insertData,
+    boss_type: data.bossType || 'execution',
+  };
+
+  console.log('[DEBUG] createGoal - inserting with boss_type:', insertDataWithBossType);
+
+  let { data: goal, error } = await supabase
     .from('goals')
-    .insert({
-      user_id: data.userId,
-      title: data.title,
-      intensity: data.intensity,
-      start_date: data.startDate,
-      end_date: data.endDate,
-      boss_type: data.bossType || 'execution',
-      status: 'active',
-    })
+    .insert(insertDataWithBossType)
     .select()
     .single();
 
-  if (error) throw error;
+  // If error is about missing boss_type column, retry without it
+  if (error && error.code === 'PGRST204' && error.message?.includes('boss_type')) {
+    console.log('[DEBUG] createGoal - boss_type column not found, retrying without it');
+    insertData = {
+      ...insertData,
+      // Don't include boss_type
+    };
+
+    const { data: goalRetry, error: errorRetry } = await supabase
+      .from('goals')
+      .insert(insertData)
+      .select()
+      .single();
+
+    goal = goalRetry;
+    error = errorRetry;
+  }
+
+  if (error) {
+    console.error('[DEBUG] createGoal - Supabase error:', {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+      fullError: JSON.stringify(error, Object.getOwnPropertyNames(error))
+    });
+    // Create a more descriptive error
+    const errorMsg = error.message || error.details || error.hint || 'Database error';
+
+    // Provide helpful message for missing column
+    if (error.code === 'PGRST204') {
+      throw new Error(`Database schema issue: ${errorMsg}. Please run the migration: supabase/migrations/003_add_boss_type_to_goals.sql`);
+    }
+
+    throw new Error(`Supabase error: ${errorMsg} (code: ${error.code || 'unknown'})`);
+  }
+
+  console.log('[DEBUG] createGoal - success:', goal?.id);
   return goal as Goal;
 }
 
@@ -177,7 +226,7 @@ export async function createCheckIn(data: {
 
 export async function markTaskMissed(taskId: string, userId: string) {
   const supabase = await createClient();
-  
+
   // Check if check-in already exists
   const { data: existing } = await supabase
     .from('check_ins')
@@ -194,7 +243,7 @@ export async function markTaskMissed(taskId: string, userId: string) {
       .eq('id', existing.id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as CheckIn;
   } else {
@@ -242,7 +291,7 @@ export async function getRecentBossEvents(userId: string, limit: number = 5) {
 
 export async function abandonGoal(goalId: string, userId: string) {
   const supabase = await createClient();
-  
+
   // Verify goal belongs to user
   const { data: goal, error: fetchError } = await supabase
     .from('goals')
@@ -268,7 +317,7 @@ export async function abandonGoal(goalId: string, userId: string) {
 
 export async function completeGoal(goalId: string, userId: string) {
   const supabase = await createClient();
-  
+
   // Verify goal belongs to user
   const { data: goal, error: fetchError } = await supabase
     .from('goals')
@@ -294,7 +343,7 @@ export async function completeGoal(goalId: string, userId: string) {
 
 export async function getConsecutiveMisses(userId: string, goalId: string): Promise<number> {
   const supabase = await createClient();
-  
+
   // Get all tasks for this goal ordered by date descending
   const { data: tasks, error: tasksError } = await supabase
     .from('daily_tasks')
@@ -306,7 +355,7 @@ export async function getConsecutiveMisses(userId: string, goalId: string): Prom
   if (tasksError || !tasks) return 0;
 
   let consecutiveMisses = 0;
-  
+
   // Check each task from most recent backwards
   for (const task of tasks) {
     // Get check-in for this task
@@ -328,5 +377,307 @@ export async function getConsecutiveMisses(userId: string, goalId: string): Prom
   }
 
   return consecutiveMisses;
+}
+
+export async function updateGoal(
+  goalId: string,
+  userId: string,
+  data: {
+    title?: string;
+    intensity?: 'low' | 'medium' | 'high';
+    startDate?: string;
+    endDate?: string;
+    bossType?: BossType;
+    status?: 'active' | 'completed' | 'abandoned';
+  }
+) {
+  const supabase = await createClient();
+
+  // Verify goal belongs to user
+  const { data: goal, error: fetchError } = await supabase
+    .from('goals')
+    .select('*')
+    .eq('id', goalId)
+    .eq('user_id', userId)
+    .single();
+
+  if (fetchError || !goal) throw new Error('Goal not found or unauthorized');
+
+  // Build update object
+  const updateData: any = {};
+  if (data.title !== undefined) updateData.title = data.title;
+  if (data.intensity !== undefined) updateData.intensity = data.intensity;
+  if (data.startDate !== undefined) updateData.start_date = data.startDate;
+  if (data.endDate !== undefined) updateData.end_date = data.endDate;
+  if (data.status !== undefined) updateData.status = data.status;
+
+  // Try with boss_type first, retry without it if column doesn't exist
+  const updateDataWithBossType = {
+    ...updateData,
+    ...(data.bossType !== undefined && { boss_type: data.bossType })
+  };
+
+  console.log('[DEBUG] updateGoal - updating with:', updateDataWithBossType);
+
+  let { data: updatedGoal, error } = await supabase
+    .from('goals')
+    .update(updateDataWithBossType)
+    .eq('id', goalId)
+    .eq('user_id', userId)
+    .select()
+    .single();
+
+  // If error is about missing boss_type column, retry without it
+  if (error && error.code === 'PGRST204' && error.message?.includes('boss_type') && data.bossType !== undefined) {
+    console.log('[DEBUG] updateGoal - boss_type column not found, retrying without it');
+    const updateDataWithoutBossType = { ...updateData };
+
+    const { data: goalRetry, error: errorRetry } = await supabase
+      .from('goals')
+      .update(updateDataWithoutBossType)
+      .eq('id', goalId)
+      .eq('user_id', userId)
+      .select()
+      .single();
+
+    updatedGoal = goalRetry;
+    error = errorRetry;
+  }
+
+  if (error) {
+    console.error('[DEBUG] updateGoal - Supabase error:', {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+      fullError: JSON.stringify(error, Object.getOwnPropertyNames(error))
+    });
+    // Create a more descriptive error
+    const errorMsg = error.message || error.details || error.hint || 'Database error';
+
+    // Provide helpful message for missing column
+    if (error.code === 'PGRST204') {
+      throw new Error(`Database schema issue: ${errorMsg}. Please run the migration: supabase/migrations/003_add_boss_type_to_goals.sql`);
+    }
+
+    throw new Error(`Supabase error: ${errorMsg} (code: ${error.code || 'unknown'})`);
+  }
+
+  console.log('[DEBUG] updateGoal - success:', updatedGoal?.id);
+  return updatedGoal as Goal;
+}
+
+export async function deleteGoal(goalId: string, userId: string) {
+  const supabase = await createClient();
+
+  // Verify goal belongs to user
+  const { data: goal, error: fetchError } = await supabase
+    .from('goals')
+    .select('*')
+    .eq('id', goalId)
+    .eq('user_id', userId)
+    .single();
+
+  if (fetchError || !goal) throw new Error('Goal not found or unauthorized');
+
+  // Delete goal (tasks and check-ins will be deleted via CASCADE)
+  const { error } = await supabase
+    .from('goals')
+    .delete()
+    .eq('id', goalId)
+    .eq('user_id', userId);
+
+  if (error) throw error;
+  return true;
+}
+
+export async function getGoalById(goalId: string, userId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('goals')
+    .select('*')
+    .eq('id', goalId)
+    .eq('user_id', userId)
+    .single();
+
+  if (error && error.code !== 'PGRST116') throw error;
+  return data as Goal | null;
+}
+
+// ==========================================
+// User Preferences (Boss Type at User Level)
+// ==========================================
+
+export type UserPreferences = {
+  id: string;
+  user_id: string;
+  boss_type: BossType;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getUserBossType(userId: string): Promise<BossType> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('user_preferences')
+    .select('boss_type')
+    .eq('user_id', userId)
+    .single();
+
+  // If no preferences exist yet, return default
+  if (error && error.code === 'PGRST116') {
+    return 'execution';
+  }
+  if (error) throw error;
+  return (data?.boss_type as BossType) || 'execution';
+}
+
+export async function setUserBossType(userId: string, bossType: BossType): Promise<UserPreferences> {
+  const supabase = await createClient();
+  
+  // Try to update first (upsert)
+  const { data, error } = await supabase
+    .from('user_preferences')
+    .upsert({
+      user_id: userId,
+      boss_type: bossType,
+    }, {
+      onConflict: 'user_id',
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as UserPreferences;
+}
+
+export async function getUserPreferences(userId: string): Promise<UserPreferences | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('user_preferences')
+    .select('*')
+    .eq('user_id', userId)
+    .single();
+
+  if (error && error.code === 'PGRST116') {
+    return null;
+  }
+  if (error) throw error;
+  return data as UserPreferences;
+}
+
+// ==========================================
+// Task CRUD Operations
+// ==========================================
+
+export async function getTasksForGoal(goalId: string, userId: string): Promise<DailyTask[]> {
+  const supabase = await createClient();
+  
+  // First verify the goal belongs to the user
+  const goal = await getGoalById(goalId, userId);
+  if (!goal) throw new Error('Goal not found or unauthorized');
+
+  const { data, error } = await supabase
+    .from('daily_tasks')
+    .select('*')
+    .eq('goal_id', goalId)
+    .order('task_date', { ascending: true });
+
+  if (error) throw error;
+  return data as DailyTask[];
+}
+
+export async function createTask(data: {
+  goalId: string;
+  userId: string;
+  taskDate: string;
+  taskText: string;
+}): Promise<DailyTask> {
+  const supabase = await createClient();
+  
+  // First verify the goal belongs to the user
+  const goal = await getGoalById(data.goalId, data.userId);
+  if (!goal) throw new Error('Goal not found or unauthorized');
+
+  const { data: task, error } = await supabase
+    .from('daily_tasks')
+    .insert({
+      goal_id: data.goalId,
+      task_date: data.taskDate,
+      task_text: data.taskText,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return task as DailyTask;
+}
+
+export async function updateTask(
+  taskId: string,
+  userId: string,
+  data: {
+    taskText?: string;
+    taskDate?: string;
+  }
+): Promise<DailyTask> {
+  const supabase = await createClient();
+
+  // First get the task and verify ownership through goal
+  const { data: task, error: fetchError } = await supabase
+    .from('daily_tasks')
+    .select('*, goals!inner(user_id)')
+    .eq('id', taskId)
+    .single();
+
+  if (fetchError || !task) throw new Error('Task not found');
+  
+  // Check if the goal belongs to the user
+  const goalData = task.goals as { user_id: string };
+  if (goalData.user_id !== userId) {
+    throw new Error('Unauthorized');
+  }
+
+  // Build update object
+  const updateData: any = {};
+  if (data.taskText !== undefined) updateData.task_text = data.taskText;
+  if (data.taskDate !== undefined) updateData.task_date = data.taskDate;
+
+  const { data: updatedTask, error } = await supabase
+    .from('daily_tasks')
+    .update(updateData)
+    .eq('id', taskId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return updatedTask as DailyTask;
+}
+
+export async function deleteTask(taskId: string, userId: string): Promise<boolean> {
+  const supabase = await createClient();
+
+  // First get the task and verify ownership through goal
+  const { data: task, error: fetchError } = await supabase
+    .from('daily_tasks')
+    .select('*, goals!inner(user_id)')
+    .eq('id', taskId)
+    .single();
+
+  if (fetchError || !task) throw new Error('Task not found');
+  
+  // Check if the goal belongs to the user
+  const goalData = task.goals as { user_id: string };
+  if (goalData.user_id !== userId) {
+    throw new Error('Unauthorized');
+  }
+
+  const { error } = await supabase
+    .from('daily_tasks')
+    .delete()
+    .eq('id', taskId);
+
+  if (error) throw error;
+  return true;
 }
 

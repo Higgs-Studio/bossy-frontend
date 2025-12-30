@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Home, LogOut, User } from 'lucide-react';
+import { Home, LogOut, User, Settings } from 'lucide-react';
 import { signOut } from '@/app/(login)/actions';
 import { AppHeader } from './app-header';
 
@@ -37,6 +37,12 @@ async function UserMenu() {
           <Link href="/app/dashboard" className="flex w-full items-center">
             <Home className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          <Link href="/app/profile" className="flex w-full items-center">
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Profile</span>
           </Link>
         </DropdownMenuItem>
         <form action={signOut} className="w-full">

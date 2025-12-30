@@ -12,3 +12,4 @@ DROP TABLE IF EXISTS users CASCADE;
 -- Note: This does NOT drop auth.users (Supabase's built-in auth table)
 -- We're only dropping the custom 'users' table from the old schema
 
+

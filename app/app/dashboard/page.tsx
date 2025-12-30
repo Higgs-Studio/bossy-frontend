@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/supabase/get-session';
 import {
   getActiveGoal,
+  getUserGoals,
   getTodayTask,
   getCheckInsForTask,
   getRecentBossEvents,
@@ -14,9 +15,16 @@ export default async function DashboardPage() {
     redirect('/sign-in');
   }
 
-  const [activeGoal, todayTask, recentEvents] = await Promise.all([
-    getActiveGoal(user.id),
-    getTodayTask(user.id),
+  // Get all goals and find active ones
+  const allGoals = await getUserGoals(user.id);
+  const activeGoals = allGoals.filter((g) => g.status === 'active');
+  
+  // Use the most recent active goal, or first active goal if multiple exist
+  // This maintains backward compatibility with getTodayTask which expects one active goal
+  const activeGoal = activeGoals.length > 0 ? activeGoals[0] : null;
+
+  const [todayTask, recentEvents] = await Promise.all([
+    getTodayTask(user.id), // This will return null if no active goal
     getRecentBossEvents(user.id, 3),
   ]);
 

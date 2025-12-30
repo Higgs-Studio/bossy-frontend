@@ -16,3 +16,4 @@ DROP TABLE IF EXISTS users CASCADE;
 -- We're only dropping the custom 'users' table from the old schema
 -- Supabase's auth.users is managed by Supabase and should never be dropped
 
+

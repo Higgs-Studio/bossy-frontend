@@ -3,9 +3,12 @@
 import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/supabase/get-session';
 import {
-  getActiveGoal,
   createGoal,
   createDailyTasks,
+  updateGoal,
+  deleteGoal,
+  getGoalById,
+  getUserBossType,
 } from '@/lib/supabase/queries';
 
 export async function createGoalAction(
@@ -17,36 +20,32 @@ export async function createGoalAction(
     redirect('/sign-in');
   }
 
-  // Check if user already has an active goal
-  const existingGoal = await getActiveGoal(user.id);
-  if (existingGoal) {
-    return { error: 'You already have an active goal' };
-  }
-
   const title = formData.get('title') as string;
   const timeHorizon = parseInt(formData.get('timeHorizon') as string);
   const intensity = formData.get('intensity') as 'low' | 'medium' | 'high';
   const startDate = formData.get('startDate') as string;
-  const bossType = (formData.get('bossType') as string) || 'execution';
 
-  if (!title || !timeHorizon || !intensity || !startDate) {
+  if (!title || !timeHorizon || isNaN(timeHorizon) || !intensity || !startDate) {
     return { error: 'All fields are required' };
   }
 
   try {
+    // Get user's boss type from preferences
+    const bossType = await getUserBossType(user.id);
+
     // Calculate end date
     const start = new Date(startDate);
     const end = new Date(start);
     end.setDate(end.getDate() + timeHorizon - 1);
 
-    // Create goal
+    // Create goal with user's boss type
     const goal = await createGoal({
       userId: user.id,
       title: title.trim(),
       intensity,
       startDate: start.toISOString().split('T')[0],
       endDate: end.toISOString().split('T')[0],
-      bossType: bossType as any,
+      bossType,
     });
 
     // Generate task text based on intensity
@@ -54,8 +53,8 @@ export async function createGoalAction(
       intensity === 'high'
         ? `Work 90 minutes on: ${title}`
         : intensity === 'medium'
-        ? `Work 60 minutes on: ${title}`
-        : `Work 30 minutes on: ${title}`;
+          ? `Work 60 minutes on: ${title}`
+          : `Work 30 minutes on: ${title}`;
 
     // Generate daily tasks
     await createDailyTasks(
@@ -67,8 +66,129 @@ export async function createGoalAction(
 
     redirect('/app/dashboard');
   } catch (error) {
+    // Re-throw redirect errors
+    if (
+      error &&
+      typeof error === 'object' &&
+      'digest' in error &&
+      typeof error.digest === 'string' &&
+      error.digest.includes('NEXT_REDIRECT')
+    ) {
+      throw error;
+    }
+
     console.error('Create goal error:', error);
-    return { error: 'Failed to create goal. Please try again.' };
+
+    let errorMessage = 'Unknown error';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (error && typeof error === 'object' && 'message' in error) {
+      errorMessage = String(error.message);
+    } else {
+      errorMessage = String(error);
+    }
+
+    return { error: `Failed to create goal: ${errorMessage}` };
   }
 }
 
+export async function updateGoalAction(
+  prevState: any,
+  formData: FormData
+): Promise<{ error?: string } | null> {
+  const user = await getUser();
+  if (!user) {
+    redirect('/sign-in');
+  }
+
+  const goalId = formData.get('goalId') as string;
+  const title = formData.get('title') as string;
+  const intensity = formData.get('intensity') as 'low' | 'medium' | 'high';
+  const startDate = formData.get('startDate') as string;
+  const timeHorizonStr = formData.get('timeHorizon') as string;
+  const timeHorizon = parseInt(timeHorizonStr);
+
+  if (!goalId || !title || !timeHorizon || isNaN(timeHorizon) || !intensity || !startDate) {
+    return { error: 'All fields are required' };
+  }
+
+  try {
+    // Verify goal exists and belongs to user
+    const existingGoal = await getGoalById(goalId, user.id);
+    if (!existingGoal) {
+      return { error: 'Goal not found or unauthorized' };
+    }
+
+    // Calculate end date
+    const start = new Date(startDate);
+    const end = new Date(start);
+    end.setDate(end.getDate() + timeHorizon - 1);
+
+    // Update goal (boss type stays the same - it's user-level now)
+    await updateGoal(goalId, user.id, {
+      title: title.trim(),
+      intensity,
+      startDate: start.toISOString().split('T')[0],
+      endDate: end.toISOString().split('T')[0],
+    });
+
+    redirect('/app/goals');
+  } catch (error) {
+    // Re-throw redirect errors
+    if (
+      error &&
+      typeof error === 'object' &&
+      'digest' in error &&
+      typeof error.digest === 'string' &&
+      error.digest.includes('NEXT_REDIRECT')
+    ) {
+      throw error;
+    }
+
+    console.error('Update goal error:', error);
+
+    let errorMessage = 'Unknown error';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (error && typeof error === 'object' && 'message' in error) {
+      errorMessage = String(error.message);
+    } else {
+      errorMessage = String(error);
+    }
+
+    return { error: `Failed to update goal: ${errorMessage}` };
+  }
+}
+
+export async function deleteGoalAction(
+  prevState: any,
+  formData: FormData
+): Promise<{ error?: string } | null> {
+  const user = await getUser();
+  if (!user) {
+    redirect('/sign-in');
+  }
+
+  const goalId = formData.get('goalId') as string;
+  if (!goalId) {
+    return { error: 'Goal ID is required' };
+  }
+
+  try {
+    await deleteGoal(goalId, user.id);
+    redirect('/app/goals');
+  } catch (error) {
+    // Re-throw redirect errors
+    if (
+      error &&
+      typeof error === 'object' &&
+      'digest' in error &&
+      typeof error.digest === 'string' &&
+      error.digest.includes('NEXT_REDIRECT')
+    ) {
+      throw error;
+    }
+    console.error('Delete goal error:', error);
+    return { error: 'Failed to delete goal. Please try again.' };
+  }
+}

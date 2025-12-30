@@ -9,11 +9,7 @@ export default async function GoalPage() {
     redirect('/sign-in');
   }
 
-  // Check if user already has an active goal
-  const activeGoal = await getActiveGoal(user.id);
-  if (activeGoal) {
-    redirect('/app/dashboard');
-  }
+  // Allow creating goals even if user has active goals
 
   return (
     <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white">

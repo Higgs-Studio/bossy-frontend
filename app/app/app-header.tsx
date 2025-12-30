@@ -10,7 +10,8 @@ interface AppHeaderProps {
 export function AppHeader({ userMenu }: AppHeaderProps) {
   const navLinks = [
     { href: '/app/dashboard', label: 'Dashboard' },
-    { href: '/app/goal', label: 'Goal' },
+    { href: '/app/goals', label: 'Goals' },
+    { href: '/app/goal', label: 'Create Goal' },
     { href: '/app/boss', label: 'Boss' },
   ];
 
@@ -32,10 +33,10 @@ export function AppHeader({ userMenu }: AppHeaderProps) {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
             <Link
-              href="/app/goal"
+              href="/app/goals"
               className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors relative group"
             >
-              Goal
+              Goals
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
             <Link

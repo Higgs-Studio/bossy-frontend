@@ -116,3 +116,4 @@ AND table_name IN ('goals', 'daily_tasks', 'check_ins', 'boss_events');
 
 You should see all 4 tables listed.
 
+
