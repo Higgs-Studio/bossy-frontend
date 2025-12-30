@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -17,6 +17,11 @@ export function BossSelector({ currentBossType }: BossSelectorProps) {
   const [state, formAction, isPending] = useActionState(changeBossAction, null);
   const [selectedBoss, setSelectedBoss] = useState<BossType>(currentBossType);
   const boss = getBossPersonality(selectedBoss);
+
+  // Update selected boss when currentBossType changes (after server revalidation)
+  useEffect(() => {
+    setSelectedBoss(currentBossType);
+  }, [currentBossType]);
 
   const hasChanges = selectedBoss !== currentBossType;
 

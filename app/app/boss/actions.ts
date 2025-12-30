@@ -1,6 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { getUser } from '@/lib/supabase/get-session';
 import { setUserBossType } from '@/lib/supabase/queries';
 import type { BossType } from '@/lib/boss/reactions';
@@ -27,6 +28,7 @@ export async function changeBossAction(
 
   try {
     await setUserBossType(user.id, bossType);
+    revalidatePath('/app/boss');
     return { success: true };
   } catch (error) {
     console.error('Error changing boss:', error);
