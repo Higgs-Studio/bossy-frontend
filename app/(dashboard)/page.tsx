@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle2, Clock, TrendingUp, Shield, Zap, BarChart3, Users, Award, MessageSquare, Target } from 'lucide-react';
 import Link from 'next/link';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { ThemeSwitcher } from '@/components/theme-switcher';
 import { useTranslation } from '@/contexts/translation-context';
 
 export default function HomePage() {
@@ -702,6 +703,7 @@ export default function HomePage() {
               © {new Date().getFullYear()} Bossy. All rights reserved.
             </div>
             <div className="flex items-center gap-6">
+              <ThemeSwitcher className="text-slate-300 hover:text-white" />
               <LanguageSwitcher />
               <Link href="/privacy" className="text-sm hover:text-white transition-colors">Privacy</Link>
               <Link href="/terms" className="text-sm hover:text-white transition-colors">Terms</Link>
