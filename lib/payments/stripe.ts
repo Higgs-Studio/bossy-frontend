@@ -6,6 +6,7 @@ import {
   getUser,
   updateTeamSubscription
 } from '@/lib/db/queries';
+import { logError } from '@/lib/utils/logger';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-04-30.basil'
@@ -124,7 +125,7 @@ export async function handleSubscriptionChange(
   const team = await getTeamByStripeCustomerId(customerId);
 
   if (!team) {
-    console.error('Team not found for Stripe customer:', customerId);
+    logError('Team not found for Stripe customer', undefined, { customerId });
     return;
   }
 

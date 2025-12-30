@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { Locale } from '@/i18n.config';
+import { logError } from '@/lib/utils/logger';
 
 type TranslationContextType = {
   locale: Locale;
@@ -32,7 +33,7 @@ export function TranslationProvider({ children, initialTranslations }: { childre
       const dict = await import(`@/dictionaries/${newLocale}.json`);
       setTranslations(dict.default);
     } catch (error) {
-      console.error('Failed to load translations:', error);
+      logError('Failed to load translations', error, { locale: newLocale });
     }
   };
 
