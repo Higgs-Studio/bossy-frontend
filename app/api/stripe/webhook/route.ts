@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { handleSubscriptionChange, stripe } from '@/lib/payments/stripe';
 import { NextRequest, NextResponse } from 'next/server';
+import { logError, logInfo } from '@/lib/utils/logger';
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
@@ -13,7 +14,7 @@ export async function POST(request: NextRequest) {
   try {
     event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
   } catch (err) {
-    console.error('Webhook signature verification failed.', err);
+    logError('Webhook signature verification failed', err);
     return NextResponse.json(
       { error: 'Webhook signature verification failed.' },
       { status: 400 }
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
       await handleSubscriptionChange(subscription);
       break;
     default:
-      console.log(`Unhandled event type ${event.type}`);
+      logInfo(`Unhandled webhook event type: ${event.type}`);
   }
 
   return NextResponse.json({ received: true });
