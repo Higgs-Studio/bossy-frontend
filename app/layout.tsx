@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { TranslationProvider } from '@/contexts/translation-context';
+import { ThemeProvider } from '@/components/theme-provider';
 import enTranslations from '@/dictionaries/en.json';
 
 export const metadata: Metadata = {
@@ -28,12 +29,20 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${inter.variable}`}
+      className={inter.variable}
+      suppressHydrationWarning
     >
-      <body className="min-h-[100dvh] bg-gray-50 font-sans">
-        <TranslationProvider initialTranslations={enTranslations}>
-          {children}
-        </TranslationProvider>
+      <body className="min-h-[100dvh] bg-background text-foreground font-sans">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TranslationProvider initialTranslations={enTranslations}>
+            {children}
+          </TranslationProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
