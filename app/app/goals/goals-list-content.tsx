@@ -2,27 +2,56 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Edit, Trash2, Target, Calendar, Zap } from 'lucide-react';
+import { Plus, Edit, Trash2, Target, Calendar, Zap, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import { deleteGoalAction } from '@/app/app/goal/actions';
-import { useActionState, useState } from 'react';
+import { useActionState, useState, useOptimistic, useTransition } from 'react';
 import type { Goal } from '@/lib/supabase/queries';
 
 type GoalsListContentProps = {
   goals: Goal[];
 };
 
-export function GoalsListContent({ goals }: GoalsListContentProps) {
+export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps) {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'abandoned'>('all');
   const [deleteState, deleteFormAction, isDeletePending] = useActionState(
     deleteGoalAction,
     null
   );
+  const [optimisticGoals, setOptimisticGoals] = useOptimistic<Goal[]>(initialGoals);
+  const [isPending, startTransition] = useTransition();
+  const [deletingGoalId, setDeletingGoalId] = useState<string | null>(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState<{show: boolean; goalId: string; goalTitle: string}>({
+    show: false,
+    goalId: '',
+    goalTitle: ''
+  });
+
+  const handleDeleteClick = (goalId: string, goalTitle: string) => {
+    setShowConfirmDialog({ show: true, goalId, goalTitle });
+  };
+
+  const handleConfirmDelete = async () => {
+    const goalId = showConfirmDialog.goalId;
+    setShowConfirmDialog({ show: false, goalId: '', goalTitle: '' });
+    setDeletingGoalId(goalId);
+
+    // Optimistic update
+    startTransition(() => {
+      setOptimisticGoals(optimisticGoals.filter(g => g.id !== goalId));
+    });
+
+    // Execute the actual delete action
+    const formData = new FormData();
+    formData.append('goalId', goalId);
+    await deleteFormAction(formData);
+    setDeletingGoalId(null);
+  };
 
   const filteredGoals =
     filter === 'all'
-      ? goals
-      : goals.filter((goal) => goal.status === filter);
+      ? optimisticGoals
+      : optimisticGoals.filter((goal) => goal.status === filter);
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {
@@ -176,22 +205,19 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
                             Edit
                           </Link>
                         </Button>
-                        <form action={deleteFormAction} className="flex-1">
-                          <input type="hidden" name="goalId" value={goal.id} />
-                          <Button
-                            type="submit"
-                            variant="outline"
-                            size="sm"
-                            className="w-full text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50"
-                            disabled={isDeletePending}
-                          >
-                            <Trash2 className="mr-2 h-3 w-3" />
-                            Delete
-                          </Button>
-                        </form>
+                        <Button
+                          onClick={() => handleDeleteClick(goal.id, goal.title)}
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50"
+                          disabled={deletingGoalId === goal.id || isPending}
+                        >
+                          <Trash2 className="mr-2 h-3 w-3" />
+                          {deletingGoalId === goal.id ? 'Deleting...' : 'Delete'}
+                        </Button>
                       </div>
 
-                      {deleteState?.error && (
+                      {deleteState?.error && deletingGoalId === goal.id && (
                         <div className="text-red-600 dark:text-red-400 text-xs bg-red-50 dark:bg-red-950/50 p-2 rounded border border-red-200 dark:border-red-900">
                           {deleteState.error}
                         </div>
@@ -201,6 +227,42 @@ export function GoalsListContent({ goals }: GoalsListContentProps) {
                 </Card>
               );
             })}
+          </div>
+        )}
+
+        {/* Confirmation Dialog */}
+        {showConfirmDialog.show && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="max-w-md w-full border-2 border-border">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 dark:bg-red-950/50 flex items-center justify-center">
+                    <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
+                  </div>
+                  <CardTitle>Delete Goal?</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Are you sure you want to delete <strong className="text-foreground">{showConfirmDialog.goalTitle}</strong>? This action cannot be undone. All associated tasks and progress will be permanently deleted.
+                </p>
+                <div className="flex gap-3 pt-2">
+                  <Button
+                    onClick={() => setShowConfirmDialog({ show: false, goalId: '', goalTitle: '' })}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleConfirmDelete}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Delete Goal
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
       </div>
