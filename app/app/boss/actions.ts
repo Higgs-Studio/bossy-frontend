@@ -3,10 +3,24 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { getUser } from '@/lib/supabase/get-session';
-import { setUserBossType, setUserBossLanguage, getUserPreferences } from '@/lib/supabase/queries';
+import { setUserBossType, setUserBossLanguage, getUserPreferences, getUserBossType, getUserBossLanguage } from '@/lib/supabase/queries';
 import type { BossType, BossLanguage } from '@/lib/boss/reactions';
 import { logError } from '@/lib/utils/logger';
 import { createClient } from '@/lib/supabase/server';
+
+export async function getBossTypeAndLanguage(): Promise<{ bossType: BossType; bossLanguage: BossLanguage }> {
+  const user = await getUser();
+  if (!user) {
+    redirect('/sign-in');
+  }
+
+  const [bossType, bossLanguage] = await Promise.all([
+    getUserBossType(user.id),
+    getUserBossLanguage(user.id),
+  ]);
+
+  return { bossType, bossLanguage };
+}
 
 export async function changeBossAction(
   prevState: any,

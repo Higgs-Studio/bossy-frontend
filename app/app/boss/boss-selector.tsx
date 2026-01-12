@@ -1,12 +1,14 @@
 'use client';
 
 import { useActionState, useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { BOSS_PERSONALITIES, getBossPersonality, type BossType, type BossLanguage } from '@/lib/boss/reactions';
 import { changeBossAction } from './actions';
 import { Loader2, CheckCircle2, Globe } from 'lucide-react';
+import { useTranslation } from '@/contexts/translation-context';
 
 type BossSelectorProps = {
   currentBossType: BossType;
@@ -21,10 +23,19 @@ const LANGUAGE_OPTIONS = [
 ];
 
 export function BossSelector({ currentBossType, currentBossLanguage }: BossSelectorProps) {
+  const { t } = useTranslation();
   const [state, formAction, isPending] = useActionState(changeBossAction, null);
   const [selectedBoss, setSelectedBoss] = useState<BossType>(currentBossType);
   const [selectedLanguage, setSelectedLanguage] = useState<BossLanguage>(currentBossLanguage);
-  const boss = getBossPersonality(selectedBoss);
+  const bossBase = getBossPersonality(selectedBoss);
+  
+  // Get translated boss personality
+  const boss = {
+    ...bossBase,
+    nickname: t.boss?.personalities?.[selectedBoss]?.nickname || bossBase.nickname,
+    description: t.boss?.personalities?.[selectedBoss]?.description || bossBase.description,
+    rules: t.boss?.personalities?.[selectedBoss]?.rules || bossBase.rules,
+  };
 
   // Update selected boss when currentBossType changes (after server revalidation)
   useEffect(() => {
@@ -39,9 +50,21 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
       {/* Current Boss Display */}
       <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
         <CardHeader className="border-b border-border">
-          <div>
-            <CardTitle className="text-2xl">{boss.name}</CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">Your AI Accountability Partner</p>
+          <div className="flex items-center gap-4">
+            <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
+              <Image
+                src={boss.avatar}
+                alt={boss.name}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+            <div className="flex-1">
+              <CardTitle className="text-2xl">{boss.name}</CardTitle>
+              <p className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">"{boss.nickname}"</p>
+              <p className="text-sm text-muted-foreground mt-1">{t.boss?.aiPartner || 'Your AI Accountability Partner'}</p>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-6 pt-6">
@@ -51,7 +74,7 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
 
           <div className="mt-6">
             <h3 className="font-semibold text-foreground mb-4 text-lg">
-              Rules
+              {t.boss?.rules || 'Rules'}
             </h3>
             <ul className="space-y-3">
               {boss.rules.map((rule, index) => (
@@ -65,10 +88,10 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
 
           <div className="mt-6 p-5 bg-muted/50 border border-border rounded-lg">
             <p className="text-foreground font-semibold text-base mb-2">
-              No Negotiations
+              {t.boss?.noNegotiations || 'No Negotiations'}
             </p>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              This boss does not negotiate. Commitments are final. Accountability is non-negotiable.
+              {t.boss?.noNegotiationsDesc || 'This boss does not negotiate. Commitments are final. Accountability is non-negotiable.'}
             </p>
           </div>
         </CardContent>
@@ -77,7 +100,7 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
       {/* Boss Selection Form */}
       <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
         <CardHeader>
-          <CardTitle>Change Your Boss</CardTitle>
+          <CardTitle>{t.boss?.changeBoss || 'Change Your Boss'}</CardTitle>
         </CardHeader>
         <CardContent>
           <form action={formAction} className="space-y-6">
@@ -85,46 +108,59 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
             <input type="hidden" name="bossLanguage" value={selectedLanguage} />
             
             <div>
-              <h3 className="font-semibold text-foreground mb-3 text-base">Boss Personality</h3>
+              <h3 className="font-semibold text-foreground mb-3 text-base">{t.boss?.bossPersonality || 'Boss Personality'}</h3>
               <RadioGroup
                 value={selectedBoss}
                 onValueChange={(value) => setSelectedBoss(value as BossType)}
                 className="space-y-3"
               >
-                {Object.values(BOSS_PERSONALITIES).map((bossOption) => (
-                  <label
-                    key={bossOption.id}
-                    htmlFor={`boss-${bossOption.id}`}
-                  className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                    selectedBoss === bossOption.id
-                      ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30 shadow-sm'
-                      : 'border-border hover:border-border/80 hover:bg-muted/50'
-                  }`}
-                  >
-                    <RadioGroupItem value={bossOption.id} id={`boss-${bossOption.id}`} className="mt-1" />
-                    <span className="cursor-pointer flex-1">
-                      <span className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold text-base">{bossOption.name}</span>
-                        {currentBossType === bossOption.id && (
-                          <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200">
-                            Current
-                          </span>
-                        )}
+                {Object.values(BOSS_PERSONALITIES).map((bossOption) => {
+                  const translatedNickname = t.boss?.personalities?.[bossOption.id]?.nickname || bossOption.nickname;
+                  const translatedDescription = t.boss?.personalities?.[bossOption.id]?.description || bossOption.description;
+                  return (
+                    <label
+                      key={bossOption.id}
+                      htmlFor={`boss-${bossOption.id}`}
+                    className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                      selectedBoss === bossOption.id
+                        ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30 shadow-sm'
+                        : 'border-border hover:border-border/80 hover:bg-muted/50'
+                    }`}
+                    >
+                      <RadioGroupItem value={bossOption.id} id={`boss-${bossOption.id}`} className="mt-1" />
+                      <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                        <Image
+                          src={bossOption.avatar}
+                          alt={bossOption.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <span className="cursor-pointer flex-1">
+                          <span className="flex items-center gap-2 mb-1">
+                          <span className="font-semibold text-base">{bossOption.name}</span>
+                          {currentBossType === bossOption.id && (
+                            <span className="text-xs bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-900">
+                              {t.boss?.current || 'Current'}
+                            </span>
+                          )}
+                        </span>
+                        <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400 block mb-1">"{translatedNickname}"</span>
+                        <span className="text-sm text-muted-foreground block">{translatedDescription}</span>
                       </span>
-                      <span className="text-sm text-muted-foreground block">{bossOption.description}</span>
-                    </span>
-                  </label>
-                ))}
+                    </label>
+                  );
+                })}
               </RadioGroup>
             </div>
 
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Globe className="h-4 w-4 text-muted-foreground" />
-                <h3 className="font-semibold text-foreground text-base">Boss Language</h3>
+                <h3 className="font-semibold text-foreground text-base">{t.boss?.bossLanguage || 'Boss Language'}</h3>
               </div>
               <p className="text-sm text-muted-foreground mb-3">
-                Choose the language your AI boss uses for feedback (independent from app language)
+                {t.boss?.bossLanguageDesc || 'Choose the language your AI boss uses for feedback (independent from app language)'}
               </p>
               <RadioGroup
                 value={selectedLanguage}
@@ -162,7 +198,7 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
             {state?.success && (
               <div className="text-emerald-700 dark:text-emerald-400 text-sm bg-emerald-50 dark:bg-emerald-950/50 p-4 rounded-lg border-2 border-emerald-200 dark:border-emerald-900 font-medium flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4" />
-                Boss changed successfully!
+                {t.boss?.bossChanged || 'Boss changed successfully!'}
               </div>
             )}
 
@@ -175,10 +211,10 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
               {isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Changing Boss...
+                  {t.boss?.changingBoss || 'Changing Boss...'}
                 </>
               ) : (
-                'Save Changes'
+                t.boss?.saveChanges || 'Save Changes'
               )}
             </Button>
           </form>

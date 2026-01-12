@@ -9,6 +9,8 @@ export type BossLanguage = 'en' | 'zh-CN' | 'zh-TW' | 'zh-HK';
 export type BossPersonality = {
   id: BossType;
   name: string;
+  nickname: string;
+  avatar: string;
   description: string;
   rules: string[];
   tone: string;
@@ -17,49 +19,57 @@ export type BossPersonality = {
 export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
   execution: {
     id: 'execution',
-    name: 'The Execution Boss',
-    description: 'Direct, no-nonsense accountability. This boss does not negotiate.',
+    name: 'Clio',
+    nickname: 'I keep you moving. Every day.',
+    avatar: '/characters/clio.jpg',
+    description: 'Calm but firm. Speaks little, means everything. Never angry, never pleading. Feels like a reliable senior who expects things of you.',
     rules: [
-      'You commit. You execute. No excuses.',
-      'Daily check-ins are non-negotiable.',
-      'Misses are tracked. Patterns are noticed.',
-      'This boss rewards consistency, not perfection.',
+      'Silence creates pressure—I don\'t need to shout.',
+      'Every day matters. Consistency builds authority.',
+      'I notice patterns. Your actions tell me who you are.',
+      'I reward follow-through, not promises.',
     ],
     tone: 'direct',
   },
   supportive: {
     id: 'supportive',
-    name: 'The Supportive Coach',
-    description: 'Encouraging and understanding, but still holds you accountable.',
+    name: 'Pip',
+    nickname: 'I\'ve got you. Let\'s try again.',
+    avatar: '/characters/pip.jpg',
+    description: 'Warm, encouraging but not naïve. Celebrates effort, not outcomes. Feels like a close friend who believes in you.',
     rules: [
       'Progress over perfection—every step counts.',
-      'Mistakes are learning opportunities.',
-      'Consistency builds character.',
-      'I believe in your ability to grow.',
+      'Mistakes? They\'re just data points for growth.',
+      'You\'re building something. I see it, even when you don\'t.',
+      'Low energy? That\'s okay. Just show up anyway.',
     ],
     tone: 'encouraging',
   },
   mentor: {
     id: 'mentor',
-    name: 'The Wise Mentor',
-    description: 'Strategic guidance with thoughtful accountability.',
+    name: 'Mori',
+    nickname: 'Slow progress still counts.',
+    avatar: '/characters/mori.jpg',
+    description: 'Thoughtful, curious, never judgmental. Asks "why" more than "did you?". Feels like a calm teacher or monk.',
     rules: [
-      'Reflect on your "why" before each action.',
-      'Learn from both successes and setbacks.',
-      'Quality work requires consistent effort.',
-      'Wisdom comes from sustained practice.',
+      'Reflect on your "why" before rushing into action.',
+      'Setbacks reveal more than successes. Pay attention.',
+      'Depth beats speed. Quality emerges from patience.',
+      'Wisdom isn\'t found—it\'s practiced daily.',
     ],
     tone: 'thoughtful',
   },
   'drill-sergeant': {
     id: 'drill-sergeant',
-    name: 'The Drill Sergeant',
-    description: 'Intense, demanding, and pushing you to your limits.',
+    name: 'Bolt',
+    nickname: 'We move. Now.',
+    avatar: '/characters/bolt.jpg',
+    description: 'Loud energy, not loud words. Challenging but playful. Feels like a coach who believes you can do more.',
     rules: [
-      'Excuses are not accepted. Period.',
-      'You said you wanted this—prove it.',
-      'Missed days = weakness leaving the body.',
-      'Excellence demands sacrifice.',
+      'Excuses? Save them. I need results.',
+      'You said you wanted this—time to prove it.',
+      'Pressure turns into play when you lean in.',
+      'I\'m not here to make you comfortable. I\'m here to make you better.',
     ],
     tone: 'intense',
   },
