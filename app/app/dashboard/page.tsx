@@ -6,6 +6,7 @@ import {
   getTodayTask,
   getCheckInsForTask,
   getRecentBossEvents,
+  getUserBossType,
 } from '@/lib/supabase/queries';
 import { DashboardContent } from './dashboard-content';
 
@@ -23,9 +24,10 @@ export default async function DashboardPage() {
   // This maintains backward compatibility with getTodayTask which expects one active goal
   const activeGoal = activeGoals.length > 0 ? activeGoals[0] : null;
 
-  const [todayTask, recentEvents] = await Promise.all([
+  const [todayTask, recentEvents, bossType] = await Promise.all([
     getTodayTask(user.id), // This will return null if no active goal
     getRecentBossEvents(user.id, 3),
+    getUserBossType(user.id),
   ]);
 
   let checkIn = null;
@@ -49,6 +51,7 @@ export default async function DashboardPage() {
       checkIn={checkIn}
       isMissed={isMissed}
       recentEvents={recentEvents}
+      bossType={bossType}
     />
   );
 }

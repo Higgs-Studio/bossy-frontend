@@ -1,11 +1,14 @@
 'use client';
 
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle2, XCircle, Clock, Target, MessageSquare, Trash2, Check } from 'lucide-react';
 import { checkInAction, markMissedAction, abandonGoalAction, completeGoalAction } from './actions';
 import { useActionState } from 'react';
 import type { Goal, DailyTask, CheckIn, BossEvent } from '@/lib/supabase/queries';
+import { getBossPersonality } from '@/lib/boss/reactions';
+import { useTranslation } from '@/contexts/translation-context';
 
 type DashboardContentProps = {
     activeGoal: Goal | null;
@@ -13,6 +16,7 @@ type DashboardContentProps = {
     checkIn: CheckIn | null;
     isMissed: boolean;
     recentEvents: BossEvent[];
+    bossType?: 'execution' | 'supportive' | 'mentor' | 'drill-sergeant';
 };
 
 export function DashboardContent({
@@ -21,7 +25,9 @@ export function DashboardContent({
     checkIn,
     isMissed,
     recentEvents,
+    bossType,
 }: DashboardContentProps) {
+    const { t } = useTranslation();
     const [checkInState, checkInFormAction, isCheckInPending] = useActionState(
         checkInAction,
         null
@@ -72,7 +78,7 @@ export function DashboardContent({
             <div className="max-w-4xl mx-auto space-y-6">
                 <div>
                     <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
-                        Dashboard
+                        {t.dashboard?.title || 'Dashboard'}
                     </h1>
                     <p className="text-muted-foreground text-lg">{today}</p>
                 </div>
@@ -85,13 +91,13 @@ export function DashboardContent({
                                     <Target className="h-10 w-10 text-muted-foreground" />
                                 </div>
                                 <h3 className="text-xl font-semibold text-foreground mb-3">
-                                    No active goal
+                                    {t.dashboard?.noGoal?.title || 'No active goal'}
                                 </h3>
                                 <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                                    Create a goal to get started with daily accountability.
+                                    {t.dashboard?.noGoal?.description || 'Create a goal to get started with daily accountability.'}
                                 </p>
                                 <Button size="lg" asChild>
-                                    <a href="/app/goal">Create Goal</a>
+                                    <a href="/app/goal">{t.dashboard?.noGoal?.cta || 'Create Goal'}</a>
                                 </Button>
                             </div>
                         </CardContent>
@@ -101,9 +107,9 @@ export function DashboardContent({
                         <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                             <CardHeader>
                                 <div className="flex items-center justify-between">
-                                    <CardTitle>Active Goal</CardTitle>
+                                    <CardTitle>{t.dashboard?.activeGoal || 'Active Goal'}</CardTitle>
                                     <span className="text-xs font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
-                                        In Progress
+                                        {t.dashboard?.inProgress || 'In Progress'}
                                     </span>
                                 </div>
                             </CardHeader>
@@ -113,7 +119,7 @@ export function DashboardContent({
                                         <h3 className="text-2xl font-bold text-foreground mb-3">{activeGoal.title}</h3>
                                         <div className="flex flex-wrap items-center gap-4 text-sm mb-4">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-muted-foreground">Intensity:</span>
+                                                <span className="text-muted-foreground">{t.goal?.intensity || 'Intensity'}:</span>
                                                 <span className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold capitalize border border-indigo-500/20">
                                                     {activeGoal.intensity}
                                                 </span>
@@ -129,10 +135,10 @@ export function DashboardContent({
                                     </div>
                                     <div className="space-y-3">
                                         <div className="flex justify-between text-sm items-center">
-                                            <span className="text-muted-foreground font-medium">Goal Progress</span>
+                                            <span className="text-muted-foreground font-medium">{t.dashboard?.goalProgress || 'Goal Progress'}</span>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-foreground font-bold text-lg">{Math.round(progress)}%</span>
-                                                <span className="text-muted-foreground text-xs">Complete</span>
+                                                <span className="text-muted-foreground text-xs">{t.dashboard?.complete || 'Complete'}</span>
                                             </div>
                                         </div>
                                         <div className="relative h-3 bg-muted rounded-full overflow-hidden">
@@ -142,8 +148,8 @@ export function DashboardContent({
                                             />
                                         </div>
                                         <div className="flex justify-between text-xs text-muted-foreground">
-                                            <span>Started {new Date(activeGoal.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-                                            <span>Ends {new Date(activeGoal.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                                            <span>{t.dashboard?.started || 'Started'} {new Date(activeGoal.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                                            <span>{t.dashboard?.ends || 'Ends'} {new Date(activeGoal.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -153,12 +159,12 @@ export function DashboardContent({
                         {/* Goal Management Card */}
                         <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                             <CardHeader>
-                                <CardTitle>Goal Management</CardTitle>
+                                <CardTitle>{t.dashboard?.goalManagement || 'Goal Management'}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
                                     <p className="text-sm text-muted-foreground mb-4">
-                                        Manage your active goal. Remember: commitments matter.
+                                        {t.dashboard?.managementDescription || 'Manage your active goal. Remember: commitments matter.'}
                                     </p>
                                     <div className="flex flex-col sm:flex-row gap-3">
                                         <form action={completeFormAction} className="flex-1">
@@ -170,11 +176,11 @@ export function DashboardContent({
                                                 disabled={isCompletePending}
                                             >
                                                 {isCompletePending ? (
-                                                    'Processing...'
+                                                    t.dashboard?.processing || 'Processing...'
                                                 ) : (
                                                     <>
                                                         <Check className="mr-2 h-4 w-4" />
-                                                        Mark Goal Complete
+                                                        {t.dashboard?.markComplete || 'Mark Goal Complete'}
                                                     </>
                                                 )}
                                             </Button>
@@ -188,11 +194,11 @@ export function DashboardContent({
                                                 disabled={isAbandonPending}
                                             >
                                                 {isAbandonPending ? (
-                                                    'Processing...'
+                                                    t.dashboard?.processing || 'Processing...'
                                                 ) : (
                                                     <>
                                                         <Trash2 className="mr-2 h-4 w-4" />
-                                                        Abandon Goal
+                                                        {t.dashboard?.abandonGoal || 'Abandon Goal'}
                                                     </>
                                                 )}
                                             </Button>
@@ -211,7 +217,7 @@ export function DashboardContent({
                             <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                                 <CardHeader>
                                     <div className="flex items-center justify-between">
-                                        <CardTitle>Today&apos;s Task</CardTitle>
+                                        <CardTitle>{t.dashboard?.todaysTask || "Today's Task"}</CardTitle>
                                         <span className="text-xs text-muted-foreground">
                                             {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </span>
@@ -228,21 +234,21 @@ export function DashboardContent({
                                                 <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 border border-border">
                                                     <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
                                                     <span className="text-foreground font-medium text-sm">
-                                                        Completed
+                                                        {t.dashboard?.completed || 'Completed'}
                                                     </span>
                                                 </div>
                                             )}
                                             {checkInStatus === 'missed' && (
                                                 <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 border border-border">
                                                     <XCircle className="h-4 w-4 text-muted-foreground" />
-                                                    <span className="text-foreground font-medium text-sm">Missed</span>
+                                                    <span className="text-foreground font-medium text-sm">{t.dashboard?.missed || 'Missed'}</span>
                                                 </div>
                                             )}
                                             {checkInStatus === 'pending' && (
                                                 <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 border border-border">
                                                     <Clock className="h-4 w-4 text-muted-foreground" />
                                                     <span className="text-foreground font-medium text-sm">
-                                                        Pending
+                                                        {t.dashboard?.pending || 'Pending'}
                                                     </span>
                                                 </div>
                                             )}
@@ -256,7 +262,7 @@ export function DashboardContent({
                                                     value={todayTask.id}
                                                 />
                                                 <Button type="submit" disabled={isCheckInPending}>
-                                                    {isCheckInPending ? 'Marking...' : 'Mark Done'}
+                                                    {isCheckInPending ? (t.dashboard?.marking || 'Marking...') : (t.dashboard?.markDone || 'Mark Done')}
                                                 </Button>
                                             </form>
                                         )}
@@ -274,8 +280,8 @@ export function DashboardContent({
                                                     disabled={isMissedPending}
                                                 >
                                                     {isMissedPending
-                                                        ? 'Processing...'
-                                                        : 'Explain Why Missed'}
+                                                        ? (t.dashboard?.processing || 'Processing...')
+                                                        : (t.dashboard?.explainMissed || 'Explain Why Missed')}
                                                 </Button>
                                             </form>
                                         )}
@@ -284,34 +290,51 @@ export function DashboardContent({
                             </Card>
                         )}
 
-                        {recentEvents.length > 0 && (
+                        {recentEvents.length > 0 && bossType && (
                             <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                                 <CardHeader>
                                     <div className="flex items-center justify-between">
-                                        <CardTitle>Activity History</CardTitle>
-                                        <span className="text-xs font-medium text-muted-foreground">Last {recentEvents.length} messages</span>
+                                        <CardTitle>{t.dashboard?.activityHistory || 'Activity History'}</CardTitle>
+                                        <span className="text-xs font-medium text-muted-foreground">
+                                            {t.dashboard?.lastNMessages?.replace('{count}', recentEvents.length.toString()) || `Last ${recentEvents.length} messages`}
+                                        </span>
                                     </div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-4">
                                         {recentEvents.map((event) => {
                                             const context = event.context as { message?: string } | null;
+                                            const boss = getBossPersonality(bossType);
                                             return (
                                                 <div
                                                     key={event.id}
                                                     className="p-5 bg-muted/50 rounded-lg border border-border hover:border-border/80 hover:shadow-sm transition-all duration-200"
                                                 >
-                                                    <p className="text-base text-foreground leading-relaxed font-medium mb-2">
-                                                        {context?.message || 'No message'}
-                                                    </p>
-                                                    <p className="text-xs text-muted-foreground font-medium">
-                                                        {new Date(event.created_at).toLocaleDateString('en-US', {
-                                                            weekday: 'long',
-                                                            year: 'numeric',
-                                                            month: 'long',
-                                                            day: 'numeric'
-                                                        })}
-                                                    </p>
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                                                            <Image
+                                                                src={boss.avatar}
+                                                                alt={boss.name}
+                                                                fill
+                                                                className="object-cover"
+                                                            />
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <span className="text-sm font-semibold text-foreground">{boss.name}</span>
+                                                                <span className="text-xs text-muted-foreground">•</span>
+                                                                <span className="text-xs text-muted-foreground">
+                                                                    {new Date(event.created_at).toLocaleDateString('en-US', {
+                                                                        month: 'short',
+                                                                        day: 'numeric'
+                                                                    })}
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-base text-foreground leading-relaxed">
+                                                                {context?.message || (t.dashboard?.noMessage || 'No message')}
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             );
                                         })}
