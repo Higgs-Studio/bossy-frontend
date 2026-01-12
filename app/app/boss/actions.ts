@@ -3,9 +3,10 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { getUser } from '@/lib/supabase/get-session';
-import { setUserBossType } from '@/lib/supabase/queries';
-import type { BossType } from '@/lib/boss/reactions';
+import { setUserBossType, setUserBossLanguage, getUserPreferences } from '@/lib/supabase/queries';
+import type { BossType, BossLanguage } from '@/lib/boss/reactions';
 import { logError } from '@/lib/utils/logger';
+import { createClient } from '@/lib/supabase/server';
 
 export async function changeBossAction(
   prevState: any,
@@ -17,9 +18,14 @@ export async function changeBossAction(
   }
 
   const bossType = formData.get('bossType') as BossType;
+  const bossLanguage = formData.get('bossLanguage') as BossLanguage;
 
   if (!bossType) {
     return { error: 'Please select a boss type' };
+  }
+
+  if (!bossLanguage) {
+    return { error: 'Please select a boss language' };
   }
 
   const validBossTypes: BossType[] = ['execution', 'supportive', 'mentor', 'drill-sergeant'];
@@ -27,12 +33,30 @@ export async function changeBossAction(
     return { error: 'Invalid boss type selected' };
   }
 
+  const validLanguages: BossLanguage[] = ['en', 'zh-CN', 'zh-TW', 'zh-HK'];
+  if (!validLanguages.includes(bossLanguage)) {
+    return { error: 'Invalid boss language selected' };
+  }
+
   try {
-    await setUserBossType(user.id, bossType);
+    // Use upsert to update both boss_type and boss_language at once
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from('user_preferences')
+      .upsert({
+        user_id: user.id,
+        boss_type: bossType,
+        boss_language: bossLanguage,
+      }, {
+        onConflict: 'user_id',
+      });
+
+    if (error) throw error;
+
     revalidatePath('/app/boss');
     return { success: true };
   } catch (error) {
-    logError('Error changing boss', error, { userId: user.id, bossType });
+    logError('Error changing boss', error, { userId: user.id, bossType, bossLanguage });
     return { error: 'Failed to change boss. Please try again.' };
   }
 }

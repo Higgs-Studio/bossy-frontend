@@ -490,6 +490,7 @@ export type UserPreferences = {
   id: string;
   user_id: string;
   boss_type: BossType;
+  boss_language: 'en' | 'zh-CN' | 'zh-TW' | 'zh-HK';
   created_at: string;
   updated_at: string;
 };
@@ -540,6 +541,48 @@ export async function getUserPreferences(userId: string): Promise<UserPreference
   if (error && error.code === 'PGRST116') {
     return null;
   }
+  if (error) throw error;
+  return data as UserPreferences;
+}
+
+export async function getUserBossLanguage(userId: string): Promise<'en' | 'zh-CN' | 'zh-TW' | 'zh-HK'> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('user_preferences')
+    .select('boss_language')
+    .eq('user_id', userId)
+    .single();
+
+  // If no preferences exist yet, return default
+  if (error && error.code === 'PGRST116') {
+    return 'en';
+  }
+  // If column doesn't exist yet (migration not run), return default
+  if (error && (error.code === 'PGRST204' || error.message?.includes('boss_language'))) {
+    return 'en';
+  }
+  if (error) throw error;
+  return (data?.boss_language as 'en' | 'zh-CN' | 'zh-TW' | 'zh-HK') || 'en';
+}
+
+export async function setUserBossLanguage(
+  userId: string,
+  bossLanguage: 'en' | 'zh-CN' | 'zh-TW' | 'zh-HK'
+): Promise<UserPreferences> {
+  const supabase = await createClient();
+  
+  // Try to update first (upsert)
+  const { data, error } = await supabase
+    .from('user_preferences')
+    .upsert({
+      user_id: userId,
+      boss_language: bossLanguage,
+    }, {
+      onConflict: 'user_id',
+    })
+    .select()
+    .single();
+
   if (error) throw error;
   return data as UserPreferences;
 }

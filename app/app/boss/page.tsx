@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/supabase/get-session';
-import { getUserBossType } from '@/lib/supabase/queries';
+import { getUserBossType, getUserBossLanguage } from '@/lib/supabase/queries';
 import { BossSelector } from './boss-selector';
 
 export default async function BossPage() {
@@ -9,19 +9,22 @@ export default async function BossPage() {
     redirect('/sign-in');
   }
 
-  const currentBossType = await getUserBossType(user.id);
+  const [currentBossType, currentBossLanguage] = await Promise.all([
+    getUserBossType(user.id),
+    getUserBossLanguage(user.id),
+  ]);
 
   return (
-    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white">
+    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
       <div className="max-w-3xl mx-auto space-y-6">
         <div>
-          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
             Your AI Boss
           </h1>
-          <p className="text-slate-600 text-lg">Choose your accountability partner</p>
+          <p className="text-muted-foreground text-lg">Choose your accountability partner</p>
         </div>
 
-        <BossSelector currentBossType={currentBossType} />
+        <BossSelector currentBossType={currentBossType} currentBossLanguage={currentBossLanguage} />
       </div>
     </div>
   );
