@@ -31,9 +31,9 @@ export default async function EditGoalPage({
     const timeHorizon = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
     return (
-        <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white">
+        <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
             <div className="max-w-2xl mx-auto space-y-6">
-                <h1 className="text-2xl lg:text-3xl font-bold text-slate-900">
+                <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
                     Edit Goal
                 </h1>
                 
