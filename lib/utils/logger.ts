@@ -57,7 +57,7 @@ function log(
   if (isDevelopment) {
     // Development: Verbose console logging
     const prefix = `[${level.toUpperCase()}]`;
-    
+
     switch (level) {
       case 'error':
         console.error(prefix, message);
@@ -97,12 +97,12 @@ function log(
       message,
       ...(error instanceof Error
         ? {
-            error: {
-              name: error.name,
-              message: error.message,
-              stack: error.stack,
-            },
-          }
+          error: {
+            name: error.name,
+            message: error.message,
+            stack: error.stack,
+          },
+        }
         : error
           ? { error: String(error) }
           : {}),
