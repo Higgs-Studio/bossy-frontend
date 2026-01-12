@@ -3,17 +3,21 @@
 import Link from 'next/link';
 import { MobileMenu } from '@/components/mobile-menu';
 import { ThemeSwitcher } from '@/components/theme-switcher';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { useTranslation } from '@/contexts/translation-context';
 
 interface AppHeaderProps {
   userMenu: React.ReactNode;
 }
 
 export function AppHeader({ userMenu }: AppHeaderProps) {
+  const { t } = useTranslation();
+  
   const navLinks = [
-    { href: '/app/dashboard', label: 'Dashboard' },
-    { href: '/app/goals', label: 'Goals' },
-    { href: '/app/goal', label: 'Create Goal' },
-    { href: '/app/boss', label: 'Boss' },
+    { href: '/app/dashboard', label: t.nav?.dashboard || 'Dashboard' },
+    { href: '/app/goals', label: t.nav?.goals || 'Goals' },
+    { href: '/app/goal', label: t.nav?.createGoal || 'Create Goal' },
+    { href: '/app/boss', label: t.nav?.boss || 'Boss' },
   ];
 
   return (
@@ -30,30 +34,32 @@ export function AppHeader({ userMenu }: AppHeaderProps) {
               href="/app/dashboard"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
             >
-              Dashboard
+              {t.nav?.dashboard || 'Dashboard'}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
             <Link
               href="/app/goals"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
             >
-              Goals
+              {t.nav?.goals || 'Goals'}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
             <Link
               href="/app/boss"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
             >
-              Boss
+              {t.nav?.boss || 'Boss'}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
           </nav>
           <div className="hidden md:flex items-center gap-2">
             <ThemeSwitcher />
+            <LanguageSwitcher />
             {userMenu}
           </div>
           <div className="md:hidden flex items-center gap-2">
             <ThemeSwitcher />
+            <LanguageSwitcher />
             {userMenu}
             <MobileMenu links={navLinks} />
           </div>
