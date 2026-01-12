@@ -77,7 +77,7 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
               {t.boss?.rules || 'Rules'}
             </h3>
             <ul className="space-y-3">
-              {boss.rules.map((rule: string, index) => (
+              {boss.rules.map((rule: string, index: number) => (
                 <li key={index} className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border hover:border-border/80 transition-colors">
                   <span className="text-muted-foreground font-medium mt-0.5">•</span>
                   <span className="text-foreground leading-relaxed flex-1">{rule}</span>
