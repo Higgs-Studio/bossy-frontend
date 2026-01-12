@@ -150,3 +150,4 @@ CREATE POLICY "Users can insert their own boss events"
   WITH CHECK (auth.uid() = user_id);
 
 
+

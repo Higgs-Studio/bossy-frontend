@@ -5,3 +5,4 @@ ALTER TABLE goals ADD COLUMN IF NOT EXISTS boss_type TEXT NOT NULL DEFAULT 'exec
 ALTER TABLE goals ADD CONSTRAINT valid_boss_type CHECK (boss_type IN ('execution', 'supportive', 'mentor', 'drill-sergeant'));
 
 
+

@@ -17,3 +17,4 @@ DROP TABLE IF EXISTS users CASCADE;
 -- Supabase's auth.users is managed by Supabase and should never be dropped
 
 
+

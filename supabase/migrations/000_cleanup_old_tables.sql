@@ -13,3 +13,4 @@ DROP TABLE IF EXISTS users CASCADE;
 -- We're only dropping the custom 'users' table from the old schema
 
 
+
