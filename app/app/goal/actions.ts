@@ -22,22 +22,25 @@ export async function createGoalAction(
   }
 
   const title = formData.get('title') as string;
-  const timeHorizon = parseInt(formData.get('timeHorizon') as string);
   const intensity = formData.get('intensity') as 'low' | 'medium' | 'high';
   const startDate = formData.get('startDate') as string;
+  const endDate = formData.get('endDate') as string;
 
-  if (!title || !timeHorizon || isNaN(timeHorizon) || !intensity || !startDate) {
+  if (!title || !intensity || !startDate || !endDate) {
     return { error: 'All fields are required' };
+  }
+
+  // Validate dates
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  
+  if (end <= start) {
+    return { error: 'End date must be after start date' };
   }
 
   try {
     // Get user's boss type from preferences
     const bossType = await getUserBossType(user.id);
-
-    // Calculate end date
-    const start = new Date(startDate);
-    const end = new Date(start);
-    end.setDate(end.getDate() + timeHorizon - 1);
 
     // Create goal with user's boss type
     const goal = await createGoal({
@@ -97,11 +100,18 @@ export async function updateGoalAction(
   const title = formData.get('title') as string;
   const intensity = formData.get('intensity') as 'low' | 'medium' | 'high';
   const startDate = formData.get('startDate') as string;
-  const timeHorizonStr = formData.get('timeHorizon') as string;
-  const timeHorizon = parseInt(timeHorizonStr);
+  const endDate = formData.get('endDate') as string;
 
-  if (!goalId || !title || !timeHorizon || isNaN(timeHorizon) || !intensity || !startDate) {
+  if (!goalId || !title || !intensity || !startDate || !endDate) {
     return { error: 'All fields are required' };
+  }
+
+  // Validate dates
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  
+  if (end <= start) {
+    return { error: 'End date must be after start date' };
   }
 
   try {
@@ -110,11 +120,6 @@ export async function updateGoalAction(
     if (!existingGoal) {
       return { error: 'Goal not found or unauthorized' };
     }
-
-    // Calculate end date
-    const start = new Date(startDate);
-    const end = new Date(start);
-    end.setDate(end.getDate() + timeHorizon - 1);
 
     // Update goal (boss type stays the same - it's user-level now)
     await updateGoal(goalId, user.id, {

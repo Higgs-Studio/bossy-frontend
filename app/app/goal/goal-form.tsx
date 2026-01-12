@@ -9,13 +9,16 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Calendar } from '@/components/ui/calendar';
 import { createGoalAction } from './actions';
 import { Loader2, Target, Calendar as CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { useTranslation } from '@/contexts/translation-context';
 
 export function GoalForm() {
+  const { t } = useTranslation();
   const [state, formAction, isPending] = useActionState(createGoalAction, null);
   const [intensity, setIntensity] = useState('medium');
   const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 30));
   const [showStartCalendar, setShowStartCalendar] = useState(false);
   const [showEndCalendar, setShowEndCalendar] = useState(false);
 
@@ -24,74 +27,146 @@ export function GoalForm() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Target className="h-5 w-5 text-primary" />
-          Goal Details
+          {t.goal?.goalDetails || 'Goal Details'}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <form action={formAction} className="space-y-8">
-          {/* Hidden inputs to sync RadioGroup values with form */}
-          <input type="hidden" name="timeHorizon" value={timeHorizon} />
+          {/* Hidden inputs to sync form values */}
           <input type="hidden" name="intensity" value={intensity} />
+          <input type="hidden" name="startDate" value={startDate.toISOString().split('T')[0]} />
+          <input type="hidden" name="endDate" value={endDate.toISOString().split('T')[0]} />
           
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-base font-semibold">Goal Title</Label>
+            <Label htmlFor="title" className="text-base font-semibold">{t.goal?.title || 'Goal Title'}</Label>
             <Input
               id="title"
               name="title"
               type="text"
               required
               maxLength={200}
-              placeholder="e.g., Build a SaaS product"
+              placeholder={t.goal?.titlePlaceholder || 'e.g., Build a SaaS product'}
             />
             <p className="text-sm text-muted-foreground mt-2">
-              Be specific and concrete. This goal cannot be edited once created.
+              {t.goal?.titleHelp || 'Be specific and concrete. This goal cannot be edited once created.'}
             </p>
           </div>
 
           <div className="space-y-4 p-4 bg-muted/50 rounded-xl border border-border">
-            <Label className="text-base font-semibold">Time Horizon</Label>
-            <p className="text-sm text-muted-foreground -mt-2">How long will you commit to this goal?</p>
-            <RadioGroup
-              value={timeHorizon}
-              onValueChange={setTimeHorizon}
-              className="mt-3 space-y-3"
-            >
-              <label 
-                htmlFor="time-14"
-                className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${timeHorizon === '14'
-                  ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
-                  : 'border-border hover:border-border/80 hover:bg-muted/50'
-                }`}
-              >
-                <RadioGroupItem value="14" id="time-14" />
-                <span className="font-medium flex-1">14 days</span>
-              </label>
-              <label 
-                htmlFor="time-30"
-                className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${timeHorizon === '30'
-                  ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
-                  : 'border-border hover:border-border/80 hover:bg-muted/50'
-                }`}
-              >
-                <RadioGroupItem value="30" id="time-30" />
-                <span className="font-medium flex-1">30 days</span>
-              </label>
-              <label 
-                htmlFor="time-60"
-                className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer ${timeHorizon === '60'
-                  ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
-                  : 'border-border hover:border-border/80 hover:bg-muted/50'
-                }`}
-              >
-                <RadioGroupItem value="60" id="time-60" />
-                <span className="font-medium flex-1">60 days</span>
-              </label>
-            </RadioGroup>
+            <Label className="text-base font-semibold">{t.goal?.timeHorizon || 'Goal Timeline'}</Label>
+            <p className="text-sm text-muted-foreground -mt-2">{t.goal?.timeHorizonHelp || 'Choose your start and end dates'}</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+              {/* Start Date Picker */}
+              <div className="space-y-2">
+                <Label htmlFor="start-date-btn" className="text-sm font-medium">{t.goal?.startDate || 'Start Date'}</Label>
+                <Button
+                  id="start-date-btn"
+                  type="button"
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !startDate && "text-muted-foreground"
+                  )}
+                  onClick={() => {
+                    setShowStartCalendar(!showStartCalendar);
+                    setShowEndCalendar(false);
+                  }}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {startDate ? format(startDate, 'PPP') : <span>Pick a date</span>}
+                </Button>
+                {showStartCalendar && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-40" 
+                      onClick={() => setShowStartCalendar(false)}
+                    />
+                    <div className="relative">
+                      <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
+                        <Calendar
+                          mode="single"
+                          selected={startDate}
+                          onSelect={(date) => {
+                            if (date) {
+                              setStartDate(date);
+                              // Adjust end date if it's before new start date
+                              if (endDate < date) {
+                                setEndDate(addDays(date, 30));
+                              }
+                            }
+                            setShowStartCalendar(false);
+                          }}
+                          disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                          initialFocus
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* End Date Picker */}
+              <div className="space-y-2">
+                <Label htmlFor="end-date-btn" className="text-sm font-medium">{t.dashboard?.ends || 'End Date'}</Label>
+                <Button
+                  id="end-date-btn"
+                  type="button"
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !endDate && "text-muted-foreground"
+                  )}
+                  onClick={() => {
+                    setShowEndCalendar(!showEndCalendar);
+                    setShowStartCalendar(false);
+                  }}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {endDate ? format(endDate, 'PPP') : <span>Pick a date</span>}
+                </Button>
+                {showEndCalendar && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-40" 
+                      onClick={() => setShowEndCalendar(false)}
+                    />
+                    <div className="relative">
+                      <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
+                        <Calendar
+                          mode="single"
+                          selected={endDate}
+                          onSelect={(date) => {
+                            if (date) {
+                              setEndDate(date);
+                            }
+                            setShowEndCalendar(false);
+                          }}
+                          disabled={(date) => date <= startDate}
+                          initialFocus
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Duration Display */}
+            {startDate && endDate && (
+              <div className="mt-3 p-3 bg-background rounded-lg border border-border">
+                <p className="text-sm text-muted-foreground">
+                  Duration: <span className="font-semibold text-foreground">
+                    {Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))} days
+                  </span>
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-4 p-4 bg-muted/50 rounded-xl border border-border">
-            <Label className="text-base font-semibold">Intensity</Label>
-            <p className="text-sm text-muted-foreground -mt-2">How much daily commitment are you making?</p>
+            <Label className="text-base font-semibold">{t.goal?.intensity || 'Intensity'}</Label>
+            <p className="text-sm text-muted-foreground -mt-2">{t.goal?.intensityHelp || 'How much daily commitment are you making?'}</p>
             <RadioGroup
               value={intensity}
               onValueChange={setIntensity}
@@ -106,8 +181,8 @@ export function GoalForm() {
               >
                 <RadioGroupItem value="low" id="intensity-low" />
                 <span className="font-medium cursor-pointer flex-1">
-                  <span className="block">Low</span>
-                  <span className="text-sm text-muted-foreground font-normal">Light daily commitment</span>
+                  <span className="block">{t.goal?.intensityLow || 'Low'}</span>
+                  <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityLowDesc || 'Light daily commitment'}</span>
                 </span>
               </label>
               <label 
@@ -119,8 +194,8 @@ export function GoalForm() {
               >
                 <RadioGroupItem value="medium" id="intensity-medium" />
                 <span className="font-medium cursor-pointer flex-1">
-                  <span className="block">Medium</span>
-                  <span className="text-sm text-muted-foreground font-normal">Moderate daily commitment</span>
+                  <span className="block">{t.goal?.intensityMedium || 'Medium'}</span>
+                  <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityMediumDesc || 'Moderate daily commitment'}</span>
                 </span>
               </label>
               <label 
@@ -132,26 +207,11 @@ export function GoalForm() {
               >
                 <RadioGroupItem value="high" id="intensity-high" />
                 <span className="font-medium cursor-pointer flex-1">
-                  <span className="block">High</span>
-                  <span className="text-sm text-muted-foreground font-normal">Significant daily commitment</span>
+                  <span className="block">{t.goal?.intensityHigh || 'High'}</span>
+                  <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityHighDesc || 'Significant daily commitment'}</span>
                 </span>
               </label>
             </RadioGroup>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="startDate" className="text-base font-semibold">Start Date</Label>
-            <Input
-              id="startDate"
-              name="startDate"
-              type="date"
-              required
-              defaultValue={new Date().toISOString().split('T')[0]}
-              min={new Date().toISOString().split('T')[0]}
-            />
-            <p className="text-sm text-muted-foreground mt-2">
-              Choose when you want to start your accountability journey.
-            </p>
           </div>
 
           {state?.error && (
@@ -164,10 +224,10 @@ export function GoalForm() {
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating Goal...
+                {t.goal?.creating || 'Creating Goal...'}
               </>
             ) : (
-              'Create Goal'
+              t.goal?.create || 'Create Goal'
             )}
           </Button>
         </form>
