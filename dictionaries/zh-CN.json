@@ -81,7 +81,20 @@
     "goalManagement": "目标管理",
     "markComplete": "标记目标完成",
     "abandonGoal": "放弃目标",
-    "managementDescription": "管理你的进行中目标。记住：承诺很重要。"
+    "managementDescription": "管理你的进行中目标。记住：承诺很重要。",
+    "goalProgress": "目标进度",
+    "complete": "完成",
+    "started": "开始",
+    "ends": "结束",
+    "completed": "已完成",
+    "missed": "错过",
+    "pending": "待处理",
+    "markDone": "标记完成",
+    "marking": "标记中...",
+    "processing": "处理中...",
+    "explainMissed": "说明错过原因",
+    "lastNMessages": "最近{count}条消息",
+    "noMessage": "没有消息"
   },
   "goal": {
     "createTitle": "建立你的目标",
@@ -97,7 +110,38 @@
     "startDate": "开始日期",
     "startDateHelp": "选择你想要开始问责之旅的日期。",
     "create": "建立目标",
-    "creating": "正在建立目标..."
+    "creating": "正在建立目标...",
+    "goalDetails": "目标详情",
+    "days14": "14天",
+    "days30": "30天",
+    "days60": "60天",
+    "intensityLow": "低",
+    "intensityMedium": "中",
+    "intensityHigh": "高",
+    "intensityLowDesc": "轻度每日承诺",
+    "intensityMediumDesc": "中度每日承诺",
+    "intensityHighDesc": "重度每日承诺"
+  },
+  "goals": {
+    "title": "目标",
+    "manageAll": "管理所有目标",
+    "createGoal": "建立目标",
+    "filterAll": "全部",
+    "filterActive": "进行中",
+    "filterCompleted": "已完成",
+    "filterAbandoned": "已放弃",
+    "noGoalsFound": "未找到目标",
+    "noGoalsYet": "你还没有创建任何目标。",
+    "noFilteredGoals": "你没有{filter}的目标。",
+    "createFirstGoal": "创建你的第一个目标",
+    "progress": "进度",
+    "edit": "编辑",
+    "delete": "删除",
+    "status": {
+      "active": "进行中",
+      "completed": "已完成",
+      "abandoned": "已放弃"
+    }
   },
   "features": {
     "title": "一切你需要的功能来保持问责",
@@ -173,6 +217,37 @@
     "markDone": "标记完成",
     "activityHistory": "活动记录",
     "lastMessages": "最近3则消息"
+  },
+  "boss": {
+    "title": "你的AI老板",
+    "subtitle": "选择你的问责伙伴",
+    "aiPartner": "你的AI问责伙伴",
+    "rules": "规则",
+    "noNegotiations": "不容谈判",
+    "noNegotiationsDesc": "这个老板不谈判。承诺是最终的。问责是不可谈判的。",
+    "changeBoss": "更换你的老板",
+    "bossPersonality": "老板性格",
+    "bossLanguage": "老板语言",
+    "bossLanguageDesc": "选择你的AI老板使用的反馈语言（独立于应用语言）",
+    "current": "当前",
+    "saveChanges": "保存更改",
+    "changingBoss": "更换老板中...",
+    "bossChanged": "老板更换成功！"
+  },
+  "profile": {
+    "title": "个人资料",
+    "subtitle": "管理你的帐户和订阅",
+    "accountInfo": "帐户信息",
+    "email": "电子邮件",
+    "userId": "用户ID",
+    "accountCreated": "帐户创建时间",
+    "notSet": "未设置",
+    "subscription": "订阅",
+    "status": "状态",
+    "plan": "计划",
+    "manageSubscription": "管理订阅",
+    "noSubscription": "没有活动订阅",
+    "viewPricing": "查看价格计划"
   }
 }
 

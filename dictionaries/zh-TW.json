@@ -81,7 +81,20 @@
         "goalManagement": "目標管理",
         "markComplete": "標記目標完成",
         "abandonGoal": "放棄目標",
-        "managementDescription": "管理你的進行中目標。記住：承諾很重要。"
+        "managementDescription": "管理你的進行中目標。記住：承諾很重要。",
+        "goalProgress": "目標進度",
+        "complete": "完成",
+        "started": "開始",
+        "ends": "結束",
+        "completed": "已完成",
+        "missed": "錯過",
+        "pending": "待處理",
+        "markDone": "標記完成",
+        "marking": "標記中...",
+        "processing": "處理中...",
+        "explainMissed": "說明錯過原因",
+        "lastNMessages": "最近{count}則訊息",
+        "noMessage": "沒有訊息"
     },
     "goal": {
         "createTitle": "建立你的目標",
@@ -97,7 +110,38 @@
         "startDate": "開始日期",
         "startDateHelp": "選擇你想要開始問責之旅的日期。",
         "create": "建立目標",
-        "creating": "正在建立目標..."
+        "creating": "正在建立目標...",
+        "goalDetails": "目標詳情",
+        "days14": "14天",
+        "days30": "30天",
+        "days60": "60天",
+        "intensityLow": "低",
+        "intensityMedium": "中",
+        "intensityHigh": "高",
+        "intensityLowDesc": "輕度每日承諾",
+        "intensityMediumDesc": "中度每日承諾",
+        "intensityHighDesc": "重度每日承諾"
+    },
+    "goals": {
+        "title": "目標",
+        "manageAll": "管理所有目標",
+        "createGoal": "建立目標",
+        "filterAll": "全部",
+        "filterActive": "進行中",
+        "filterCompleted": "已完成",
+        "filterAbandoned": "已放棄",
+        "noGoalsFound": "未找到目標",
+        "noGoalsYet": "你還沒有創建任何目標。",
+        "noFilteredGoals": "你沒有{filter}的目標。",
+        "createFirstGoal": "創建你的第一個目標",
+        "progress": "進度",
+        "edit": "編輯",
+        "delete": "刪除",
+        "status": {
+            "active": "進行中",
+            "completed": "已完成",
+            "abandoned": "已放棄"
+        }
     },
     "features": {
         "title": "一切你需要的功能來保持問責",
@@ -173,5 +217,36 @@
         "markDone": "標記完成",
         "activityHistory": "活動記錄",
         "lastMessages": "最近3則訊息"
+    },
+    "boss": {
+        "title": "你的AI老闆",
+        "subtitle": "選擇你的問責夥伴",
+        "aiPartner": "你的AI問責夥伴",
+        "rules": "規則",
+        "noNegotiations": "不容談判",
+        "noNegotiationsDesc": "這個老闆不談判。承諾是最終的。問責是不可談判的。",
+        "changeBoss": "更換你的老闆",
+        "bossPersonality": "老闆性格",
+        "bossLanguage": "老闆語言",
+        "bossLanguageDesc": "選擇你的AI老闆使用的反饋語言（獨立於應用語言）",
+        "current": "當前",
+        "saveChanges": "儲存更改",
+        "changingBoss": "更換老闆中...",
+        "bossChanged": "老闆更換成功！"
+    },
+    "profile": {
+        "title": "個人資料",
+        "subtitle": "管理你的帳戶和訂閱",
+        "accountInfo": "帳戶資訊",
+        "email": "電子郵件",
+        "userId": "用戶ID",
+        "accountCreated": "帳戶創建時間",
+        "notSet": "未設置",
+        "subscription": "訂閱",
+        "status": "狀態",
+        "plan": "計劃",
+        "manageSubscription": "管理訂閱",
+        "noSubscription": "沒有活動訂閱",
+        "viewPricing": "查看價格計劃"
     }
 }

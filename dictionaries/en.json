@@ -81,7 +81,20 @@
     "goalManagement": "Goal Management",
     "markComplete": "Mark Goal Complete",
     "abandonGoal": "Abandon Goal",
-    "managementDescription": "Manage your active goal. Remember: commitments matter."
+    "managementDescription": "Manage your active goal. Remember: commitments matter.",
+    "goalProgress": "Goal Progress",
+    "complete": "Complete",
+    "started": "Started",
+    "ends": "Ends",
+    "completed": "Completed",
+    "missed": "Missed",
+    "pending": "Pending",
+    "markDone": "Mark Done",
+    "marking": "Marking...",
+    "processing": "Processing...",
+    "explainMissed": "Explain Why Missed",
+    "lastNMessages": "Last {count} messages",
+    "noMessage": "No message"
   },
   "goal": {
     "createTitle": "Create Your Goal",
@@ -97,7 +110,38 @@
     "startDate": "Start Date",
     "startDateHelp": "Choose when you want to start your accountability journey.",
     "create": "Create Goal",
-    "creating": "Creating Goal..."
+    "creating": "Creating Goal...",
+    "goalDetails": "Goal Details",
+    "days14": "14 days",
+    "days30": "30 days",
+    "days60": "60 days",
+    "intensityLow": "Low",
+    "intensityMedium": "Medium",
+    "intensityHigh": "High",
+    "intensityLowDesc": "Light daily commitment",
+    "intensityMediumDesc": "Moderate daily commitment",
+    "intensityHighDesc": "Significant daily commitment"
+  },
+  "goals": {
+    "title": "Goals",
+    "manageAll": "Manage all your goals",
+    "createGoal": "Create Goal",
+    "filterAll": "All",
+    "filterActive": "Active",
+    "filterCompleted": "Completed",
+    "filterAbandoned": "Abandoned",
+    "noGoalsFound": "No goals found",
+    "noGoalsYet": "You haven't created any goals yet.",
+    "noFilteredGoals": "You don't have any {filter} goals.",
+    "createFirstGoal": "Create Your First Goal",
+    "progress": "Progress",
+    "edit": "Edit",
+    "delete": "Delete",
+    "status": {
+      "active": "active",
+      "completed": "completed",
+      "abandoned": "abandoned"
+    }
   },
   "features": {
     "title": "Everything You Need to Stay Accountable",
@@ -173,6 +217,37 @@
     "markDone": "Mark Done",
     "activityHistory": "Activity History",
     "lastMessages": "Last 3 messages"
+  },
+  "boss": {
+    "title": "Your AI Boss",
+    "subtitle": "Choose your accountability partner",
+    "aiPartner": "Your AI Accountability Partner",
+    "rules": "Rules",
+    "noNegotiations": "No Negotiations",
+    "noNegotiationsDesc": "This boss does not negotiate. Commitments are final. Accountability is non-negotiable.",
+    "changeBoss": "Change Your Boss",
+    "bossPersonality": "Boss Personality",
+    "bossLanguage": "Boss Language",
+    "bossLanguageDesc": "Choose the language your AI boss uses for feedback (independent from app language)",
+    "current": "Current",
+    "saveChanges": "Save Changes",
+    "changingBoss": "Changing Boss...",
+    "bossChanged": "Boss changed successfully!"
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Manage your account and subscription",
+    "accountInfo": "Account Information",
+    "email": "Email",
+    "userId": "User ID",
+    "accountCreated": "Account Created",
+    "notSet": "Not set",
+    "subscription": "Subscription",
+    "status": "Status",
+    "plan": "Plan",
+    "manageSubscription": "Manage Subscription",
+    "noSubscription": "No active subscription",
+    "viewPricing": "View Pricing Plans"
   }
 }
 
