@@ -6,13 +6,18 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Calendar } from '@/components/ui/calendar';
 import { createGoalAction } from './actions';
-import { Loader2, Target } from 'lucide-react';
+import { Loader2, Target, Calendar as CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
 
 export function GoalForm() {
   const [state, formAction, isPending] = useActionState(createGoalAction, null);
-  const [timeHorizon, setTimeHorizon] = useState('30');
   const [intensity, setIntensity] = useState('medium');
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [showStartCalendar, setShowStartCalendar] = useState(false);
+  const [showEndCalendar, setShowEndCalendar] = useState(false);
 
   return (
     <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
