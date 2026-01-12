@@ -232,7 +232,49 @@
     "current": "Current",
     "saveChanges": "Save Changes",
     "changingBoss": "Changing Boss...",
-    "bossChanged": "Boss changed successfully!"
+    "bossChanged": "Boss changed successfully!",
+    "personalities": {
+      "execution": {
+        "nickname": "I keep you moving. Every day.",
+        "description": "Calm but firm. Speaks little, means everything. Never angry, never pleading. Feels like a reliable senior who expects things of you.",
+        "rules": [
+          "Silence creates pressure—I don't need to shout.",
+          "Every day matters. Consistency builds authority.",
+          "I notice patterns. Your actions tell me who you are.",
+          "I reward follow-through, not promises."
+        ]
+      },
+      "supportive": {
+        "nickname": "I've got you. Let's try again.",
+        "description": "Warm, encouraging but not naïve. Celebrates effort, not outcomes. Feels like a close friend who believes in you.",
+        "rules": [
+          "Progress over perfection—every step counts.",
+          "Mistakes? They're just data points for growth.",
+          "You're building something. I see it, even when you don't.",
+          "Low energy? That's okay. Just show up anyway."
+        ]
+      },
+      "mentor": {
+        "nickname": "You're capable. Let me show you how.",
+        "description": "Thoughtful and experienced. Challenges your thinking, not your worth. Feels like a coach who's been there before.",
+        "rules": [
+          "Smart doesn't mean perfect. It means learning fast.",
+          "I ask questions because I believe you have answers.",
+          "The process matters more than the result.",
+          "Struggle is part of growth, not evidence of failure."
+        ]
+      },
+      "drill-sergeant": {
+        "nickname": "No excuses. Get it done.",
+        "description": "Intense and demanding. Zero tolerance for excuses. Pushes you hard because mediocrity isn't an option.",
+        "rules": [
+          "Discomfort is temporary. Regret lasts forever.",
+          "You said you'd do it. So do it.",
+          "Excuses are just stories you tell yourself.",
+          "I don't lower the bar. You rise to meet it."
+        ]
+      }
+    }
   },
   "profile": {
     "title": "Profile",
@@ -247,7 +289,55 @@
     "plan": "Plan",
     "manageSubscription": "Manage Subscription",
     "noSubscription": "No active subscription",
-    "viewPricing": "View Pricing Plans"
+    "viewPricing": "View Pricing Plans",
+    "appLanguage": "App Language",
+    "appLanguageDesc": "Choose your preferred language for the app interface"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "goals": "Goals",
+    "boss": "Boss",
+    "profile": "Profile",
+    "signOut": "Sign out",
+    "createGoal": "Create Goal",
+    "loading": "Loading..."
+  },
+  "editGoal": {
+    "title": "Edit Goal",
+    "editDetails": "Edit Goal Details",
+    "goalStatus": "Goal Status",
+    "updateStatus": "Update the current status of your goal",
+    "updatingStatus": "Updating status...",
+    "goalTimeline": "Goal Timeline",
+    "chooseDates": "Choose your start and end dates",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "pickDate": "Pick a date",
+    "duration": "Duration",
+    "days": "days",
+    "cancel": "Cancel",
+    "updateGoal": "Update Goal",
+    "updatingGoal": "Updating Goal..."
+  },
+  "tasks": {
+    "title": "Tasks",
+    "selectAll": "Select all tasks",
+    "deleting": "Deleting...",
+    "deleteSelected": "Delete {count} Selected",
+    "cancel": "Cancel",
+    "addTask": "Add Task",
+    "taskDate": "Task Date",
+    "taskDescription": "Task Description",
+    "taskPlaceholder": "What do you need to do?",
+    "addingTask": "Adding Task...",
+    "noTasks": "No tasks yet. Add your first task!",
+    "save": "Save"
+  },
+  "calendar": {
+    "taskCalendar": "Task Calendar",
+    "today": "Today",
+    "hasTasks": "Has tasks",
+    "outsideRange": "Outside goal range"
   }
 }
 

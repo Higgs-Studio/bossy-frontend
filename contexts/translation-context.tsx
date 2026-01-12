@@ -19,7 +19,7 @@ export function TranslationProvider({ children, initialTranslations }: { childre
   // Load saved language preference on mount
   useEffect(() => {
     const saved = localStorage.getItem('preferred-language') as Locale;
-    if (saved && (saved === 'en' || saved === 'zh-TW' || saved === 'zh-CN')) {
+    if (saved && (saved === 'en' || saved === 'zh-TW' || saved === 'zh-CN' || saved === 'zh-HK')) {
       setLocale(saved);
     }
   }, []);

@@ -232,7 +232,49 @@
     "current": "当前",
     "saveChanges": "保存更改",
     "changingBoss": "更换老板中...",
-    "bossChanged": "老板更换成功！"
+    "bossChanged": "老板更换成功！",
+    "personalities": {
+      "execution": {
+        "nickname": "我让你持续前进。每一天。",
+        "description": "冷静但坚定。话不多，但字字有力。从不生气，从不恳求。感觉像一个可靠的前辈对你充满期待。",
+        "rules": [
+          "沉默创造压力——我不需要大喊大叫。",
+          "每一天都很重要。持续性建立权威。",
+          "我注意到模式。你的行动告诉我你是谁。",
+          "我奖励执行力，而不是承诺。"
+        ]
+      },
+      "supportive": {
+        "nickname": "我支持你。让我们再试一次。",
+        "description": "温暖、鼓励但不天真。庆祝努力，而不是结果。感觉像一个相信你的密友。",
+        "rules": [
+          "进步胜于完美——每一步都很重要。",
+          "错误？它们只是成长的数据点。",
+          "你正在建立一些东西。我看到了，即使你没看到。",
+          "精力不足？没关系。无论如何都要出现。"
+        ]
+      },
+      "mentor": {
+        "nickname": "你有能力。让我告诉你怎么做。",
+        "description": "深思熟虑且经验丰富。挑战你的思维，而不是你的价值。感觉像一个曾经经历过的教练。",
+        "rules": [
+          "聪明不意味着完美。它意味着快速学习。",
+          "我问问题是因为我相信你有答案。",
+          "过程比结果更重要。",
+          "挣扎是成长的一部分，而不是失败的证据。"
+        ]
+      },
+      "drill-sergeant": {
+        "nickname": "没有借口。完成它。",
+        "description": "强烈且要求严格。对借口零容忍。努力推动你，因为平庸不是选项。",
+        "rules": [
+          "不适是暂时的。遗憾是永久的。",
+          "你说你会做。那就去做。",
+          "借口只是你告诉自己的故事。",
+          "我不降低标准。你要提升自己来达到它。"
+        ]
+      }
+    }
   },
   "profile": {
     "title": "个人资料",
@@ -247,7 +289,55 @@
     "plan": "计划",
     "manageSubscription": "管理订阅",
     "noSubscription": "没有活动订阅",
-    "viewPricing": "查看价格计划"
+    "viewPricing": "查看价格计划",
+    "appLanguage": "应用语言",
+    "appLanguageDesc": "选择你的应用界面语言"
+  },
+  "nav": {
+    "dashboard": "仪表板",
+    "goals": "目标",
+    "boss": "老板",
+    "profile": "个人资料",
+    "signOut": "登出",
+    "createGoal": "建立目标",
+    "loading": "加载中..."
+  },
+  "editGoal": {
+    "title": "编辑目标",
+    "editDetails": "编辑目标详情",
+    "goalStatus": "目标状态",
+    "updateStatus": "更新你的目标当前状态",
+    "updatingStatus": "更新状态中...",
+    "goalTimeline": "目标时间线",
+    "chooseDates": "选择你的开始和结束日期",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "pickDate": "选择日期",
+    "duration": "持续时间",
+    "days": "天",
+    "cancel": "取消",
+    "updateGoal": "更新目标",
+    "updatingGoal": "更新目标中..."
+  },
+  "tasks": {
+    "title": "任务",
+    "selectAll": "选择所有任务",
+    "deleting": "删除中...",
+    "deleteSelected": "删除 {count} 个选中项",
+    "cancel": "取消",
+    "addTask": "添加任务",
+    "taskDate": "任务日期",
+    "taskDescription": "任务描述",
+    "taskPlaceholder": "你需要做什么？",
+    "addingTask": "添加任务中...",
+    "noTasks": "还没有任务。添加你的第一个任务！",
+    "save": "保存"
+  },
+  "calendar": {
+    "taskCalendar": "任务日历",
+    "today": "今天",
+    "hasTasks": "有任务",
+    "outsideRange": "超出目标范围"
   }
 }
 

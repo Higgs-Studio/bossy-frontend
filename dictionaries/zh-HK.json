@@ -232,7 +232,49 @@
         "current": "當前",
         "saveChanges": "儲存更改",
         "changingBoss": "換緊老細...",
-        "bossChanged": "老細換咗喇！"
+        "bossChanged": "老細換咗喇！",
+        "personalities": {
+            "execution": {
+                "nickname": "我令你持續前進。每一日。",
+                "description": "冷靜但堅定。唔多講嘢，但字字有力。從不嬲，從不求人。感覺似個可靠嘅前輩對你有期望。",
+                "rules": [
+                    "沉默製造壓力——我唔使大聲嗌。",
+                    "每一日都好重要。持續性建立權威。",
+                    "我留意到模式。你嘅行動話畀我知你係邊個。",
+                    "我獎勵執行力，唔係承諾。"
+                ]
+            },
+            "supportive": {
+                "nickname": "我撐你。我哋再試過。",
+                "description": "溫暖、鼓勵但唔天真。慶祝努力，唔係結果。感覺似個相信你嘅好friend。",
+                "rules": [
+                    "進步好過完美——每一步都重要。",
+                    "錯誤？佢哋只係成長嘅數據點。",
+                    "你建緊啲嘢。我睇到，就算你睇唔到。",
+                    "精力唔夠？冇所謂。無論點都要出現。"
+                ]
+            },
+            "mentor": {
+                "nickname": "你有能力。等我話畀你知點做。",
+                "description": "深思熟慮同有經驗。挑戰你嘅思維，唔係你嘅價值。感覺似個經歷過嘅教練。",
+                "rules": [
+                    "聰明唔代表完美。佢代表學得快。",
+                    "我問問題係因為我信你有答案。",
+                    "過程比結果更重要。",
+                    "掙扎係成長嘅一部分，唔係失敗嘅證據。"
+                ]
+            },
+            "drill-sergeant": {
+                "nickname": "冇藉口。做好佢。",
+                "description": "強烈同要求嚴格。對藉口零容忍。用力推動你，因為平庸唔係選擇。",
+                "rules": [
+                    "唔舒服係暫時嘅。遺憾係永久嘅。",
+                    "你話過你會做。咁就做。",
+                    "藉口只係你講畀自己聽嘅故事。",
+                    "我唔降低標準。你要提升自己嚟達到佢。"
+                ]
+            }
+        }
     },
     "profile": {
         "title": "個人資料",
@@ -247,6 +289,54 @@
         "plan": "計劃",
         "manageSubscription": "管理訂閱",
         "noSubscription": "冇活動訂閱",
-        "viewPricing": "睇價錢計劃"
+        "viewPricing": "睇價錢計劃",
+        "appLanguage": "應用語言",
+        "appLanguageDesc": "揀你嘅應用介面語言"
+    },
+    "nav": {
+        "dashboard": "控制面板",
+        "goals": "目標",
+        "boss": "老細",
+        "profile": "個人資料",
+        "signOut": "登出",
+        "createGoal": "建立目標",
+        "loading": "載入中..."
+    },
+    "editGoal": {
+        "title": "編輯目標",
+        "editDetails": "編輯目標詳情",
+        "goalStatus": "目標狀態",
+        "updateStatus": "更新你嘅目標當前狀態",
+        "updatingStatus": "更新狀態中...",
+        "goalTimeline": "目標時間線",
+        "chooseDates": "揀你嘅開始同結束日期",
+        "startDate": "開始日期",
+        "endDate": "結束日期",
+        "pickDate": "揀日期",
+        "duration": "持續時間",
+        "days": "日",
+        "cancel": "取消",
+        "updateGoal": "更新目標",
+        "updatingGoal": "更新目標中..."
+    },
+    "tasks": {
+        "title": "任務",
+        "selectAll": "選擇所有任務",
+        "deleting": "刪除中...",
+        "deleteSelected": "刪除 {count} 個選中項",
+        "cancel": "取消",
+        "addTask": "新增任務",
+        "taskDate": "任務日期",
+        "taskDescription": "任務描述",
+        "taskPlaceholder": "你需要做咩？",
+        "addingTask": "新增任務中...",
+        "noTasks": "未有任務。新增你嘅第一個任務！",
+        "save": "儲存"
+    },
+    "calendar": {
+        "taskCalendar": "任務日曆",
+        "today": "今日",
+        "hasTasks": "有任務",
+        "outsideRange": "超出目標範圍"
     }
 }
