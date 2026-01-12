@@ -9,8 +9,12 @@ import { Label } from '@/components/ui/label';
 import { CircleIcon, Loader2 } from 'lucide-react';
 import { signIn, signUp } from './actions';
 import { ActionState } from '@/lib/auth/middleware';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { ThemeSwitcher } from '@/components/theme-switcher';
+import { useTranslation } from '@/contexts/translation-context';
 
 export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect');
   const priceId = searchParams.get('priceId');
@@ -23,21 +27,25 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   return (
     <div className="min-h-[100dvh] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-50 relative overflow-hidden">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+        <ThemeSwitcher />
+        <LanguageSwitcher />
+      </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center mb-8">
           <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-            Bossy
+            {t.common?.appName || 'Bossy'}
           </h1>
         </div>
         <h2 className="text-center text-3xl sm:text-4xl font-bold text-slate-900 mb-2">
           {mode === 'signin'
-            ? 'Welcome Back'
-            : 'Hire Your AI Boss'}
+            ? (t.auth?.signIn?.title || 'Welcome Back')
+            : (t.auth?.signUp?.title || 'Hire Your AI Boss')}
         </h2>
         <p className="text-center text-sm sm:text-base text-slate-600 mb-8">
           {mode === 'signin'
-            ? 'Your AI accountability boss is waiting'
-            : 'Start your AI-powered accountability journey'}
+            ? (t.auth?.signIn?.subtitle || 'Your AI accountability boss is waiting')
+            : (t.auth?.signUp?.subtitle || 'Start your AI-powered accountability journey')}
         </p>
       </div>
 
@@ -52,7 +60,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               htmlFor="email"
               className="block text-sm font-medium text-slate-700"
             >
-              Email
+              {t.auth?.email || 'Email'}
             </Label>
             <div className="mt-1">
               <Input
@@ -63,7 +71,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 defaultValue={state.email}
                 required
                 maxLength={50}
-                placeholder="Enter your email"
+                placeholder={t.auth?.enterEmail || 'Enter your email'}
                 className="border-slate-300"
               />
             </div>
@@ -74,7 +82,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               htmlFor="password"
               className="block text-sm font-medium text-slate-700"
             >
-              Password
+              {t.auth?.password || 'Password'}
             </Label>
             <div className="mt-1">
               <Input
@@ -88,7 +96,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 required
                 minLength={8}
                 maxLength={100}
-                placeholder="Enter your password"
+                placeholder={t.auth?.enterPassword || 'Enter your password'}
                 className="border-slate-300"
               />
             </div>
@@ -115,12 +123,12 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               {pending ? (
                 <>
                   <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                  Loading...
+                  {t.nav?.loading || 'Loading...'}
                 </>
               ) : mode === 'signin' ? (
-                'Sign in'
+                t.common?.signIn || 'Sign in'
               ) : (
-                'Sign up'
+                t.common?.signUp || 'Sign up'
               )}
             </Button>
           </div>
@@ -135,8 +143,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-slate-50 text-slate-500">
                 {mode === 'signin'
-                  ? 'New to Bossy?'
-                  : 'Already have an account?'}
+                  ? (t.auth?.newToPlatform || 'New to Bossy?')
+                  : (t.auth?.alreadyHaveAccount || 'Already have an account?')}
               </span>
             </div>
           </div>
@@ -149,8 +157,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               className="w-full flex justify-center py-3 px-4 border-2 border-slate-200 rounded-lg shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 hover:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
             >
               {mode === 'signin'
-                ? 'Create an account'
-                : 'Sign in to existing account'}
+                ? (t.auth?.createAccount || 'Create an account')
+                : (t.auth?.signInExisting || 'Sign in to existing account')}
             </Link>
           </div>
         </div>

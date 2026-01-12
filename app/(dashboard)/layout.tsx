@@ -5,21 +5,26 @@ import { Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { PublicUserMenu } from './public-user-menu';
 import { MobileMenu } from '@/components/mobile-menu';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { ThemeSwitcher } from '@/components/theme-switcher';
+import { useTranslation } from '@/contexts/translation-context';
 
 function Header() {
+  const { t } = useTranslation();
+  
   const navLinks = [
-    { href: '/#features', label: 'Features' },
-    { href: '/#how-it-works', label: 'How It Works' },
-    { href: '/pricing', label: 'Pricing' },
+    { href: '/#features', label: t.common?.features || 'Features' },
+    { href: '/#how-it-works', label: t.common?.howItWorks || 'How It Works' },
+    { href: '/pricing', label: t.common?.pricing || 'Pricing' },
   ];
 
   const mobileActions = (
     <>
       <Button variant="ghost" asChild className="w-full justify-start min-h-[44px]">
-        <Link href="/sign-in">Sign In</Link>
+        <Link href="/sign-in">{t.common?.signIn || 'Sign In'}</Link>
       </Button>
       <Button asChild className="w-full min-h-[44px]">
-        <Link href="/sign-up">Get Started</Link>
+        <Link href="/sign-up">{t.common?.getStarted || 'Get Started'}</Link>
       </Button>
     </>
   );
@@ -38,33 +43,39 @@ function Header() {
               href="/#features" 
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
             >
-              Features
+              {t.common?.features || 'Features'}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
             <Link 
               href="/#how-it-works" 
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
             >
-              How It Works
+              {t.common?.howItWorks || 'How It Works'}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
             <Link 
               href="/pricing" 
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
             >
-              Pricing
+              {t.common?.pricing || 'Pricing'}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
           </nav>
           <div className="hidden md:flex items-center gap-3">
+            <ThemeSwitcher />
+            <LanguageSwitcher />
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/sign-in">Sign In</Link>
+              <Link href="/sign-in">{t.common?.signIn || 'Sign In'}</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link href="/sign-up">Get Started</Link>
+              <Link href="/sign-up">{t.common?.getStarted || 'Get Started'}</Link>
             </Button>
           </div>
-          <MobileMenu links={navLinks} actions={mobileActions} />
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeSwitcher />
+            <LanguageSwitcher />
+            <MobileMenu links={navLinks} actions={mobileActions} />
+          </div>
         </div>
       </div>
     </header>
