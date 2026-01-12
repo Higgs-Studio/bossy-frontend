@@ -52,87 +52,87 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
       <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="bg-white rounded-2xl shadow-xl border-2 border-slate-200 p-6 sm:p-8">
           <form className="space-y-6" action={formAction}>
-          <input type="hidden" name="redirect" value={redirect || ''} />
-          <input type="hidden" name="priceId" value={priceId || ''} />
-          <input type="hidden" name="inviteId" value={inviteId || ''} />
-          <div>
-            <Label
-              htmlFor="email"
-              className="block text-sm font-medium text-slate-700"
-            >
-              {t.auth?.email || 'Email'}
-            </Label>
-            <div className="mt-1">
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                defaultValue={state.email}
-                required
-                maxLength={50}
-                placeholder={t.auth?.enterEmail || 'Enter your email'}
-                className="border-slate-300"
-              />
+            <input type="hidden" name="redirect" value={redirect || ''} />
+            <input type="hidden" name="priceId" value={priceId || ''} />
+            <input type="hidden" name="inviteId" value={inviteId || ''} />
+            <div>
+              <Label
+                htmlFor="email"
+                className="block text-sm font-medium text-slate-700"
+              >
+                {t.auth?.email || 'Email'}
+              </Label>
+              <div className="mt-1">
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  defaultValue={state.email}
+                  required
+                  maxLength={50}
+                  placeholder={t.auth?.enterEmail || 'Enter your email'}
+                  className="border-slate-300"
+                />
+              </div>
             </div>
-          </div>
 
-          <div>
-            <Label
-              htmlFor="password"
-              className="block text-sm font-medium text-slate-700"
-            >
-              {t.auth?.password || 'Password'}
-            </Label>
-            <div className="mt-1">
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete={
-                  mode === 'signin' ? 'current-password' : 'new-password'
-                }
-                defaultValue={state.password}
-                required
-                minLength={8}
-                maxLength={100}
-                placeholder={t.auth?.enterPassword || 'Enter your password'}
-                className="border-slate-300"
-              />
+            <div>
+              <Label
+                htmlFor="password"
+                className="block text-sm font-medium text-slate-700"
+              >
+                {t.auth?.password || 'Password'}
+              </Label>
+              <div className="mt-1">
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete={
+                    mode === 'signin' ? 'current-password' : 'new-password'
+                  }
+                  defaultValue={state.password}
+                  required
+                  minLength={8}
+                  maxLength={100}
+                  placeholder={t.auth?.enterPassword || 'Enter your password'}
+                  className="border-slate-300"
+                />
+              </div>
             </div>
-          </div>
 
-          {state?.error && (
-            <div className="text-red-700 text-sm bg-red-50 p-4 rounded-lg border border-red-200 font-medium">
-              {state.error}
-            </div>
-          )}
-          {state?.success && (
-            <div className="text-green-700 text-sm bg-green-50 p-4 rounded-lg border border-green-200 font-medium">
-              {state.success}
-            </div>
-          )}
+            {state?.error && (
+              <div className="text-red-700 text-sm bg-red-50 p-4 rounded-lg border border-red-200 font-medium">
+                {state.error}
+              </div>
+            )}
+            {state?.success && (
+              <div className="text-green-700 text-sm bg-green-50 p-4 rounded-lg border border-green-200 font-medium">
+                {state.success}
+              </div>
+            )}
 
-          <div>
-            <Button
-              type="submit"
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-              size="lg"
-              disabled={pending}
-            >
-              {pending ? (
-                <>
-                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                  {t.nav?.loading || 'Loading...'}
-                </>
-              ) : mode === 'signin' ? (
-                t.common?.signIn || 'Sign in'
-              ) : (
-                t.common?.signUp || 'Sign up'
-              )}
-            </Button>
-          </div>
-        </form>
+            <div>
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                size="lg"
+                disabled={pending}
+              >
+                {pending ? (
+                  <>
+                    <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                    {t.nav?.loading || 'Loading...'}
+                  </>
+                ) : mode === 'signin' ? (
+                  t.common?.signIn || 'Sign in'
+                ) : (
+                  t.common?.signUp || 'Sign up'
+                )}
+              </Button>
+            </div>
+          </form>
         </div>
 
         <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
@@ -151,9 +151,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
 
           <div className="mt-6">
             <Link
-              href={`${mode === 'signin' ? '/sign-up' : '/sign-in'}${
-                redirect ? `?redirect=${redirect}` : ''
-              }${priceId ? `&priceId=${priceId}` : ''}`}
+              href={`${mode === 'signin' ? '/sign-up' : '/sign-in'}${redirect ? `?redirect=${redirect}` : ''
+                }${priceId ? `&priceId=${priceId}` : ''}`}
               className="w-full flex justify-center py-3 px-4 border-2 border-slate-200 rounded-lg shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 hover:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
             >
               {mode === 'signin'

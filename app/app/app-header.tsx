@@ -12,7 +12,7 @@ interface AppHeaderProps {
 
 export function AppHeader({ userMenu }: AppHeaderProps) {
   const { t } = useTranslation();
-  
+
   const navLinks = [
     { href: '/app/dashboard', label: t.nav?.dashboard || 'Dashboard' },
     { href: '/app/goals', label: t.nav?.goals || 'Goals' },

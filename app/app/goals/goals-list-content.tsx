@@ -173,6 +173,8 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredGoals.map((goal) => {
               const progress = calculateProgress(goal);
+              // Round to 2 decimal places to prevent hydration mismatch
+              const progressRounded = Math.round(progress * 100) / 100;
               return (
                 <Card
                   key={goal.id}
@@ -251,7 +253,7 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
                             <div className="relative h-2 bg-muted rounded-full overflow-hidden">
                               <div
                                 className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full transition-all duration-500"
-                                style={{ width: `${progress}%` }}
+                                style={{ width: `${progressRounded}%` }}
                               />
                             </div>
                           </div>

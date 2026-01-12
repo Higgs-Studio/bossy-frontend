@@ -11,7 +11,7 @@ import { useTranslation } from '@/contexts/translation-context';
 
 function Header() {
   const { t } = useTranslation();
-  
+
   const navLinks = [
     { href: '/#features', label: t.common?.features || 'Features' },
     { href: '/#how-it-works', label: t.common?.howItWorks || 'How It Works' },
@@ -39,22 +39,22 @@ function Header() {
             </span>
           </Link>
           <nav className="hidden md:flex items-center space-x-8">
-            <Link 
-              href="/#features" 
+            <Link
+              href="/#features"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
             >
               {t.common?.features || 'Features'}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
-            <Link 
-              href="/#how-it-works" 
+            <Link
+              href="/#how-it-works"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
             >
               {t.common?.howItWorks || 'How It Works'}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
-            <Link 
-              href="/pricing" 
+            <Link
+              href="/pricing"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
             >
               {t.common?.pricing || 'Pricing'}

@@ -72,6 +72,8 @@ export function DashboardContent({
     };
 
     const progress = calculateProgress();
+    // Round to 2 decimal places to prevent hydration mismatch
+    const progressRounded = Math.round(progress * 100) / 100;
 
     return (
         <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
@@ -144,7 +146,7 @@ export function DashboardContent({
                                         <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                                             <div
                                                 className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full transition-all duration-500 ease-out"
-                                                style={{ width: `${progress}%` }}
+                                                style={{ width: `${progressRounded}%` }}
                                             />
                                         </div>
                                         <div className="flex justify-between text-xs text-muted-foreground">
