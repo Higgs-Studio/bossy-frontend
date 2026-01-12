@@ -14,3 +14,4 @@ export default async function GoalsPage() {
   return <GoalsListContent goals={goals} />;
 }
 
+
