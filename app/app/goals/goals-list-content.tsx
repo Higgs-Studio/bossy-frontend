@@ -2,17 +2,20 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Edit, Trash2, Target, Calendar, Zap, AlertTriangle } from 'lucide-react';
+import { Plus, Edit, Trash2, Target, Calendar, Zap, AlertTriangle, MoreVertical, CheckCircle2, XCircle, Ban } from 'lucide-react';
 import Link from 'next/link';
 import { deleteGoalAction } from '@/app/app/goal/actions';
+import { updateGoalStatusAction } from '@/app/app/goals/[id]/actions';
 import { useActionState, useState, useOptimistic, useTransition } from 'react';
 import type { Goal } from '@/lib/supabase/queries';
+import { useTranslation } from '@/contexts/translation-context';
 
 type GoalsListContentProps = {
   goals: Goal[];
 };
 
 export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps) {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'abandoned'>('all');
   const [deleteState, deleteFormAction, isDeletePending] = useActionState(
     deleteGoalAction,
@@ -26,6 +29,8 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
     goalId: '',
     goalTitle: ''
   });
+  const [showStatusMenu, setShowStatusMenu] = useState<string | null>(null);
+  const [updatingStatusGoalId, setUpdatingStatusGoalId] = useState<string | null>(null);
 
   const handleDeleteClick = (goalId: string, goalTitle: string) => {
     setShowConfirmDialog({ show: true, goalId, goalTitle });
@@ -46,6 +51,22 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
     formData.append('goalId', goalId);
     await deleteFormAction(formData);
     setDeletingGoalId(null);
+  };
+
+  const handleStatusUpdate = async (goalId: string, newStatus: 'active' | 'completed' | 'abandoned') => {
+    setUpdatingStatusGoalId(goalId);
+    setShowStatusMenu(null);
+
+    // Optimistic update
+    startTransition(() => {
+      setOptimisticGoals(optimisticGoals.map(g => 
+        g.id === goalId ? { ...g, status: newStatus } : g
+      ));
+    });
+
+    // Execute the actual update
+    await updateGoalStatusAction(goalId, newStatus);
+    setUpdatingStatusGoalId(null);
   };
 
   const filteredGoals =
@@ -85,37 +106,45 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">Goals</h1>
-            <p className="text-muted-foreground text-lg">Manage all your goals</p>
+            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">{t.goals?.title || 'Goals'}</h1>
+            <p className="text-muted-foreground text-lg">{t.goals?.manageAll || 'Manage all your goals'}</p>
           </div>
           <Button asChild size="lg">
             <Link href="/app/goal">
               <Plus className="mr-2 h-4 w-4" />
-              Create Goal
+              {t.goals?.createGoal || 'Create Goal'}
             </Link>
           </Button>
         </div>
 
         {/* Filter Tabs */}
         <div className="flex flex-wrap gap-2 border-b border-border pb-4">
-          {(['all', 'active', 'completed', 'abandoned'] as const).map((status) => (
-            <button
-              key={status}
-              onClick={() => setFilter(status)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                filter === status
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-muted text-foreground hover:bg-muted/80'
-              }`}
-            >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
-              {status !== 'all' && (
-                <span className="ml-2 text-xs opacity-75">
-                  ({goals.filter((g) => g.status === status).length})
-                </span>
-              )}
-            </button>
-          ))}
+          {(['all', 'active', 'completed', 'abandoned'] as const).map((status) => {
+            const labels = {
+              all: t.goals?.filterAll || 'All',
+              active: t.goals?.filterActive || 'Active',
+              completed: t.goals?.filterCompleted || 'Completed',
+              abandoned: t.goals?.filterAbandoned || 'Abandoned'
+            };
+            return (
+              <button
+                key={status}
+                onClick={() => setFilter(status)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  filter === status
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-muted text-foreground hover:bg-muted/80'
+                }`}
+              >
+                {labels[status]}
+                {status !== 'all' && (
+                  <span className="ml-2 text-xs opacity-75">
+                    ({initialGoals.filter((g) => g.status === status).length})
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* Goals List */}
@@ -125,16 +154,16 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
               <div className="text-center py-12">
                 <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-foreground mb-2">
-                  No goals found
+                  {t.goals?.noGoalsFound || 'No goals found'}
                 </h3>
                 <p className="text-muted-foreground mb-6">
                   {filter === 'all'
-                    ? "You haven't created any goals yet."
-                    : `You don't have any ${filter} goals.`}
+                    ? (t.goals?.noGoalsYet || "You haven't created any goals yet.")
+                    : (t.goals?.noFilteredGoals?.replace('{filter}', t.goals?.status?.[filter] || filter) || `You don't have any ${filter} goals.`)}
                 </p>
                 {filter === 'all' && (
                   <Button asChild>
-                    <Link href="/app/goal">Create Your First Goal</Link>
+                    <Link href="/app/goal">{t.goals?.createFirstGoal || 'Create Your First Goal'}</Link>
                   </Button>
                 )}
               </div>
@@ -154,9 +183,45 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
                       <CardTitle className="text-lg line-clamp-2 flex-1">
                         {goal.title}
                       </CardTitle>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(goal.status)}`}>
-                        {goal.status}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <div className="relative">
+                          <button
+                            onClick={() => setShowStatusMenu(showStatusMenu === goal.id ? null : goal.id)}
+                            className={`px-2 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(goal.status)} hover:opacity-80 transition-opacity cursor-pointer`}
+                            disabled={updatingStatusGoalId === goal.id}
+                          >
+                            {updatingStatusGoalId === goal.id ? (t.nav?.loading || 'Updating...') : (t.goals?.status?.[goal.status as keyof typeof t.goals.status] || goal.status)}
+                          </button>
+                          {showStatusMenu === goal.id && (
+                            <div className="absolute right-0 top-full mt-2 z-50 bg-background border border-border rounded-lg shadow-lg py-1 min-w-[150px]">
+                              <button
+                                onClick={() => handleStatusUpdate(goal.id, 'active')}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors flex items-center gap-2"
+                                disabled={goal.status === 'active'}
+                              >
+                                <Zap className="h-4 w-4 text-emerald-600" />
+                                <span className={goal.status === 'active' ? 'font-semibold' : ''}>{t.goals?.filterActive || 'Active'}</span>
+                              </button>
+                              <button
+                                onClick={() => handleStatusUpdate(goal.id, 'completed')}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors flex items-center gap-2"
+                                disabled={goal.status === 'completed'}
+                              >
+                                <CheckCircle2 className="h-4 w-4 text-blue-600" />
+                                <span className={goal.status === 'completed' ? 'font-semibold' : ''}>{t.goals?.filterCompleted || 'Completed'}</span>
+                              </button>
+                              <button
+                                onClick={() => handleStatusUpdate(goal.id, 'abandoned')}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors flex items-center gap-2"
+                                disabled={goal.status === 'abandoned'}
+                              >
+                                <XCircle className="h-4 w-4 text-slate-600" />
+                                <span className={goal.status === 'abandoned' ? 'font-semibold' : ''}>{t.goals?.filterAbandoned || 'Abandoned'}</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -180,7 +245,7 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
                         {goal.status === 'active' && (
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs text-muted-foreground">
-                              <span>Progress</span>
+                              <span>{t.goals?.progress || 'Progress'}</span>
                               <span>{Math.round(progress)}%</span>
                             </div>
                             <div className="relative h-2 bg-muted rounded-full overflow-hidden">
@@ -202,7 +267,7 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
                         >
                           <Link href={`/app/goals/${goal.id}`}>
                             <Edit className="mr-2 h-3 w-3" />
-                            Edit
+                            {t.goals?.edit || 'Edit'}
                           </Link>
                         </Button>
                         <Button
@@ -213,7 +278,7 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
                           disabled={deletingGoalId === goal.id || isPending}
                         >
                           <Trash2 className="mr-2 h-3 w-3" />
-                          {deletingGoalId === goal.id ? 'Deleting...' : 'Delete'}
+                          {deletingGoalId === goal.id ? (t.nav?.loading || 'Deleting...') : (t.goals?.delete || 'Delete')}
                         </Button>
                       </div>
 
@@ -239,7 +304,7 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 dark:bg-red-950/50 flex items-center justify-center">
                     <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
                   </div>
-                  <CardTitle>Delete Goal?</CardTitle>
+                  <CardTitle>{t.goals?.delete || 'Delete'} {t.goal?.title || 'Goal'}?</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -258,7 +323,7 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
                     onClick={handleConfirmDelete}
                     className="flex-1 bg-red-600 hover:bg-red-700 text-white"
                   >
-                    Delete Goal
+                    {t.goals?.delete || 'Delete'} {t.goal?.title || 'Goal'}
                   </Button>
                 </div>
               </CardContent>
