@@ -1,0 +1,252 @@
+{
+    "common": {
+        "appName": "Bossy",
+        "signIn": "登入",
+        "signUp": "即刻開始",
+        "getStarted": "即刻開始",
+        "features": "功能特色",
+        "howItWorks": "點樣運作",
+        "pricing": "收費計劃"
+    },
+    "hero": {
+        "badge": "AI驅動嘅問責老細",
+        "title": "請你專屬嘅",
+        "titleHighlight": "AI問責老細",
+        "subtitle": "唔好再設啲你做唔到嘅目標喇。你嘅AI老細每日都會監督你嘅進度。",
+        "description": "冇得傾。冇藉口。只有持續嘅每日行動同真實嘅成果。",
+        "cta": "免費開始",
+        "secondaryCta": "睇下點運作",
+        "freeToStart": "免費開始",
+        "noCreditCard": "唔使信用卡",
+        "cancelAnytime": "隨時取消"
+    },
+    "stats": {
+        "title": "你嘅AI老細永不休息",
+        "subtitle": "持續問責、全天候追蹤、對藉口零容忍",
+        "completionRate": "完成率",
+        "usersAccountable": "用戶數",
+        "goalsCompleted": "已完成目標",
+        "aiMonitoring": "AI監控"
+    },
+    "bossSection": {
+        "badge": "AI驅動",
+        "title": "認識你嘅",
+        "titleHighlight": "AI問責老細",
+        "description": "同傳統嘅目標追蹤應用程式唔同，Bossy為你提供一個直接、唔廢話嘅AI老細，每日監控你嘅進度並要你負責任。",
+        "cta": "即刻請你嘅AI老細",
+        "features": {
+            "realtime": {
+                "title": "即時反饋",
+                "description": "你嘅AI老細會即時回應每次check-in，提供個人化嘅反饋"
+            },
+            "noNegotiations": {
+                "title": "冇得傾",
+                "description": "承諾係最終嘅。你嘅AI老細唔接受藉口，只接受結果"
+            },
+            "pattern": {
+                "title": "模式識別",
+                "description": "AI追蹤你嘅一致性，當你偏離軌道時會升級反饋"
+            }
+        }
+    },
+    "auth": {
+        "signIn": {
+            "title": "歡迎返嚟",
+            "subtitle": "你嘅AI問責老細等緊你"
+        },
+        "signUp": {
+            "title": "請你嘅AI老細",
+            "subtitle": "開始你嘅AI驅動問責之旅"
+        },
+        "email": "電郵",
+        "password": "密碼",
+        "enterEmail": "輸入你嘅電郵",
+        "enterPassword": "輸入你嘅密碼",
+        "newToPlatform": "第一次用Bossy？",
+        "alreadyHaveAccount": "已經有帳號？",
+        "createAccount": "建立帳號",
+        "signInExisting": "登入現有帳號"
+    },
+    "dashboard": {
+        "title": "控制面板",
+        "noGoal": {
+            "title": "未有進行中嘅目標",
+            "description": "建立目標以開始每日問責。",
+            "cta": "建立目標"
+        },
+        "activeGoal": "進行中嘅目標",
+        "inProgress": "進行中",
+        "todaysTask": "今日任務",
+        "activityHistory": "活動記錄",
+        "goalManagement": "目標管理",
+        "markComplete": "標記目標完成",
+        "abandonGoal": "放棄目標",
+        "managementDescription": "管理你進行中嘅目標。記住：承諾好重要。",
+        "goalProgress": "目標進度",
+        "complete": "完成",
+        "started": "開始",
+        "ends": "結束",
+        "completed": "已完成",
+        "missed": "Miss咗",
+        "pending": "待處理",
+        "markDone": "標記完成",
+        "marking": "標記緊...",
+        "processing": "處理緊...",
+        "explainMissed": "解釋點解miss咗",
+        "lastNMessages": "最近{count}條訊息",
+        "noMessage": "冇訊息"
+    },
+    "goal": {
+        "createTitle": "建立你嘅目標",
+        "title": "目標標題",
+        "titlePlaceholder": "例如：建立一個SaaS產品",
+        "titleHelp": "要具體清楚。目標一旦建立就改唔到。",
+        "timeHorizon": "時間範圍",
+        "timeHorizonHelp": "你會承諾幾耐嚟完成呢個目標？",
+        "intensity": "強度",
+        "intensityHelp": "你每日要投入幾多承諾？",
+        "chooseBoss": "揀你嘅AI老細",
+        "chooseBossHelp": "揀個能夠激勵你嘅問責風格",
+        "startDate": "開始日期",
+        "startDateHelp": "揀你想開始問責之旅嘅日期。",
+        "create": "建立目標",
+        "creating": "建立緊目標...",
+        "goalDetails": "目標詳情",
+        "days14": "14日",
+        "days30": "30日",
+        "days60": "60日",
+        "intensityLow": "低",
+        "intensityMedium": "中",
+        "intensityHigh": "高",
+        "intensityLowDesc": "輕度每日承諾",
+        "intensityMediumDesc": "中度每日承諾",
+        "intensityHighDesc": "重度每日承諾"
+    },
+    "goals": {
+        "title": "目標",
+        "manageAll": "管理晒所有目標",
+        "createGoal": "建立目標",
+        "filterAll": "全部",
+        "filterActive": "進行中",
+        "filterCompleted": "已完成",
+        "filterAbandoned": "已放棄",
+        "noGoalsFound": "搵唔到目標",
+        "noGoalsYet": "你未創建任何目標。",
+        "noFilteredGoals": "你冇{filter}嘅目標。",
+        "createFirstGoal": "創建你嘅第一個目標",
+        "progress": "進度",
+        "edit": "編輯",
+        "delete": "刪除",
+        "status": {
+            "active": "進行中",
+            "completed": "已完成",
+            "abandoned": "已放棄"
+        }
+    },
+    "features": {
+        "title": "所有你需要嘅功能嚟保持問責",
+        "subtitle": "強大嘅功能設計，幫你建立一致性並實現目標",
+        "goalSetting": {
+            "title": "目標設定",
+            "description": "定義清晰、有時限嘅目標，並揀自訂嘅強度等級。一旦設定，全力承諾——改唔到，縮唔到。"
+        },
+        "dailyCheckins": {
+            "title": "每日Check-in",
+            "description": "每日追蹤你嘅進度。通過持續嘅check-in建立動力，睇住你嘅連續記錄增長。"
+        },
+        "aiBoss": {
+            "title": "AI老細",
+            "description": "你嘅AI問責老細全天候監控你嘅進度。錯過一日？你會聽到反饋。保持一致？你會得到認可。"
+        },
+        "progressTracking": {
+            "title": "進度追蹤",
+            "description": "通過詳細嘅進度追蹤嚟視覺化你嘅旅程。睇下你已經行咗幾遠，保持動力。"
+        },
+        "streakBuilding": {
+            "title": "連續記錄建立",
+            "description": "通過持續嘅每日行動建立強大嘅習慣。睇住你嘅連續計數器每日攀升。"
+        },
+        "achievements": {
+            "title": "成就系統",
+            "description": "達到里程碑時獲得認可。慶祝你嘅勝利，喺旅程中保持動力。"
+        }
+    },
+    "howItWorks": {
+        "title": "簡單嘅流程，強大嘅成果",
+        "subtitle": "幾分鐘內開始，建立改變生活嘅一致性習慣",
+        "step1": {
+            "title": "設定你嘅目標",
+            "description": "定義你想實現嘅目標，揀你嘅時間表（14、30或60日），並揀你嘅強度等級。要具體同有意義。"
+        },
+        "step2": {
+            "title": "每日Check-in",
+            "description": "每日登入並標記你嘅進度。你做到未？對自己誠實啲。系統會追蹤晒所有嘢。"
+        },
+        "step3": {
+            "title": "建立動力",
+            "description": "睇住你嘅連續記錄增長，從你嘅問責夥伴嗰度獲得反饋，體驗每日一致性嘅複利效應。"
+        }
+    },
+    "testimonials": {
+        "title": "受到成功者信賴",
+        "subtitle": "睇下我哋嘅用戶點講佢哋嘅轉變"
+    },
+    "cta": {
+        "badge": "你嘅AI老細準備好喇",
+        "title": "準備好請你嘅",
+        "titleLine2": "AI問責老細未？",
+        "subtitle": "加入數千名停止搵藉口並通過AI驅動問責開始實現目標嘅人。",
+        "button": "免費開始—請你嘅老細",
+        "secondaryButton": "睇價錢",
+        "features": "免費開始 • 唔使信用卡 • 你嘅AI老細全天候待命"
+    },
+    "preview": {
+        "seeItInAction": "實際操作示範",
+        "dashboard": "控制面板",
+        "activeGoal": "進行中嘅目標",
+        "inProgress": "進行中",
+        "intensity": "強度",
+        "high": "高",
+        "goalProgress": "目標進度",
+        "complete": "完成",
+        "started": "開始",
+        "ends": "結束",
+        "todaysTask": "今日任務",
+        "workMinutes": "做90分鐘：",
+        "pending": "待處理",
+        "markDone": "標記完成",
+        "activityHistory": "活動記錄",
+        "lastMessages": "最近3條訊息"
+    },
+    "boss": {
+        "title": "你嘅AI老細",
+        "subtitle": "揀你嘅問責夥伴",
+        "aiPartner": "你嘅AI問責夥伴",
+        "rules": "規則",
+        "noNegotiations": "冇得傾",
+        "noNegotiationsDesc": "呢個老細唔傾偈。承諾係最終嘅。問責係唔可以談判嘅。",
+        "changeBoss": "換你嘅老細",
+        "bossPersonality": "老細性格",
+        "bossLanguage": "老細語言",
+        "bossLanguageDesc": "揀你嘅AI老細用嚟反饋嘅語言（獨立於應用語言）",
+        "current": "當前",
+        "saveChanges": "儲存更改",
+        "changingBoss": "換緊老細...",
+        "bossChanged": "老細換咗喇！"
+    },
+    "profile": {
+        "title": "個人資料",
+        "subtitle": "管理你嘅帳戶同訂閱",
+        "accountInfo": "帳戶資訊",
+        "email": "電郵",
+        "userId": "用戶ID",
+        "accountCreated": "帳戶創建時間",
+        "notSet": "未設置",
+        "subscription": "訂閱",
+        "status": "狀態",
+        "plan": "計劃",
+        "manageSubscription": "管理訂閱",
+        "noSubscription": "冇活動訂閱",
+        "viewPricing": "睇價錢計劃"
+    }
+}

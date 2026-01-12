@@ -14,6 +14,7 @@ const languages = [
   { code: 'en' as const, label: 'English', flag: '🇺🇸' },
   { code: 'zh-TW' as const, label: '繁體中文', flag: '🇹🇼' },
   { code: 'zh-CN' as const, label: '简体中文', flag: '🇨🇳' },
+  { code: 'zh-HK' as const, label: '粵語', flag: '🇭🇰' },
 ];
 
 export function LanguageSwitcher() {
