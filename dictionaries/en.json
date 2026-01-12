@@ -291,7 +291,16 @@
     "noSubscription": "No active subscription",
     "viewPricing": "View Pricing Plans",
     "appLanguage": "App Language",
-    "appLanguageDesc": "Choose your preferred language for the app interface"
+    "appLanguageDesc": "Choose your preferred language for the app interface",
+    "personalInfo": "Personal Information",
+    "phoneNumber": "Mobile Phone",
+    "phonePlaceholder": "+1 (555) 123-4567",
+    "phoneDescription": "Optional. Used for account recovery and notifications.",
+    "phoneInvalid": "Please enter a valid phone number",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "phoneSaved": "Phone number saved successfully",
+    "phoneSaveError": "Failed to save phone number"
   },
   "nav": {
     "dashboard": "Dashboard",

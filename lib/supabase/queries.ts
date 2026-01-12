@@ -491,6 +491,10 @@ export type UserPreferences = {
   user_id: string;
   boss_type: BossType;
   boss_language: 'en' | 'zh-CN' | 'zh-TW' | 'zh-HK';
+  phone_no?: string | null;
+  email?: string | null;
+  next_checkin_at?: string | null;
+  last_checkin_at?: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -577,6 +581,41 @@ export async function setUserBossLanguage(
     .upsert({
       user_id: userId,
       boss_language: bossLanguage,
+    }, {
+      onConflict: 'user_id',
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as UserPreferences;
+}
+
+export async function getUserPhone(userId: string): Promise<string | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('user_preferences')
+    .select('phone_no')
+    .eq('user_id', userId)
+    .single();
+
+  // If no preferences exist yet, return null
+  if (error && error.code === 'PGRST116') {
+    return null;
+  }
+  if (error) throw error;
+  return data?.phone_no || null;
+}
+
+export async function setUserPhone(userId: string, phone: string | null): Promise<UserPreferences> {
+  const supabase = await createClient();
+  
+  // Try to update first (upsert)
+  const { data, error } = await supabase
+    .from('user_preferences')
+    .upsert({
+      user_id: userId,
+      phone_no: phone,
     }, {
       onConflict: 'user_id',
     })

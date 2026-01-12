@@ -291,7 +291,16 @@
     "noSubscription": "没有活动订阅",
     "viewPricing": "查看价格计划",
     "appLanguage": "应用语言",
-    "appLanguageDesc": "选择你的应用界面语言"
+    "appLanguageDesc": "选择你的应用界面语言",
+    "personalInfo": "个人信息",
+    "phoneNumber": "手机号码",
+    "phonePlaceholder": "+86 138 0013 8000",
+    "phoneDescription": "可选。用于帐户恢复和通知。",
+    "phoneInvalid": "请输入有效的手机号码",
+    "saveChanges": "保存更改",
+    "saving": "保存中...",
+    "phoneSaved": "手机号码保存成功",
+    "phoneSaveError": "保存手机号码失败"
   },
   "nav": {
     "dashboard": "仪表板",

@@ -291,7 +291,16 @@
         "noSubscription": "冇活動訂閱",
         "viewPricing": "睇價錢計劃",
         "appLanguage": "應用語言",
-        "appLanguageDesc": "揀你嘅應用介面語言"
+        "appLanguageDesc": "揀你嘅應用介面語言",
+        "personalInfo": "個人資訊",
+        "phoneNumber": "手機號碼",
+        "phonePlaceholder": "+852 9123 4567",
+        "phoneDescription": "選填。用於帳戶恢復同通知。",
+        "phoneInvalid": "請輸入有效嘅手機號碼",
+        "saveChanges": "儲存變更",
+        "saving": "儲存緊...",
+        "phoneSaved": "手機號碼儲存成功",
+        "phoneSaveError": "儲存手機號碼失敗"
     },
     "nav": {
         "dashboard": "控制面板",
