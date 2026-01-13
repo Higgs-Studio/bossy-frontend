@@ -1,16 +1,13 @@
 'use client';
 
-import { useActionState, useState, useTransition } from 'react';
+import { useActionState, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Calendar } from '@/components/ui/calendar';
 import { updateGoalAction } from '@/app/app/goal/actions';
-import { updateGoalStatusAction } from './actions';
-import { Loader2, Target, Calendar as CalendarIcon, CheckCircle2, XCircle, Zap } from 'lucide-react';
-import { format, addDays } from 'date-fns';
+import { Loader2, Target, CheckCircle2, XCircle, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Goal } from '@/lib/supabase/queries';
 import { useTranslation } from '@/contexts/translation-context';
@@ -24,20 +21,15 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
     const { t } = useTranslation();
     const [state, formAction, isPending] = useActionState(updateGoalAction, null);
 
-    // Controlled state
+    // Controlled state - all changes only persist when "Update Goal" is clicked
+    const [title, setTitle] = useState(goal.title);
     const [intensity, setIntensity] = useState(goal.intensity);
-    const [startDate, setStartDate] = useState<Date>(new Date(goal.start_date));
-    const [endDate, setEndDate] = useState<Date>(new Date(goal.end_date));
-    const [showStartCalendar, setShowStartCalendar] = useState(false);
-    const [showEndCalendar, setShowEndCalendar] = useState(false);
+    const [startDate, setStartDate] = useState<string>(goal.start_date);
+    const [endDate, setEndDate] = useState<string>(goal.end_date);
     const [currentStatus, setCurrentStatus] = useState(goal.status);
-    const [isUpdatingStatus, startTransition] = useTransition();
 
-    const handleStatusUpdate = async (newStatus: 'active' | 'completed' | 'abandoned') => {
-        startTransition(async () => {
-            setCurrentStatus(newStatus);
-            await updateGoalStatusAction(goal.id, newStatus);
-        });
+    const handleStatusUpdate = (newStatus: 'active' | 'completed' | 'abandoned') => {
+        setCurrentStatus(newStatus);
     };
 
     return (
@@ -53,8 +45,9 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                     <input type="hidden" name="goalId" value={goal.id} />
                     {/* Hidden inputs to sync form values */}
                     <input type="hidden" name="intensity" value={intensity} />
-                    <input type="hidden" name="startDate" value={startDate.toISOString().split('T')[0]} />
-                    <input type="hidden" name="endDate" value={endDate.toISOString().split('T')[0]} />
+                    <input type="hidden" name="startDate" value={startDate} />
+                    <input type="hidden" name="endDate" value={endDate} />
+                    <input type="hidden" name="status" value={currentStatus} />
 
                     <div className="space-y-3">
                         <Label htmlFor="title" className="text-base font-semibold text-foreground">{t.goal?.title || 'Goal Title'}</Label>
@@ -65,7 +58,8 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             required
                             maxLength={200}
                             placeholder={t.goal?.titlePlaceholder || 'e.g., Build a SaaS product'}
-                            defaultValue={goal.title}
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                             className="h-11 text-base"
                         />
                     </div>
@@ -79,7 +73,6 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             <button
                                 type="button"
                                 onClick={() => handleStatusUpdate('active')}
-                                disabled={isUpdatingStatus || currentStatus === 'active'}
                                 className={cn(
                                     "flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all",
                                     currentStatus === 'active'
@@ -93,7 +86,6 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             <button
                                 type="button"
                                 onClick={() => handleStatusUpdate('completed')}
-                                disabled={isUpdatingStatus || currentStatus === 'completed'}
                                 className={cn(
                                     "flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all",
                                     currentStatus === 'completed'
@@ -107,7 +99,6 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             <button
                                 type="button"
                                 onClick={() => handleStatusUpdate('abandoned')}
-                                disabled={isUpdatingStatus || currentStatus === 'abandoned'}
                                 className={cn(
                                     "flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all",
                                     currentStatus === 'abandoned'
@@ -119,9 +110,6 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                                 <span className="font-medium text-sm">{t.goals?.status?.abandoned || 'Abandoned'}</span>
                             </button>
                         </div>
-                        {isUpdatingStatus && (
-                            <p className="text-sm text-muted-foreground text-center">{t.editGoal?.updatingStatus || 'Updating status...'}</p>
-                        )}
                     </div>
 
                     <div className="space-y-4 p-5 bg-muted/50 rounded-xl border border-border">
@@ -133,96 +121,39 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* Start Date Picker */}
                             <div className="space-y-2.5">
-                                <Label htmlFor="edit-start-date-btn" className="text-sm font-semibold text-foreground">{t.editGoal?.startDate || 'Start Date'}</Label>
-                                <Button
-                                    id="edit-start-date-btn"
-                                    type="button"
-                                    variant="outline"
-                                    className={cn(
-                                        "w-full justify-start text-left font-normal",
-                                        !startDate && "text-muted-foreground"
-                                    )}
-                                    onClick={() => {
-                                        setShowStartCalendar(!showStartCalendar);
-                                        setShowEndCalendar(false);
+                                <Label htmlFor="edit-start-date" className="text-sm font-semibold text-foreground">{t.editGoal?.startDate || 'Start Date'}</Label>
+                                <Input
+                                    id="edit-start-date"
+                                    type="date"
+                                    value={startDate}
+                                    onChange={(e) => {
+                                        const newStartDate = e.target.value;
+                                        setStartDate(newStartDate);
+                                        // Adjust end date if it's before new start date
+                                        if (endDate < newStartDate) {
+                                            const start = new Date(newStartDate);
+                                            start.setDate(start.getDate() + 30);
+                                            setEndDate(start.toISOString().split('T')[0]);
+                                        }
                                     }}
-                                >
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {startDate ? format(startDate, 'PPP') : <span>{t.editGoal?.pickDate || 'Pick a date'}</span>}
-                                </Button>
-                                {showStartCalendar && (
-                                    <>
-                                        <div 
-                                            className="fixed inset-0 z-40" 
-                                            onClick={() => setShowStartCalendar(false)}
-                                        />
-                                        <div className="relative">
-                                            <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
-                                                <Calendar
-                                                    mode="single"
-                                                    selected={startDate}
-                                                    onSelect={(date) => {
-                                                        if (date) {
-                                                            setStartDate(date);
-                                                            // Adjust end date if it's before new start date
-                                                            if (endDate < date) {
-                                                                setEndDate(addDays(date, 30));
-                                                            }
-                                                        }
-                                                        setShowStartCalendar(false);
-                                                    }}
-                                                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                                                    initialFocus
-                                                />
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
+                                    min={new Date().toISOString().split('T')[0]}
+                                    className="h-11"
+                                    required
+                                />
                             </div>
 
                             {/* End Date Picker */}
                             <div className="space-y-2.5">
-                                <Label htmlFor="edit-end-date-btn" className="text-sm font-semibold text-foreground">{t.editGoal?.endDate || 'End Date'}</Label>
-                                <Button
-                                    id="edit-end-date-btn"
-                                    type="button"
-                                    variant="outline"
-                                    className={cn(
-                                        "w-full justify-start text-left font-normal",
-                                        !endDate && "text-muted-foreground"
-                                    )}
-                                    onClick={() => {
-                                        setShowEndCalendar(!showEndCalendar);
-                                        setShowStartCalendar(false);
-                                    }}
-                                >
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {endDate ? format(endDate, 'PPP') : <span>{t.editGoal?.pickDate || 'Pick a date'}</span>}
-                                </Button>
-                                {showEndCalendar && (
-                                    <>
-                                        <div 
-                                            className="fixed inset-0 z-40" 
-                                            onClick={() => setShowEndCalendar(false)}
-                                        />
-                                        <div className="relative">
-                                            <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
-                                                <Calendar
-                                                    mode="single"
-                                                    selected={endDate}
-                                                    onSelect={(date) => {
-                                                        if (date) {
-                                                            setEndDate(date);
-                                                        }
-                                                        setShowEndCalendar(false);
-                                                    }}
-                                                    disabled={(date) => date <= startDate}
-                                                    initialFocus
-                                                />
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
+                                <Label htmlFor="edit-end-date" className="text-sm font-semibold text-foreground">{t.editGoal?.endDate || 'End Date'}</Label>
+                                <Input
+                                    id="edit-end-date"
+                                    type="date"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    min={startDate}
+                                    className="h-11"
+                                    required
+                                />
                             </div>
                         </div>
 
@@ -231,7 +162,7 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             <div className="mt-3 p-3 bg-background rounded-lg border border-border">
                                 <p className="text-sm text-muted-foreground">
                                     {t.editGoal?.duration || 'Duration'}: <span className="font-semibold text-foreground">
-                                        {Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))} {t.editGoal?.days || 'days'}
+                                        {Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24))} {t.editGoal?.days || 'days'}
                                     </span>
                                 </p>
                             </div>

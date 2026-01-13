@@ -101,8 +101,9 @@ export async function updateGoalAction(
   const intensity = formData.get('intensity') as 'low' | 'medium' | 'high';
   const startDate = formData.get('startDate') as string;
   const endDate = formData.get('endDate') as string;
+  const status = formData.get('status') as 'active' | 'completed' | 'abandoned';
 
-  if (!goalId || !title || !intensity || !startDate || !endDate) {
+  if (!goalId || !title || !intensity || !startDate || !endDate || !status) {
     return { error: 'All fields are required' };
   }
 
@@ -127,6 +128,7 @@ export async function updateGoalAction(
       intensity,
       startDate: start.toISOString().split('T')[0],
       endDate: end.toISOString().split('T')[0],
+      status,
     });
 
     redirect('/app/goals');
