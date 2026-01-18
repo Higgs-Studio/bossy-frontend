@@ -8,6 +8,9 @@ import { GoalCalendar } from './goal-calendar';
 import { getGoalWithTasks } from './actions';
 import { useTranslation } from '@/contexts/translation-context';
 import type { Goal, DailyTask } from '@/lib/supabase/queries';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 export default function EditGoalPage() {
     const { t } = useTranslation();
@@ -64,9 +67,22 @@ export default function EditGoalPage() {
     return (
         <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
             <div className="max-w-4xl mx-auto space-y-6">
-                <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
-                    {t.editGoal?.title || 'Edit Goal'}
-                </h1>
+                <div className="flex items-center gap-4">
+                    <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="gap-2"
+                    >
+                        <Link href="/app/goals">
+                            <ArrowLeft className="h-4 w-4" />
+                            {t.nav?.back || 'Back'}
+                        </Link>
+                    </Button>
+                    <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
+                        {t.editGoal?.title || 'Edit Goal'}: {goal.title}
+                    </h1>
+                </div>
                 
                 <EditGoalForm goal={goal} timeHorizon={timeHorizon} />
 

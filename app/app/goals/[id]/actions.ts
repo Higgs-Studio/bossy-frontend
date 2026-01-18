@@ -58,6 +58,41 @@ export async function updateGoalStatusAction(
   }
 }
 
+export async function updateGoalIntensityAction(
+  goalId: string,
+  intensity: 'low' | 'medium' | 'high'
+): Promise<{ error?: string; success?: boolean }> {
+  try {
+    const user = await getUser();
+    if (!user) {
+      redirect('/sign-in');
+    }
+
+    await updateGoal(goalId, user.id, { intensity });
+
+    revalidatePath('/app/goals');
+    revalidatePath(`/app/goals/${goalId}`);
+    revalidatePath('/app/dashboard');
+
+    return { success: true };
+  } catch (error) {
+    // Re-throw redirect errors
+    if (
+      error &&
+      typeof error === 'object' &&
+      'digest' in error &&
+      typeof error.digest === 'string' &&
+      error.digest.includes('NEXT_REDIRECT')
+    ) {
+      throw error;
+    }
+
+    logError('Update goal intensity error', error, { goalId, intensity });
+    const errorMessage = getErrorMessage(error);
+    return { error: `Failed to update goal intensity: ${errorMessage}` };
+  }
+}
+
 export async function createTaskAction(
   prevState: any,
   formData: FormData
@@ -83,6 +118,7 @@ export async function createTaskAction(
         goal_id: goalId,
         task_date: taskDate,
         task_text: taskText,
+        status: 'todo',
       });
 
     if (error) throw error;
@@ -122,12 +158,28 @@ export async function updateTaskAction(
     const goalId = formData.get('goalId') as string;
     const taskText = formData.get('taskText') as string;
     const taskDate = formData.get('taskDate') as string;
+    const taskStatus = formData.get('taskStatus') as 'todo' | 'in_progress' | 'done' | null;
 
     if (!taskId || !taskText || !taskDate) {
       return { error: 'All fields are required' };
     }
 
-    await updateTask(taskId, user.id, { taskText, taskDate });
+    const supabase = await createClient();
+    const updateData: any = {
+      task_text: taskText,
+      task_date: taskDate,
+    };
+    
+    if (taskStatus) {
+      updateData.status = taskStatus;
+    }
+
+    const { error } = await supabase
+      .from('daily_tasks')
+      .update(updateData)
+      .eq('id', taskId);
+
+    if (error) throw error;
 
     revalidatePath(`/app/goals/${goalId}`);
 
@@ -147,6 +199,47 @@ export async function updateTaskAction(
     logError('Update task error', error);
     const errorMessage = getErrorMessage(error);
     return { error: `Failed to update task: ${errorMessage}` };
+  }
+}
+
+export async function updateTaskStatusAction(
+  taskId: string,
+  goalId: string,
+  status: 'todo' | 'in_progress' | 'done'
+): Promise<{ error?: string; success?: boolean }> {
+  try {
+    const user = await getUser();
+    if (!user) {
+      redirect('/sign-in');
+    }
+
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from('daily_tasks')
+      .update({ status })
+      .eq('id', taskId);
+
+    if (error) throw error;
+
+    revalidatePath(`/app/goals/${goalId}`);
+    revalidatePath('/app/goals');
+
+    return { success: true };
+  } catch (error) {
+    // Re-throw redirect errors
+    if (
+      error &&
+      typeof error === 'object' &&
+      'digest' in error &&
+      typeof error.digest === 'string' &&
+      error.digest.includes('NEXT_REDIRECT')
+    ) {
+      throw error;
+    }
+
+    logError('Update task status error', error, { taskId, status });
+    const errorMessage = getErrorMessage(error);
+    return { error: `Failed to update task status: ${errorMessage}` };
   }
 }
 

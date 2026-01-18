@@ -82,8 +82,8 @@ export function GoalForm() {
                       className="fixed inset-0 z-40" 
                       onClick={() => setShowStartCalendar(false)}
                     />
-                    <div className="relative">
-                      <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
+                    <div className="relative z-50">
+                      <div className="absolute top-0 left-0 bg-background border border-border rounded-lg shadow-xl p-3 mt-1">
                         <Calendar
                           mode="single"
                           selected={startDate}
@@ -92,12 +92,11 @@ export function GoalForm() {
                               setStartDate(date);
                               // Adjust end date if it's before new start date
                               if (endDate < date) {
-                                setEndDate(addDays(date, 30));
+                                setEndDate(addDays(date, 1));
                               }
                             }
                             setShowStartCalendar(false);
                           }}
-                          disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
                           initialFocus
                         />
                       </div>
@@ -131,8 +130,8 @@ export function GoalForm() {
                       className="fixed inset-0 z-40" 
                       onClick={() => setShowEndCalendar(false)}
                     />
-                    <div className="relative">
-                      <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
+                    <div className="relative z-50">
+                      <div className="absolute top-0 left-0 bg-background border border-border rounded-lg shadow-xl p-3 mt-1">
                         <Calendar
                           mode="single"
                           selected={endDate}
@@ -142,7 +141,7 @@ export function GoalForm() {
                             }
                             setShowEndCalendar(false);
                           }}
-                          disabled={(date) => date <= startDate}
+                          disabled={(date) => date < startDate}
                           initialFocus
                         />
                       </div>

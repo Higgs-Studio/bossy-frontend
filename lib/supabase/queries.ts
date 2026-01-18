@@ -11,6 +11,8 @@ export type Goal = {
   status: 'active' | 'completed' | 'abandoned';
   boss_type: BossType;
   created_at: string;
+  total_tasks?: number;
+  completed_tasks?: number;
 };
 
 export type DailyTask = {
@@ -18,6 +20,7 @@ export type DailyTask = {
   goal_id: string;
   task_date: string;
   task_text: string;
+  status: 'todo' | 'in_progress' | 'done';
   created_at: string;
 };
 
@@ -40,14 +43,38 @@ export type BossEvent = {
 
 export async function getUserGoals(userId: string) {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data: goals, error } = await supabase
     .from('goals')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return data as Goal[];
+  
+  // Fetch task statistics for each goal
+  if (goals && goals.length > 0) {
+    const goalsWithStats = await Promise.all(
+      goals.map(async (goal) => {
+        const { data: tasks } = await supabase
+          .from('daily_tasks')
+          .select('status')
+          .eq('goal_id', goal.id);
+        
+        const total_tasks = tasks?.length || 0;
+        const completed_tasks = tasks?.filter(t => t.status === 'done').length || 0;
+        
+        return {
+          ...goal,
+          total_tasks,
+          completed_tasks,
+        };
+      })
+    );
+    
+    return goalsWithStats as Goal[];
+  }
+  
+  return goals as Goal[];
 }
 
 export async function getActiveGoal(userId: string) {

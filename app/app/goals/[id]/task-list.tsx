@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Calendar } from '@/components/ui/calendar';
-import { Plus, Edit2, Trash2, Check, X, Loader2, ListTodo, Calendar as CalendarIcon } from 'lucide-react';
-import { createTaskAction, updateTaskAction, deleteTaskAction, bulkDeleteTasksAction } from './actions';
+import { Plus, Edit2, Trash2, Check, X, Loader2, ListTodo, Calendar as CalendarIcon, Circle, Clock, CheckCircle2 } from 'lucide-react';
+import { createTaskAction, updateTaskAction, deleteTaskAction, bulkDeleteTasksAction, updateTaskStatusAction } from './actions';
 import type { DailyTask } from '@/lib/supabase/queries';
 import { useTranslation } from '@/contexts/translation-context';
 import { format } from 'date-fns';
@@ -32,16 +32,20 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(new Set());
   const [optimisticTasks, setOptimisticTasks] = useOptimistic<DailyTask[]>(initialTasks);
   const [isPending, startTransition] = useTransition();
+  const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
 
   const [editDate, setEditDate] = useState<Date | undefined>(undefined);
   const [addTaskDate, setAddTaskDate] = useState<Date>(new Date());
   const [showAddTaskCalendar, setShowAddTaskCalendar] = useState(false);
   const [showEditTaskCalendar, setShowEditTaskCalendar] = useState<string | null>(null);
 
+  const [editStatus, setEditStatus] = useState<'todo' | 'in_progress' | 'done'>('todo');
+
   const handleEditClick = (task: DailyTask) => {
     setEditingTaskId(task.id);
     setEditText(task.task_text);
     setEditDate(new Date(task.task_date));
+    setEditStatus(task.status || 'todo');
     setShowEditTaskCalendar(null);
   };
 
@@ -87,6 +91,54 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
     await bulkDeleteTasksAction(goalId, taskIdsArray);
   };
 
+  const handleTaskStatusUpdate = async (taskId: string, newStatus: 'todo' | 'in_progress' | 'done') => {
+    setUpdatingTaskId(taskId);
+
+    // Optimistic update
+    startTransition(() => {
+      setOptimisticTasks(optimisticTasks.map(t => 
+        t.id === taskId ? { ...t, status: newStatus } : t
+      ));
+    });
+
+    // Execute the actual update
+    await updateTaskStatusAction(taskId, goalId, newStatus);
+    setUpdatingTaskId(null);
+  };
+
+  const getTaskStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
+      todo: 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-900/50 dark:text-slate-300 dark:border-slate-700',
+      in_progress: 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-700',
+      done: 'bg-green-100 text-green-700 border-green-300 dark:bg-green-900/50 dark:text-green-300 dark:border-green-700',
+    };
+    return colors[status] || colors.todo;
+  };
+
+  const getTaskStatusIcon = (status: string) => {
+    const icons: Record<string, React.ReactElement> = {
+      todo: <Circle className="h-3.5 w-3.5" />,
+      in_progress: <Clock className="h-3.5 w-3.5" />,
+      done: <CheckCircle2 className="h-3.5 w-3.5" />,
+    };
+    return icons[status] || icons.todo;
+  };
+
+  const getTaskStatusLabel = (status: string) => {
+    const labels: Record<string, string> = {
+      todo: 'To Do',
+      in_progress: 'In Progress',
+      done: 'Done',
+    };
+    return labels[status] || labels.todo;
+  };
+
+  const calculateProgress = () => {
+    if (optimisticTasks.length === 0) return 0;
+    const completedTasks = optimisticTasks.filter(t => t.status === 'done').length;
+    return Math.round((completedTasks / optimisticTasks.length) * 100);
+  };
+
   // Group tasks by date for better display
   const sortedTasks = [...optimisticTasks].sort((a, b) => 
     new Date(a.task_date).getTime() - new Date(b.task_date).getTime()
@@ -96,19 +148,34 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
     <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            {sortedTasks.length > 0 && (
-              <input
-                type="checkbox"
-                checked={sortedTasks.length > 0 && selectedTasks.size === sortedTasks.length}
-                onChange={handleToggleAll}
-                className="h-4 w-4 rounded border-border"
-                title={t.tasks?.selectAll || 'Select all tasks'}
-              />
+          <div className="flex items-center gap-3 flex-1">
+            <CardTitle className="flex items-center gap-2">
+              {sortedTasks.length > 0 && (
+                <input
+                  type="checkbox"
+                  checked={sortedTasks.length > 0 && selectedTasks.size === sortedTasks.length}
+                  onChange={handleToggleAll}
+                  className="h-4 w-4 rounded border-border"
+                  title={t.tasks?.selectAll || 'Select all tasks'}
+                />
+              )}
+              <ListTodo className="h-5 w-5 text-primary" />
+              {t.tasks?.title || 'Tasks'} ({optimisticTasks.length})
+            </CardTitle>
+            {optimisticTasks.length > 0 && (
+              <div className="flex items-center gap-2 px-3 py-1 bg-muted rounded-full text-sm">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-16 h-2 bg-muted-foreground/20 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-green-600 transition-all duration-300"
+                      style={{ width: `${calculateProgress()}%` }}
+                    />
+                  </div>
+                  <span className="font-semibold text-xs">{calculateProgress()}%</span>
+                </div>
+              </div>
             )}
-            <ListTodo className="h-5 w-5 text-primary" />
-            {t.tasks?.title || 'Tasks'} ({optimisticTasks.length})
-          </CardTitle>
+          </div>
           <div className="flex items-center gap-2">
             {selectedTasks.size > 0 && (
               <Button
@@ -279,7 +346,50 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
                       <input type="hidden" name="taskId" value={task.id} />
                       <input type="hidden" name="goalId" value={goalId} />
                       <input type="hidden" name="taskDate" value={editDate ? editDate.toISOString().split('T')[0] : ''} />
+                      <input type="hidden" name="taskStatus" value={editStatus} />
                       
+                      <div className="space-y-2">
+                        <Label className="text-sm">Task Status</Label>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setEditStatus('todo')}
+                            className={`px-3 py-1.5 rounded-md text-xs font-medium border flex items-center gap-1.5 transition-all ${
+                              editStatus === 'todo' 
+                                ? 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-900/50 dark:text-slate-300 dark:border-slate-700 ring-2 ring-slate-400' 
+                                : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
+                            }`}
+                          >
+                            <Circle className="h-3 w-3" />
+                            To Do
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditStatus('in_progress')}
+                            className={`px-3 py-1.5 rounded-md text-xs font-medium border flex items-center gap-1.5 transition-all ${
+                              editStatus === 'in_progress' 
+                                ? 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-700 ring-2 ring-amber-400' 
+                                : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
+                            }`}
+                          >
+                            <Clock className="h-3 w-3" />
+                            In Progress
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditStatus('done')}
+                            className={`px-3 py-1.5 rounded-md text-xs font-medium border flex items-center gap-1.5 transition-all ${
+                              editStatus === 'done' 
+                                ? 'bg-green-100 text-green-700 border-green-300 dark:bg-green-900/50 dark:text-green-300 dark:border-green-700 ring-2 ring-green-400' 
+                                : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
+                            }`}
+                          >
+                            <CheckCircle2 className="h-3 w-3" />
+                            Done
+                          </button>
+                        </div>
+                      </div>
+
                       <div className="space-y-2">
                         <Label htmlFor={`edit-taskDate-btn-${task.id}`} className="text-sm">{t.tasks?.taskDate || 'Task Date'}</Label>
                         <Button
@@ -368,12 +478,29 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
                     // View Mode
                     <div className="flex items-start justify-between gap-4 w-full">
                       <div className="flex-1">
-                        <div className="text-xs text-muted-foreground mb-1">
-                          {new Date(task.task_date).toLocaleDateString('en-US', {
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric',
-                          })}
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="text-xs text-muted-foreground">
+                            {new Date(task.task_date).toLocaleDateString('en-US', {
+                              weekday: 'short',
+                              month: 'short',
+                              day: 'numeric',
+                            })}
+                          </div>
+                          <button
+                            onClick={() => {
+                              const statusCycle: Record<string, 'todo' | 'in_progress' | 'done'> = {
+                                todo: 'in_progress',
+                                in_progress: 'done',
+                                done: 'todo',
+                              };
+                              handleTaskStatusUpdate(task.id, statusCycle[task.status || 'todo']);
+                            }}
+                            disabled={updatingTaskId === task.id}
+                            className={`px-2 py-0.5 rounded-full text-xs font-medium border flex items-center gap-1 hover:opacity-80 transition-opacity ${getTaskStatusColor(task.status || 'todo')}`}
+                          >
+                            {getTaskStatusIcon(task.status || 'todo')}
+                            <span>{updatingTaskId === task.id ? '...' : getTaskStatusLabel(task.status || 'todo')}</span>
+                          </button>
                         </div>
                         <p className="text-foreground">{task.task_text}</p>
                       </div>
