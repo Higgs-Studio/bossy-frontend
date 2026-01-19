@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
       expand: ['items.data.price.product'],
-    }) as Stripe.Subscription;
+    });
 
     const price = subscription.items.data[0]?.price;
 
@@ -85,8 +85,8 @@ export async function GET(request: NextRequest) {
       plan_name: 'Plus',
       subscription_status: mapStripeStatus(subscription.status),
       billing_interval: billingInterval,
-      subscription_end_date: subscription.current_period_end 
-        ? new Date(subscription.current_period_end * 1000).toISOString()
+      subscription_end_date: (subscription as any).current_period_end 
+        ? new Date((subscription as any).current_period_end * 1000).toISOString()
         : null
     });
 
