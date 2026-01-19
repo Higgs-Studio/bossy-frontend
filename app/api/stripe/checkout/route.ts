@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
       expand: ['items.data.price.product'],
-    });
+    }) as Stripe.Subscription;
 
     const price = subscription.items.data[0]?.price;
 
