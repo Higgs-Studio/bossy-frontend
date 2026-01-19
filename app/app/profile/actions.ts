@@ -14,12 +14,18 @@ export async function getProfileData() {
     redirect('/sign-in');
   }
 
-  const subscriptionData = await getTeamForUser();
   const userPreferences = await getUserPreferences(user.id);
 
   return {
     user,
-    subscriptionData,
+    subscriptionData: userPreferences ? {
+      stripe_customer_id: userPreferences.stripe_customer_id,
+      stripe_subscription_id: userPreferences.stripe_subscription_id,
+      subscription_status: userPreferences.subscription_status || 'free',
+      plan_name: userPreferences.plan_name || 'Free',
+      billing_interval: userPreferences.billing_interval,
+      subscription_end_date: userPreferences.subscription_end_date,
+    } : null,
     userPreferences,
   };
 }

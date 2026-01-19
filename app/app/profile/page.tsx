@@ -101,26 +101,35 @@ export default function ProfilePage() {
                     <p className="text-base text-foreground mt-1">
                       <span
                         className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
-                          profileData.subscriptionData.subscriptionStatus === 'active' ||
-                          profileData.subscriptionData.subscriptionStatus === 'trialing'
+                          profileData.subscriptionData.subscription_status === 'active' ||
+                          profileData.subscriptionData.subscription_status === 'trialing'
                             ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
+                            : profileData.subscriptionData.subscription_status === 'free'
+                            ? 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20'
                             : 'bg-muted text-foreground border border-border'
                         }`}
                       >
-                        {profileData.subscriptionData.subscriptionStatus
-                          ? profileData.subscriptionData.subscriptionStatus.charAt(0).toUpperCase() +
-                            profileData.subscriptionData.subscriptionStatus.slice(1)
-                          : (t.profile?.noSubscription || 'No subscription')}
+                        {profileData.subscriptionData.subscription_status
+                          ? profileData.subscriptionData.subscription_status.charAt(0).toUpperCase() +
+                            profileData.subscriptionData.subscription_status.slice(1)
+                          : 'Free'}
                       </span>
                     </p>
                   </div>
-                  {profileData.subscriptionData.planName && (
+                  {profileData.subscriptionData.plan_name && (
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">{t.profile?.plan || 'Plan'}</label>
-                      <p className="text-base text-foreground mt-1">{profileData.subscriptionData.planName}</p>
+                      <p className="text-base text-foreground mt-1">
+                        {profileData.subscriptionData.plan_name}
+                        {profileData.subscriptionData.billing_interval && (
+                          <span className="text-sm text-muted-foreground ml-2">
+                            (Billed {profileData.subscriptionData.billing_interval === 'year' ? 'Yearly' : 'Monthly'})
+                          </span>
+                        )}
+                      </p>
                     </div>
                   )}
-                  {profileData.subscriptionData.stripeCustomerId && (
+                  {profileData.subscriptionData.stripe_customer_id && profileData.subscriptionData.subscription_status === 'active' ? (
                     <div className="pt-4">
                       <form action={manageSubscriptionAction}>
                         <Button type="submit" className="w-full sm:w-auto">
@@ -129,7 +138,15 @@ export default function ProfilePage() {
                         </Button>
                       </form>
                     </div>
-                  )}
+                  ) : profileData.subscriptionData.subscription_status === 'free' ? (
+                    <div className="pt-4">
+                      <Button asChild className="w-full sm:w-auto">
+                        <a href="/pricing">
+                          {t.profile?.upgradeToPro || 'Upgrade to Pro'}
+                        </a>
+                      </Button>
+                    </div>
+                  ) : null}
                 </>
               ) : (
                 <div className="text-center py-6">
