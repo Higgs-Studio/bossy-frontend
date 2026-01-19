@@ -138,6 +138,8 @@ export async function handleSubscriptionChange(
     const plan = subscription.items.data[0]?.price;
     const product = plan?.product as Stripe.Product;
     const billingInterval = plan?.recurring?.interval as 'month' | 'year';
+    // Type assertion needed because Stripe types don't expose current_period_end properly
+    const currentPeriodEnd = (subscription as any).current_period_end;
 
     await updateUserSubscription(userId, {
       stripe_subscription_id: subscriptionId,
@@ -145,8 +147,8 @@ export async function handleSubscriptionChange(
       plan_name: 'Plus',
       subscription_status: status,
       billing_interval: billingInterval,
-      subscription_end_date: subscription.current_period_end 
-        ? new Date(subscription.current_period_end * 1000).toISOString()
+      subscription_end_date: currentPeriodEnd 
+        ? new Date(currentPeriodEnd * 1000).toISOString()
         : null
     });
   } else if (status === 'canceled' || status === 'unpaid' || status === 'past_due') {

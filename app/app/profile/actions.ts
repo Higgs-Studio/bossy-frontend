@@ -5,6 +5,7 @@ import { customerPortalAction } from '@/lib/payments/actions';
 import { getUser } from '@/lib/supabase/get-session';
 import { getTeamForUser } from '@/lib/db/queries';
 import { getUserPreferences, setUserPhone } from '@/lib/supabase/queries';
+import { getUserSubscription } from '@/lib/subscriptions/queries';
 
 export { customerPortalAction as manageSubscriptionAction };
 
@@ -15,17 +16,19 @@ export async function getProfileData() {
   }
 
   const userPreferences = await getUserPreferences(user.id);
+  const subscriptionData = await getUserSubscription(user.id);
 
   return {
     user,
-    subscriptionData: userPreferences ? {
-      stripe_customer_id: userPreferences.stripe_customer_id,
-      stripe_subscription_id: userPreferences.stripe_subscription_id,
-      subscription_status: userPreferences.subscription_status || 'free',
-      plan_name: userPreferences.plan_name || 'Free',
-      billing_interval: userPreferences.billing_interval,
-      subscription_end_date: userPreferences.subscription_end_date,
-    } : null,
+    subscriptionData: subscriptionData || {
+      stripe_customer_id: null,
+      stripe_subscription_id: null,
+      stripe_product_id: null,
+      subscription_status: 'free' as const,
+      plan_name: 'Free' as const,
+      billing_interval: null,
+      subscription_end_date: null,
+    },
     userPreferences,
   };
 }

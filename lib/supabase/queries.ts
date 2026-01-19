@@ -522,6 +522,13 @@ export type UserPreferences = {
   email?: string | null;
   next_checkin_at?: string | null;
   last_checkin_at?: string | null;
+  stripe_customer_id?: string | null;
+  stripe_subscription_id?: string | null;
+  stripe_product_id?: string | null;
+  subscription_status?: string | null;
+  plan_name?: string | null;
+  billing_interval?: string | null;
+  subscription_end_date?: string | null;
   created_at: string;
   updated_at: string;
 };

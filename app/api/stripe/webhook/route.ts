@@ -51,10 +51,12 @@ export async function POST(request: NextRequest) {
       case 'invoice.payment_succeeded':
         // Payment succeeded - ensure subscription is active
         const successInvoice = event.data.object as Stripe.Invoice;
-        if (successInvoice.subscription) {
-          const subscriptionId = typeof successInvoice.subscription === 'string' 
-            ? successInvoice.subscription 
-            : successInvoice.subscription.id;
+        // Type assertion needed because Stripe types don't expose subscription field properly
+        const successSubscription = (successInvoice as any).subscription;
+        if (successSubscription) {
+          const subscriptionId = typeof successSubscription === 'string' 
+            ? successSubscription 
+            : successSubscription.id;
           const subscription = await stripe.subscriptions.retrieve(subscriptionId);
           logInfo('Payment succeeded, updating subscription', { subscriptionId });
           await handleSubscriptionChange(subscription);
@@ -64,10 +66,12 @@ export async function POST(request: NextRequest) {
       case 'invoice.payment_failed':
         // Payment failed - mark as past_due
         const failedInvoice = event.data.object as Stripe.Invoice;
-        if (failedInvoice.subscription) {
-          const subscriptionId = typeof failedInvoice.subscription === 'string' 
-            ? failedInvoice.subscription 
-            : failedInvoice.subscription.id;
+        // Type assertion needed because Stripe types don't expose subscription field properly
+        const failedSubscription = (failedInvoice as any).subscription;
+        if (failedSubscription) {
+          const subscriptionId = typeof failedSubscription === 'string' 
+            ? failedSubscription 
+            : failedSubscription.id;
           const subscription = await stripe.subscriptions.retrieve(subscriptionId);
           logInfo('Payment failed, updating subscription', { 
             subscriptionId,
