@@ -142,7 +142,7 @@ export default function ProfilePage() {
                     <div className="pt-4">
                       <Button asChild className="w-full sm:w-auto">
                         <a href="/pricing">
-                          {t.profile?.upgradeToPro || 'Upgrade to Pro'}
+                          {t.profile?.upgradeToPro || 'Upgrade to Plus'}
                         </a>
                       </Button>
                     </div>

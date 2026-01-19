@@ -61,7 +61,7 @@ export async function changeBossAction(
       if (!canChange) {
         const plan = await getUserPlan(user.id);
         return { 
-          error: `Upgrade to Pro to unlock all boss personalities. You're currently on the ${plan.planName} plan.`
+          error: `Upgrade to Plus to unlock all boss personalities. You're currently on the ${plan.planName} plan.`
         };
       }
     }

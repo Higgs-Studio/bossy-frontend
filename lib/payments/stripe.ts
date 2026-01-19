@@ -142,7 +142,7 @@ export async function handleSubscriptionChange(
     await updateUserSubscription(userId, {
       stripe_subscription_id: subscriptionId,
       stripe_product_id: product.id,
-      plan_name: 'Pro',
+      plan_name: 'Plus',
       subscription_status: status,
       billing_interval: billingInterval,
       subscription_end_date: subscription.current_period_end 

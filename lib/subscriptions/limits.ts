@@ -8,7 +8,7 @@ export const PLAN_LIMITS: Record<PlanName, PlanLimits> = {
     defaultBossType: 'execution',
     features: ['basic_boss', 'daily_checkins']
   },
-  Pro: {
+  Plus: {
     maxActiveGoals: -1, // unlimited
     historyDays: -1, // unlimited
     canChangeBossType: true,

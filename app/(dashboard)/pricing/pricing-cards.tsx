@@ -128,7 +128,7 @@ function ProPlanCard({
           Popular
         </span>
       </div>
-      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Pro</h2>
+      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Plus</h2>
       <div className="mb-6">
         <p className="text-5xl font-bold text-slate-900 dark:text-white mb-1">
           ${amount / 100}

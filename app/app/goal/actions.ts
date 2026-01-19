@@ -46,7 +46,7 @@ export async function createGoalAction(
       const plan = await getUserPlan(user.id);
       const activeCount = await getActiveGoalsCount(user.id);
       return { 
-        error: `Goal limit reached. You're on the ${plan.planName} plan (${activeCount}/${plan.limits.maxActiveGoals} active goal${plan.limits.maxActiveGoals === 1 ? '' : 's'}). Upgrade to Pro for unlimited goals.`
+        error: `Goal limit reached. You're on the ${plan.planName} plan (${activeCount}/${plan.limits.maxActiveGoals} active goal${plan.limits.maxActiveGoals === 1 ? '' : 's'}). Upgrade to Plus for unlimited goals.`
       };
     }
 

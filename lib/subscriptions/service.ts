@@ -20,7 +20,7 @@ export async function getUserPlan(userId: string): Promise<UserPlan> {
 export async function canCreateGoal(userId: string): Promise<boolean> {
   const plan = await getUserPlan(userId);
   
-  // Unlimited goals for Pro
+  // Unlimited goals for Plus
   if (isUnlimited(plan.limits.maxActiveGoals)) {
     return true;
   }
