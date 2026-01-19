@@ -88,3 +88,4 @@ export async function POST(request: NextRequest) {
     // This prevents Stripe from retrying indefinitely
     return NextResponse.json({ received: true, error: 'Processing failed' });
   }
+}
