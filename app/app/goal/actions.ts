@@ -10,6 +10,7 @@ import {
   getGoalById,
   getUserBossType,
 } from '@/lib/supabase/queries';
+import { canCreateGoal, getUserPlan, getActiveGoalsCount } from '@/lib/subscriptions/service';
 import { logError, getErrorMessage } from '@/lib/utils/logger';
 
 export async function createGoalAction(
@@ -39,6 +40,16 @@ export async function createGoalAction(
   }
 
   try {
+    // Check subscription limits before creating goal
+    const canCreate = await canCreateGoal(user.id);
+    if (!canCreate) {
+      const plan = await getUserPlan(user.id);
+      const activeCount = await getActiveGoalsCount(user.id);
+      return { 
+        error: `Goal limit reached. You're on the ${plan.planName} plan (${activeCount}/${plan.limits.maxActiveGoals} active goal${plan.limits.maxActiveGoals === 1 ? '' : 's'}). Upgrade to Pro for unlimited goals.`
+      };
+    }
+
     // Get user's boss type from preferences
     const bossType = await getUserBossType(user.id);
 
