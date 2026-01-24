@@ -7,12 +7,14 @@ import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { BOSS_PERSONALITIES, getBossPersonality, type BossType, type BossLanguage } from '@/lib/boss/reactions';
 import { changeBossAction } from './actions';
-import { Loader2, CheckCircle2, Globe } from 'lucide-react';
+import { Loader2, CheckCircle2, Globe, Crown } from 'lucide-react';
 import { useTranslation } from '@/contexts/translation-context';
+import { useRouter } from 'next/navigation';
 
 type BossSelectorProps = {
   currentBossType: BossType;
   currentBossLanguage: BossLanguage;
+  hasActiveSubscription: boolean;
 };
 
 const LANGUAGE_OPTIONS = [
@@ -22,8 +24,9 @@ const LANGUAGE_OPTIONS = [
   { code: 'zh-HK' as const, label: '粵語', flag: '🇭🇰' },
 ];
 
-export function BossSelector({ currentBossType, currentBossLanguage }: BossSelectorProps) {
+export function BossSelector({ currentBossType, currentBossLanguage, hasActiveSubscription }: BossSelectorProps) {
   const { t } = useTranslation();
+  const router = useRouter();
   const [state, formAction, isPending] = useActionState(changeBossAction, null);
   const [selectedBoss, setSelectedBoss] = useState<BossType>(currentBossType);
   const [selectedLanguage, setSelectedLanguage] = useState<BossLanguage>(currentBossLanguage);
@@ -44,9 +47,17 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
   }, [currentBossType, currentBossLanguage]);
 
   const hasChanges = selectedBoss !== currentBossType || selectedLanguage !== currentBossLanguage;
+  
+  // Check if user selected a paid boss without subscription
+  const isFreeBoss = (bossType: BossType) => bossType === 'supportive'; // Only Pip is free
+  const selectedPaidBossWithoutSubscription = !hasActiveSubscription && !isFreeBoss(selectedBoss) && selectedBoss !== currentBossType;
+  
+  const handleUpgradeClick = () => {
+    router.push('/app/profile#subscription');
+  };
 
   return (
-    <div className="space-y-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Current Boss Display */}
       <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
         <CardHeader className="border-b border-border">
@@ -117,6 +128,8 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
                 {Object.values(BOSS_PERSONALITIES).map((bossOption) => {
                   const translatedNickname = t.boss?.personalities?.[bossOption.id]?.nickname || bossOption.nickname;
                   const translatedDescription = t.boss?.personalities?.[bossOption.id]?.description || bossOption.description;
+                  const isFree = isFreeBoss(bossOption.id);
+                  const isPaid = !isFree;
                   return (
                     <label
                       key={bossOption.id}
@@ -137,11 +150,22 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
                         />
                       </div>
                       <span className="cursor-pointer flex-1">
-                          <span className="flex items-center gap-2 mb-1">
+                          <span className="flex items-center gap-2 mb-1 flex-wrap">
                           <span className="font-semibold text-base">{bossOption.name}</span>
                           {currentBossType === bossOption.id && (
                             <span className="text-xs bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-900">
                               {t.boss?.current || 'Current'}
+                            </span>
+                          )}
+                          {isFree && (
+                            <span className="text-xs bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 px-2 py-0.5 rounded-full border border-blue-200 dark:border-blue-900">
+                              Free
+                            </span>
+                          )}
+                          {isPaid && (
+                            <span className="text-xs bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-900 flex items-center gap-1">
+                              <Crown className="h-3 w-3" />
+                              Plus
                             </span>
                           )}
                         </span>
@@ -202,21 +226,33 @@ export function BossSelector({ currentBossType, currentBossLanguage }: BossSelec
               </div>
             )}
 
-            <Button 
-              type="submit" 
-              disabled={isPending || !hasChanges} 
-              className="w-full" 
-              size="lg"
-            >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t.boss?.changingBoss || 'Changing Boss...'}
-                </>
-              ) : (
-                t.boss?.saveChanges || 'Save Changes'
-              )}
-            </Button>
+            {selectedPaidBossWithoutSubscription ? (
+              <Button 
+                type="button"
+                onClick={handleUpgradeClick}
+                className="w-full" 
+                size="lg"
+              >
+                <Crown className="mr-2 h-4 w-4" />
+                Upgrade to Plus to Unlock
+              </Button>
+            ) : (
+              <Button 
+                type="submit" 
+                disabled={isPending || !hasChanges} 
+                className="w-full" 
+                size="lg"
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {t.boss?.changingBoss || 'Changing Boss...'}
+                  </>
+                ) : (
+                  t.boss?.saveChanges || 'Save Changes'
+                )}
+              </Button>
+            )}
           </form>
         </CardContent>
       </Card>

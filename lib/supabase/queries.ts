@@ -77,39 +77,39 @@ export async function getUserGoals(userId: string) {
   return goals as Goal[];
 }
 
-export async function getActiveGoal(userId: string) {
+export async function getActiveGoals(userId: string): Promise<Goal[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('goals')
     .select('*')
     .eq('user_id', userId)
     .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single();
+    .order('created_at', { ascending: false });
 
-  if (error && error.code !== 'PGRST116') throw error;
-  return data as Goal | null;
+  if (error) throw error;
+  return (data as Goal[]) || [];
 }
 
-export async function getTodayTask(userId: string) {
+export async function getTodayTasks(userId: string): Promise<DailyTask[]> {
   const supabase = await createClient();
   const today = new Date().toISOString().split('T')[0];
 
-  // Get active goal first
-  const activeGoal = await getActiveGoal(userId);
-  if (!activeGoal) return null;
+  // Get all active goals
+  const activeGoals = await getActiveGoals(userId);
+  if (activeGoals.length === 0) return [];
 
-  // Get today's task
+  const goalIds = activeGoals.map(goal => goal.id);
+
+  // Get today's tasks for all active goals
   const { data, error } = await supabase
     .from('daily_tasks')
     .select('*')
-    .eq('goal_id', activeGoal.id)
+    .in('goal_id', goalIds)
     .eq('task_date', today)
-    .single();
+    .order('created_at', { ascending: true });
 
-  if (error && error.code !== 'PGRST116') throw error;
-  return data as DailyTask | null;
+  if (error) throw error;
+  return (data as DailyTask[]) || [];
 }
 
 export async function getCheckInsForTask(taskId: string) {
@@ -393,6 +393,198 @@ export async function getConsecutiveMisses(userId: string, goalId: string): Prom
   }
 
   return consecutiveMisses;
+}
+
+// ==========================================
+// Dashboard KPI Queries
+// ==========================================
+
+export type DashboardKPIs = {
+  todayCompleted: number;
+  overdueCount: number;
+  currentStreak: number;
+  totalTasks: number;
+  completedTasks: number;
+  completionRate: number;
+};
+
+export type TaskWithStatus = {
+  id: string;
+  task_date: string;
+  task_text: string;
+  status: 'completed' | 'missed' | 'pending';
+  goal_title: string;
+  goal_id: string;
+};
+
+export async function getDashboardKPIs(userId: string): Promise<DashboardKPIs> {
+  const supabase = await createClient();
+  const activeGoals = await getActiveGoals(userId);
+  
+  if (activeGoals.length === 0) {
+    return {
+      todayCompleted: 0,
+      overdueCount: 0,
+      currentStreak: 0,
+      totalTasks: 0,
+      completedTasks: 0,
+      completionRate: 0,
+    };
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+  const goalIds = activeGoals.map(goal => goal.id);
+
+  // Get all tasks for all active goals
+  const { data: allTasks } = await supabase
+    .from('daily_tasks')
+    .select('id, task_date, goal_id')
+    .in('goal_id', goalIds)
+    .order('task_date', { ascending: true });
+
+  if (!allTasks || allTasks.length === 0) {
+    return {
+      todayCompleted: 0,
+      overdueCount: 0,
+      currentStreak: 0,
+      totalTasks: 0,
+      completedTasks: 0,
+      completionRate: 0,
+    };
+  }
+
+  // Get all check-ins for these tasks
+  const taskIds = allTasks.map(t => t.id);
+  const { data: checkIns } = await supabase
+    .from('check_ins')
+    .select('task_id, status')
+    .in('task_id', taskIds)
+    .eq('user_id', userId);
+
+  const checkInMap = new Map(checkIns?.map(ci => [ci.task_id, ci.status]) || []);
+
+  // Calculate metrics
+  let todayCompleted = 0;
+  let overdueCount = 0;
+  let completedTasks = 0;
+  let currentStreak = 0;
+  let streakBroken = false;
+
+  // Process tasks from most recent to oldest for streak calculation
+  const sortedTasks = [...allTasks].sort((a, b) => b.task_date.localeCompare(a.task_date));
+
+  // Count today's completed tasks
+  const todayTasks = allTasks.filter(t => t.task_date === today);
+  todayCompleted = todayTasks.filter(t => checkInMap.get(t.id) === 'done').length;
+
+  for (const task of sortedTasks) {
+    const checkInStatus = checkInMap.get(task.id);
+    const isCompleted = checkInStatus === 'done';
+    const isMissed = checkInStatus === 'missed';
+
+    // Count overdue (tasks before today with no check-in or missed)
+    if (task.task_date < today && (!checkInStatus || isMissed)) {
+      overdueCount++;
+    }
+
+    // Count total completed
+    if (isCompleted) {
+      completedTasks++;
+    }
+
+    // Calculate current streak (from today backwards)
+    if (task.task_date <= today && !streakBroken) {
+      if (isCompleted) {
+        currentStreak++;
+      } else if (task.task_date < today) {
+        // Only break streak for past tasks, not today's pending task
+        streakBroken = true;
+      }
+    }
+  }
+
+  const totalTasks = allTasks.length;
+  const completionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+  return {
+    todayCompleted,
+    overdueCount,
+    currentStreak,
+    totalTasks,
+    completedTasks,
+    completionRate: Math.round(completionRate * 10) / 10, // Round to 1 decimal
+  };
+}
+
+export async function getDashboardTasks(userId: string): Promise<TaskWithStatus[]> {
+  const supabase = await createClient();
+  const activeGoals = await getActiveGoals(userId);
+  
+  if (activeGoals.length === 0) {
+    return [];
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+  const goalIds = activeGoals.map(goal => goal.id);
+
+  // Create a map of goal IDs to goal titles for quick lookup
+  const goalMap = new Map(activeGoals.map(goal => [goal.id, goal.title]));
+
+  // Get all tasks for all active goals up to today
+  const { data: tasks } = await supabase
+    .from('daily_tasks')
+    .select('id, task_date, task_text, goal_id')
+    .in('goal_id', goalIds)
+    .lte('task_date', today)
+    .order('task_date', { ascending: false });
+
+  if (!tasks || tasks.length === 0) {
+    return [];
+  }
+
+  // Get all check-ins for these tasks
+  const taskIds = tasks.map(t => t.id);
+  const { data: checkIns } = await supabase
+    .from('check_ins')
+    .select('task_id, status')
+    .in('task_id', taskIds)
+    .eq('user_id', userId);
+
+  const checkInMap = new Map(checkIns?.map(ci => [ci.task_id, ci.status]) || []);
+
+  // Map tasks with their status and filter for incomplete tasks only
+  const tasksWithStatus: TaskWithStatus[] = tasks
+    .map(task => {
+      const checkInStatus = checkInMap.get(task.id);
+      let status: 'completed' | 'missed' | 'pending';
+      
+      if (checkInStatus === 'done') {
+        status = 'completed';
+      } else if (checkInStatus === 'missed') {
+        status = 'missed';
+      } else if (task.task_date < today) {
+        status = 'missed'; // Overdue tasks are considered missed
+      } else {
+        status = 'pending'; // Today's task
+      }
+
+      return {
+        id: task.id,
+        task_date: task.task_date,
+        task_text: task.task_text,
+        status,
+        goal_title: goalMap.get(task.goal_id) || 'Unknown Goal',
+        goal_id: task.goal_id,
+      };
+    })
+    .filter(task => {
+      // Only return tasks that are:
+      // 1. Overdue and not done (status = 'missed')
+      // 2. Today and not done (status = 'pending')
+      return task.status === 'missed' || task.status === 'pending';
+    });
+
+  return tasksWithStatus;
 }
 
 export async function updateGoal(

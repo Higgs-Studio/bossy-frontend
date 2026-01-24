@@ -3,14 +3,16 @@
 import { BossSelector } from './boss-selector';
 import { useTranslation } from '@/contexts/translation-context';
 import { useEffect, useState } from 'react';
-import { getBossTypeAndLanguage } from './actions';
+import { getBossTypeAndLanguage, checkSubscription } from './actions';
 
 export default function BossPage() {
   const { t } = useTranslation();
-  const [bossData, setBossData] = useState<{ bossType: 'execution' | 'supportive' | 'mentor' | 'drill-sergeant', bossLanguage: 'en' | 'zh-CN' | 'zh-TW' | 'zh-HK' } | null>(null);
+  const [bossData, setBossData] = useState<{ bossType: 'execution' | 'supportive' | 'mentor' | 'drill-sergeant', bossLanguage: 'en' | 'zh-CN' | 'zh-TW' | 'zh-HK', hasActiveSubscription: boolean } | null>(null);
 
   useEffect(() => {
-    getBossTypeAndLanguage().then(setBossData);
+    Promise.all([getBossTypeAndLanguage(), checkSubscription()]).then(([typeAndLang, hasSub]) => {
+      setBossData({ ...typeAndLang, hasActiveSubscription: hasSub });
+    });
   }, []);
 
   if (!bossData) {
@@ -27,7 +29,7 @@ export default function BossPage() {
 
   return (
     <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
             {t.boss?.title || 'Your AI Boss'}
@@ -35,7 +37,7 @@ export default function BossPage() {
           <p className="text-muted-foreground text-lg">{t.boss?.subtitle || 'Choose your accountability partner'}</p>
         </div>
 
-        <BossSelector currentBossType={bossData.bossType} currentBossLanguage={bossData.bossLanguage} />
+        <BossSelector currentBossType={bossData.bossType} currentBossLanguage={bossData.bossLanguage} hasActiveSubscription={bossData.hasActiveSubscription} />
       </div>
     </div>
   );

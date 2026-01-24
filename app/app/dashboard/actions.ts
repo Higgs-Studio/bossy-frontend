@@ -3,14 +3,14 @@
 import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/supabase/get-session';
 import {
-  getTodayTask,
+  getTodayTasks,
   createCheckIn,
   createBossEvent,
   markTaskMissed,
   abandonGoal,
   completeGoal,
   getConsecutiveMisses,
-  getActiveGoal,
+  getActiveGoals,
 } from '@/lib/supabase/queries';
 import { getBossReaction } from '@/lib/boss/reactions';
 import { logError } from '@/lib/utils/logger';
@@ -31,8 +31,10 @@ export async function checkInAction(
 
   try {
     // Validate task belongs to user and is today
-    const todayTask = await getTodayTask(user.id);
-    if (!todayTask || todayTask.id !== taskId) {
+    const todayTasks = await getTodayTasks(user.id);
+    const todayTask = todayTasks.find(task => task.id === taskId);
+    
+    if (!todayTask) {
       return { error: 'Invalid task' };
     }
 
@@ -48,11 +50,12 @@ export async function checkInAction(
       status: 'done',
     });
 
-    // Get active goal to use boss type
-    const activeGoal = await getActiveGoal(user.id);
+    // Get active goals to use boss type (use first goal's boss type)
+    const activeGoals = await getActiveGoals(user.id);
+    const bossType = activeGoals.length > 0 ? activeGoals[0].boss_type : undefined;
 
     // Create boss reaction
-    const reaction = getBossReaction('done', { bossType: activeGoal?.boss_type });
+    const reaction = getBossReaction('done', { bossType });
     await createBossEvent({
       userId: user.id,
       eventType: reaction.eventType,
@@ -84,16 +87,26 @@ export async function markMissedAction(
     // Mark task as missed
     await markTaskMissed(taskId, user.id);
 
-    // Get active goal to calculate consecutive misses
-    const activeGoal = await getActiveGoal(user.id);
-    const consecutiveMisses = activeGoal 
-      ? await getConsecutiveMisses(user.id, activeGoal.id)
-      : 1;
+    // Get active goals to calculate consecutive misses
+    const activeGoals = await getActiveGoals(user.id);
+    
+    // Calculate max consecutive misses across all active goals
+    let maxConsecutiveMisses = 1;
+    let bossType = undefined;
+    
+    if (activeGoals.length > 0) {
+      const missesPromises = activeGoals.map(goal => 
+        getConsecutiveMisses(user.id, goal.id)
+      );
+      const missesResults = await Promise.all(missesPromises);
+      maxConsecutiveMisses = Math.max(...missesResults, 1);
+      bossType = activeGoals[0].boss_type;
+    }
 
     // Create boss reaction with actual consecutive miss count and boss type
     const reaction = getBossReaction('missed', { 
-      consecutiveMisses,
-      bossType: activeGoal?.boss_type 
+      consecutiveMisses: maxConsecutiveMisses,
+      bossType
     });
     await createBossEvent({
       userId: user.id,

@@ -23,6 +23,22 @@ export async function getBossTypeAndLanguage(): Promise<{ bossType: BossType; bo
   return { bossType, bossLanguage };
 }
 
+export async function checkSubscription(): Promise<boolean> {
+  const user = await getUser();
+  if (!user) {
+    redirect('/sign-in');
+  }
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('user_preferences')
+    .select('subscription_status')
+    .eq('user_id', user.id)
+    .single();
+
+  return data?.subscription_status === 'active' || data?.subscription_status === 'trialing';
+}
+
 export async function changeBossAction(
   prevState: any,
   formData: FormData

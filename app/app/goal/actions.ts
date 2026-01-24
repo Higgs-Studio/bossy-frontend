@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/supabase/get-session';
 import {
   createGoal,
-  createDailyTasks,
   updateGoal,
   deleteGoal,
   getGoalById,
@@ -63,23 +62,8 @@ export async function createGoalAction(
       bossType,
     });
 
-    // Generate task text based on intensity
-    const taskText =
-      intensity === 'high'
-        ? `Work 90 minutes on: ${title}`
-        : intensity === 'medium'
-          ? `Work 60 minutes on: ${title}`
-          : `Work 30 minutes on: ${title}`;
-
-    // Generate daily tasks
-    await createDailyTasks(
-      goal.id,
-      start.toISOString().split('T')[0],
-      end.toISOString().split('T')[0],
-      taskText
-    );
-
-    redirect('/app/dashboard');
+    // Redirect to goal detail page where user can add tasks
+    redirect(`/app/goals/${goal.id}`);
   } catch (error) {
     // Re-throw redirect errors
     if (

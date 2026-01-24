@@ -26,7 +26,7 @@ export function PublicUserMenu() {
   }, [supabase]);
 
   if (user) {
-    router.push('/app/dashboard');
+    router.push('/app/goals');
     return null;
   }
 

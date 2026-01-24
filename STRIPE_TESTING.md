@@ -85,7 +85,7 @@ WHERE user_id = 'YOUR_USER_ID';
 - [ ] **Verify**: Redirected to Stripe Checkout
 - [ ] Enter test card: `4242 4242 4242 4242`
 - [ ] Complete payment
-- [ ] **Expected**: Redirected to `/app/dashboard`
+- [ ] **Expected**: Redirected to `/app/goals`
 
 ### Test 3.2: Verify Subscription Status
 

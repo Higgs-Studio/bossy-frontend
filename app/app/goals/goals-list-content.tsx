@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Edit, Trash2, Target, Calendar, Zap, AlertTriangle, MoreVertical, CheckCircle2, XCircle, Ban, Pencil, Flame, TrendingUp, TrendingDown } from 'lucide-react';
+import { Plus, Edit, Trash2, Target, Calendar, Zap, AlertTriangle, MoreVertical, CheckCircle2, XCircle, Ban, Pencil, Flame, TrendingUp, TrendingDown, Crown, Info } from 'lucide-react';
 import Link from 'next/link';
 import { deleteGoalAction } from '@/app/app/goal/actions';
 import { updateGoalStatusAction, updateGoalIntensityAction } from '@/app/app/goals/[id]/actions';
@@ -13,9 +13,11 @@ import { useRouter } from 'next/navigation';
 
 type GoalsListContentProps = {
   goals: Goal[];
+  hasActiveSubscription: boolean;
+  maxActiveGoals: number;
 };
 
-export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps) {
+export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, maxActiveGoals }: GoalsListContentProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'abandoned'>('active');
@@ -31,10 +33,19 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
     goalId: '',
     goalTitle: ''
   });
+  const [showSuccessMessage, setShowSuccessMessage] = useState<{show: boolean; message: string}>({
+    show: false,
+    message: ''
+  });
   const [showStatusMenu, setShowStatusMenu] = useState<string | null>(null);
   const [updatingStatusGoalId, setUpdatingStatusGoalId] = useState<string | null>(null);
   const [showIntensityMenu, setShowIntensityMenu] = useState<string | null>(null);
   const [updatingIntensityGoalId, setUpdatingIntensityGoalId] = useState<string | null>(null);
+  
+  // Calculate active goals count
+  const activeGoalsCount = optimisticGoals.filter((g) => g.status === 'active').length;
+  const isAtLimit = !hasActiveSubscription && activeGoalsCount >= maxActiveGoals;
+  const isNearLimit = !hasActiveSubscription && activeGoalsCount >= maxActiveGoals - 1;
 
   const handleCardClick = (goalId: string) => {
     router.push(`/app/goals/${goalId}`);
@@ -45,53 +56,96 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
     setShowConfirmDialog({ show: true, goalId, goalTitle });
   };
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = () => {
     const goalId = showConfirmDialog.goalId;
+    const goalTitle = showConfirmDialog.goalTitle;
     setShowConfirmDialog({ show: false, goalId: '', goalTitle: '' });
     setDeletingGoalId(goalId);
 
-    // Optimistic update
-    startTransition(() => {
+    // Optimistic update and execute delete action in transition
+    startTransition(async () => {
       setOptimisticGoals(optimisticGoals.filter(g => g.id !== goalId));
+      
+      // Execute the actual delete action
+      const formData = new FormData();
+      formData.append('goalId', goalId);
+      await deleteFormAction(formData);
+      setDeletingGoalId(null);
+      
+      // Show success message
+      setShowSuccessMessage({ 
+        show: true, 
+        message: `"${goalTitle}" has been successfully deleted.` 
+      });
+      
+      // Auto-hide success message after 4 seconds
+      setTimeout(() => {
+        setShowSuccessMessage({ show: false, message: '' });
+      }, 4000);
     });
-
-    // Execute the actual delete action
-    const formData = new FormData();
-    formData.append('goalId', goalId);
-    await deleteFormAction(formData);
-    setDeletingGoalId(null);
   };
 
   const handleStatusUpdate = async (goalId: string, newStatus: 'active' | 'completed' | 'abandoned') => {
+    const goal = optimisticGoals.find(g => g.id === goalId);
+    const goalTitle = goal?.title || 'Goal';
     setUpdatingStatusGoalId(goalId);
     setShowStatusMenu(null);
 
     // Optimistic update
-    startTransition(() => {
+    startTransition(async () => {
       setOptimisticGoals(optimisticGoals.map(g => 
         g.id === goalId ? { ...g, status: newStatus } : g
       ));
-    });
 
-    // Execute the actual update
-    await updateGoalStatusAction(goalId, newStatus);
-    setUpdatingStatusGoalId(null);
+      // Execute the actual update
+      await updateGoalStatusAction(goalId, newStatus);
+      setUpdatingStatusGoalId(null);
+      
+      // Show success message
+      const statusLabels = {
+        active: t.goals?.filterActive || 'Active',
+        completed: t.goals?.filterCompleted || 'Completed',
+        abandoned: t.goals?.filterAbandoned || 'Abandoned'
+      };
+      setShowSuccessMessage({ 
+        show: true, 
+        message: `"${goalTitle}" status updated to ${statusLabels[newStatus]}.` 
+      });
+      
+      // Auto-hide success message after 4 seconds
+      setTimeout(() => {
+        setShowSuccessMessage({ show: false, message: '' });
+      }, 4000);
+    });
   };
 
   const handleIntensityUpdate = async (goalId: string, newIntensity: 'low' | 'medium' | 'high') => {
+    const goal = optimisticGoals.find(g => g.id === goalId);
+    const goalTitle = goal?.title || 'Goal';
     setUpdatingIntensityGoalId(goalId);
     setShowIntensityMenu(null);
 
     // Optimistic update
-    startTransition(() => {
+    startTransition(async () => {
       setOptimisticGoals(optimisticGoals.map(g => 
         g.id === goalId ? { ...g, intensity: newIntensity } : g
       ));
-    });
 
-    // Execute the actual update
-    await updateGoalIntensityAction(goalId, newIntensity);
-    setUpdatingIntensityGoalId(null);
+      // Execute the actual update
+      await updateGoalIntensityAction(goalId, newIntensity);
+      setUpdatingIntensityGoalId(null);
+      
+      // Show success message
+      setShowSuccessMessage({ 
+        show: true, 
+        message: `"${goalTitle}" intensity updated to ${newIntensity}.` 
+      });
+      
+      // Auto-hide success message after 4 seconds
+      setTimeout(() => {
+        setShowSuccessMessage({ show: false, message: '' });
+      }, 4000);
+    });
   };
 
   const filteredGoals =
@@ -179,13 +233,67 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
             <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">{t.goals?.title || 'Goals'}</h1>
             <p className="text-muted-foreground text-lg">{t.goals?.manageAll || 'Manage all your goals'}</p>
           </div>
-          <Button asChild size="lg">
-            <Link href="/app/goal">
+          {isAtLimit ? (
+            <Button size="lg" disabled>
               <Plus className="mr-2 h-4 w-4" />
               {t.goals?.createGoal || 'Create Goal'}
-            </Link>
-          </Button>
+            </Button>
+          ) : (
+            <Button asChild size="lg">
+              <Link href="/app/goal">
+                <Plus className="mr-2 h-4 w-4" />
+                {t.goals?.createGoal || 'Create Goal'}
+              </Link>
+            </Button>
+          )}
         </div>
+
+        {/* Free User Limit Banner */}
+        {!hasActiveSubscription && (
+          <Card className={`border-2 ${isAtLimit ? 'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/20' : isNearLimit ? 'border-yellow-200 dark:border-yellow-900 bg-yellow-50 dark:bg-yellow-950/20' : 'border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/20'}`}>
+            <CardContent className="pt-4">
+              <div className="flex items-start gap-3">
+                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${isAtLimit ? 'bg-red-100 dark:bg-red-900/50' : isNearLimit ? 'bg-yellow-100 dark:bg-yellow-900/50' : 'bg-blue-100 dark:bg-blue-900/50'}`}>
+                  {isAtLimit ? (
+                    <AlertTriangle className={`h-5 w-5 text-red-600 dark:text-red-400`} />
+                  ) : (
+                    <Info className={`h-5 w-5 ${isNearLimit ? 'text-yellow-600 dark:text-yellow-400' : 'text-blue-600 dark:text-blue-400'}`} />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p className={`font-semibold ${isAtLimit ? 'text-red-900 dark:text-red-100' : isNearLimit ? 'text-yellow-900 dark:text-yellow-100' : 'text-blue-900 dark:text-blue-100'}`}>
+                    {isAtLimit 
+                      ? `Active Goal Limit Reached (${activeGoalsCount}/${maxActiveGoals})`
+                      : `Active Goals: ${activeGoalsCount}/${maxActiveGoals}`
+                    }
+                  </p>
+                  <p className={`text-sm mt-1 ${isAtLimit ? 'text-red-800 dark:text-red-200' : isNearLimit ? 'text-yellow-800 dark:text-yellow-200' : 'text-blue-800 dark:text-blue-200'}`}>
+                    {isAtLimit
+                      ? 'You\'ve reached the maximum number of active goals on the Free plan. Complete or abandon a goal to create a new one, or upgrade to Plus for unlimited goals.'
+                      : `You're on the Free plan. Upgrade to Plus for unlimited active goals and more features.`
+                    }
+                  </p>
+                  {!isAtLimit && (
+                    <Button asChild variant="outline" size="sm" className="mt-3">
+                      <Link href="/app/profile#subscription">
+                        <Crown className="mr-2 h-4 w-4" />
+                        Upgrade to Plus
+                      </Link>
+                    </Button>
+                  )}
+                  {isAtLimit && (
+                    <Button asChild size="sm" className="mt-3">
+                      <Link href="/app/profile#subscription">
+                        <Crown className="mr-2 h-4 w-4" />
+                        Upgrade to Plus for Unlimited Goals
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Filter Tabs */}
         <div className="flex flex-wrap gap-2 border-b border-border pb-4">
@@ -451,6 +559,32 @@ export function GoalsListContent({ goals: initialGoals }: GoalsListContentProps)
                   >
                     {t.goals?.delete || 'Delete'} {t.goal?.title || 'Goal'}
                   </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Success Message */}
+        {showSuccessMessage.show && (
+          <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 duration-300">
+            <Card className="border-2 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/50 shadow-lg">
+              <CardContent className="pt-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                    <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-green-900 dark:text-green-100">
+                      {showSuccessMessage.message}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowSuccessMessage({ show: false, message: '' })}
+                    className="flex-shrink-0 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
+                  >
+                    <XCircle className="h-4 w-4" />
+                  </button>
                 </div>
               </CardContent>
             </Card>

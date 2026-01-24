@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
         : null
     });
 
-    return NextResponse.redirect(new URL('/app/dashboard', request.url));
+    return NextResponse.redirect(new URL('/app/goals', request.url));
   } catch (error) {
     logError('Error handling successful checkout', error, { sessionId });
     return NextResponse.redirect(new URL('/pricing', request.url));

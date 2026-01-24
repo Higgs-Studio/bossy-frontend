@@ -85,7 +85,7 @@ export default function ProfilePage() {
         <ProfileSettings />
 
         {/* Subscription Management */}
-        <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
+        <Card id="subscription" className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200 scroll-mt-8">
           <CardHeader>
             <div className="flex items-center gap-2">
               <CreditCard className="h-5 w-5 text-muted-foreground" />

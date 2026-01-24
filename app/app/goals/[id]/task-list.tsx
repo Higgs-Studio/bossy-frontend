@@ -1,26 +1,33 @@
 'use client';
 
-import { useActionState, useState, useOptimistic, useTransition } from 'react';
+import { useActionState, useState, useOptimistic, useTransition, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Calendar } from '@/components/ui/calendar';
-import { Plus, Edit2, Trash2, Check, X, Loader2, ListTodo, Calendar as CalendarIcon, Circle, Clock, CheckCircle2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, Check, X, Loader2, ListTodo, Calendar as CalendarIcon, Circle, Clock, CheckCircle2, XCircle, ChevronDown } from 'lucide-react';
 import { createTaskAction, updateTaskAction, deleteTaskAction, bulkDeleteTasksAction, updateTaskStatusAction } from './actions';
 import type { DailyTask } from '@/lib/supabase/queries';
 import { useTranslation } from '@/contexts/translation-context';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 type TaskListProps = {
   goalId: string;
   tasks: DailyTask[];
   startDate: string;
   endDate: string;
+  onTasksChange?: () => Promise<void>;
 };
 
-export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: TaskListProps) {
+export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTasksChange }: TaskListProps) {
   const { t } = useTranslation();
   const [createState, createFormAction, isCreatePending] = useActionState(createTaskAction, null);
   const [updateState, updateFormAction, isUpdatePending] = useActionState(updateTaskAction, null);
@@ -29,31 +36,75 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editText, setEditText] = useState('');
+  const [editDate, setEditDate] = useState<Date>(new Date());
+  const [editStatus, setEditStatus] = useState<'todo' | 'in_progress' | 'done'>('todo');
+  const [showEditCalendar, setShowEditCalendar] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(new Set());
   const [optimisticTasks, setOptimisticTasks] = useOptimistic<DailyTask[]>(initialTasks);
   const [isPending, startTransition] = useTransition();
   const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState<{show: boolean; message: string}>({
+    show: false,
+    message: ''
+  });
 
-  const [editDate, setEditDate] = useState<Date | undefined>(undefined);
   const [addTaskDate, setAddTaskDate] = useState<Date>(new Date());
   const [showAddTaskCalendar, setShowAddTaskCalendar] = useState(false);
-  const [showEditTaskCalendar, setShowEditTaskCalendar] = useState<string | null>(null);
 
-  const [editStatus, setEditStatus] = useState<'todo' | 'in_progress' | 'done'>('todo');
+  const showNotification = (message: string) => {
+    setShowSuccessMessage({ show: true, message });
+    setTimeout(() => {
+      setShowSuccessMessage({ show: false, message: '' });
+    }, 4000);
+  };
+
+  // Watch for successful task creation
+  useEffect(() => {
+    if (!isCreatePending && createState === null && showAddForm) {
+      // Task was successfully created (state is null and not pending)
+      const prevTaskCount = optimisticTasks.length;
+      if (initialTasks.length > prevTaskCount) {
+        showNotification('Task created successfully.');
+        setShowAddForm(false);
+        onTasksChange?.();
+      }
+    }
+  }, [isCreatePending, createState, showAddForm, optimisticTasks.length, initialTasks.length, onTasksChange]);
+
+  // Watch for successful task update
+  useEffect(() => {
+    if (!isUpdatePending && updateState === null && editingTaskId) {
+      // Task was successfully updated
+      showNotification('Task updated successfully.');
+      setEditingTaskId(null);
+      setEditText('');
+      onTasksChange?.();
+    }
+  }, [isUpdatePending, updateState, editingTaskId, onTasksChange]);
+
+  // Watch for successful task deletion
+  useEffect(() => {
+    if (!isDeletePending && deleteState === null) {
+      // Task was successfully deleted
+      const prevTaskCount = optimisticTasks.length;
+      if (initialTasks.length < prevTaskCount) {
+        showNotification('Task deleted successfully.');
+        onTasksChange?.();
+      }
+    }
+  }, [isDeletePending, deleteState, optimisticTasks.length, initialTasks.length, onTasksChange]);
 
   const handleEditClick = (task: DailyTask) => {
     setEditingTaskId(task.id);
     setEditText(task.task_text);
     setEditDate(new Date(task.task_date));
     setEditStatus(task.status || 'todo');
-    setShowEditTaskCalendar(null);
   };
 
   const handleCancelEdit = () => {
     setEditingTaskId(null);
     setEditText('');
-    setEditDate(undefined);
-    setShowEditTaskCalendar(null);
+    setShowEditCalendar(false);
   };
 
   const handleToggleTask = (taskId: string) => {
@@ -76,34 +127,50 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
     }
   };
 
-  const handleBulkDelete = async () => {
+  const handleBulkDelete = () => {
     const taskIdsArray = Array.from(selectedTasks);
+    const count = taskIdsArray.length;
     
-    // Optimistic update
-    startTransition(() => {
+    // Optimistic update and execute bulk delete in transition
+    startTransition(async () => {
       setOptimisticTasks(optimisticTasks.filter(t => !selectedTasks.has(t.id)));
+      setSelectedTasks(new Set());
+
+      // Execute bulk delete
+      await bulkDeleteTasksAction(goalId, taskIdsArray);
+      
+      // Show success message
+      showNotification(`${count} task${count > 1 ? 's' : ''} deleted successfully.`);
+      
+      // Refresh data
+      await onTasksChange?.();
     });
-
-    // Clear selection
-    setSelectedTasks(new Set());
-
-    // Execute bulk delete
-    await bulkDeleteTasksAction(goalId, taskIdsArray);
   };
 
   const handleTaskStatusUpdate = async (taskId: string, newStatus: 'todo' | 'in_progress' | 'done') => {
     setUpdatingTaskId(taskId);
 
-    // Optimistic update
-    startTransition(() => {
+    // Optimistic update and execute the update in transition
+    startTransition(async () => {
       setOptimisticTasks(optimisticTasks.map(t => 
         t.id === taskId ? { ...t, status: newStatus } : t
       ));
-    });
 
-    // Execute the actual update
-    await updateTaskStatusAction(taskId, goalId, newStatus);
-    setUpdatingTaskId(null);
+      // Execute the actual update
+      await updateTaskStatusAction(taskId, goalId, newStatus);
+      setUpdatingTaskId(null);
+      
+      // Show success message
+      const statusLabels = {
+        todo: 'To Do',
+        in_progress: 'In Progress',
+        done: 'Done'
+      };
+      showNotification(`Task status updated to ${statusLabels[newStatus]}.`);
+      
+      // Refresh data
+      await onTasksChange?.();
+    });
   };
 
   const getTaskStatusColor = (status: string) => {
@@ -341,137 +408,145 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
                 />
                 <div className="flex-1">
                   {editingTaskId === task.id ? (
-                    // Edit Mode
-                    <form action={updateFormAction} className="space-y-3 w-full">
+                    // Edit Mode - Full edit form
+                    <form action={updateFormAction} className="space-y-3 w-full p-4 bg-muted/30 rounded-lg border border-border">
                       <input type="hidden" name="taskId" value={task.id} />
                       <input type="hidden" name="goalId" value={goalId} />
-                      <input type="hidden" name="taskDate" value={editDate ? editDate.toISOString().split('T')[0] : ''} />
+                      <input type="hidden" name="taskDate" value={editDate.toISOString().split('T')[0]} />
                       <input type="hidden" name="taskStatus" value={editStatus} />
                       
-                      <div className="space-y-2">
-                        <Label className="text-sm">Task Status</Label>
-                        <div className="flex gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setEditStatus('todo')}
-                            className={`px-3 py-1.5 rounded-md text-xs font-medium border flex items-center gap-1.5 transition-all ${
-                              editStatus === 'todo' 
-                                ? 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-900/50 dark:text-slate-300 dark:border-slate-700 ring-2 ring-slate-400' 
-                                : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
-                            }`}
-                          >
-                            <Circle className="h-3 w-3" />
-                            To Do
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setEditStatus('in_progress')}
-                            className={`px-3 py-1.5 rounded-md text-xs font-medium border flex items-center gap-1.5 transition-all ${
-                              editStatus === 'in_progress' 
-                                ? 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-700 ring-2 ring-amber-400' 
-                                : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
-                            }`}
-                          >
-                            <Clock className="h-3 w-3" />
-                            In Progress
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setEditStatus('done')}
-                            className={`px-3 py-1.5 rounded-md text-xs font-medium border flex items-center gap-1.5 transition-all ${
-                              editStatus === 'done' 
-                                ? 'bg-green-100 text-green-700 border-green-300 dark:bg-green-900/50 dark:text-green-300 dark:border-green-700 ring-2 ring-green-400' 
-                                : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
-                            }`}
-                          >
-                            <CheckCircle2 className="h-3 w-3" />
-                            Done
-                          </button>
+                      <div className="space-y-3">
+                        <div className="space-y-2">
+                          <Label htmlFor={`edit-taskText-${task.id}`}>{t.tasks?.taskDescription || 'Task Description'}</Label>
+                          <Input
+                            id={`edit-taskText-${task.id}`}
+                            name="taskText"
+                            type="text"
+                            value={editText}
+                            onChange={(e) => setEditText(e.target.value)}
+                            required
+                            maxLength={500}
+                            placeholder={t.tasks?.taskPlaceholder || 'What do you need to do?'}
+                            autoFocus
+                          />
                         </div>
-                      </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor={`edit-taskDate-btn-${task.id}`} className="text-sm">{t.tasks?.taskDate || 'Task Date'}</Label>
-                        <Button
-                          id={`edit-taskDate-btn-${task.id}`}
-                          type="button"
-                          variant="outline"
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !editDate && "text-muted-foreground"
-                          )}
-                          onClick={() => {
-                            setShowEditTaskCalendar(showEditTaskCalendar === task.id ? null : task.id);
-                          }}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {editDate ? format(editDate, 'PPP') : <span>{t.tasks?.pickDate || 'Pick a date'}</span>}
-                        </Button>
-                        {showEditTaskCalendar === task.id && (
-                          <>
-                            <div 
-                              className="fixed inset-0 z-40" 
-                              onClick={() => setShowEditTaskCalendar(null)}
-                            />
-                            <div className="relative">
-                              <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
-                                <Calendar
-                                  mode="single"
-                                  selected={editDate}
-                                  onSelect={(date) => {
-                                    if (date) {
-                                      setEditDate(date);
-                                    }
-                                    setShowEditTaskCalendar(null);
-                                  }}
-                                  disabled={(date) => {
-                                    const start = new Date(startDate);
-                                    const end = new Date(endDate);
-                                    start.setHours(0, 0, 0, 0);
-                                    end.setHours(23, 59, 59, 999);
-                                    return date < start || date > end;
-                                  }}
-                                  initialFocus
-                                />
-                              </div>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor={`edit-taskText-${task.id}`} className="text-sm">{t.tasks?.taskDescription || 'Task Description'}</Label>
-                        <Input
-                          id={`edit-taskText-${task.id}`}
-                          name="taskText"
-                          type="text"
-                          value={editText}
-                          onChange={(e) => setEditText(e.target.value)}
-                          required
-                          maxLength={500}
-                        />
-                      </div>
-                      
-                      <div className="flex gap-2">
-                        <Button type="submit" size="sm" disabled={isUpdatePending}>
-                          {isUpdatePending ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
+                        <div className="space-y-2">
+                          <Label htmlFor={`edit-task-date-btn-${task.id}`}>{t.tasks?.taskDate || 'Task Date'}</Label>
+                          <Button
+                            id={`edit-task-date-btn-${task.id}`}
+                            type="button"
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !editDate && "text-muted-foreground"
+                            )}
+                            onClick={() => setShowEditCalendar(!showEditCalendar)}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {editDate ? format(editDate, 'PPP') : <span>{t.tasks?.pickDate || 'Pick a date'}</span>}
+                          </Button>
+                          {showEditCalendar && (
                             <>
-                              <Check className="mr-1 h-4 w-4" />
-                              {t.tasks?.save || 'Save'}
+                              <div 
+                                className="fixed inset-0 z-40" 
+                                onClick={() => setShowEditCalendar(false)}
+                              />
+                              <div className="relative">
+                                <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
+                                  <Calendar
+                                    mode="single"
+                                    selected={editDate}
+                                    onSelect={(date) => {
+                                      if (date) {
+                                        setEditDate(date);
+                                      }
+                                      setShowEditCalendar(false);
+                                    }}
+                                    disabled={(date) => {
+                                      const start = new Date(startDate);
+                                      const end = new Date(endDate);
+                                      start.setHours(0, 0, 0, 0);
+                                      end.setHours(23, 59, 59, 999);
+                                      return date < start || date > end;
+                                    }}
+                                    initialFocus
+                                  />
+                                </div>
+                              </div>
                             </>
                           )}
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={handleCancelEdit}
-                        >
-                          <X className="mr-1 h-4 w-4" />
-                          {t.tasks?.cancel || 'Cancel'}
-                        </Button>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor={`edit-status-${task.id}`}>{t.tasks?.status || 'Status'}</Label>
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setEditStatus('todo')}
+                              className={cn(
+                                "flex-1 px-3 py-2 rounded-md text-xs font-medium border transition-all",
+                                editStatus === 'todo'
+                                  ? 'bg-slate-100 text-slate-700 border-slate-400 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-600'
+                                  : 'bg-background border-border hover:border-border/80'
+                              )}
+                            >
+                              <Circle className="h-3.5 w-3.5 mx-auto mb-1" />
+                              To Do
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setEditStatus('in_progress')}
+                              className={cn(
+                                "flex-1 px-3 py-2 rounded-md text-xs font-medium border transition-all",
+                                editStatus === 'in_progress'
+                                  ? 'bg-amber-100 text-amber-700 border-amber-400 dark:bg-amber-900/50 dark:text-amber-200 dark:border-amber-700'
+                                  : 'bg-background border-border hover:border-border/80'
+                              )}
+                            >
+                              <Clock className="h-3.5 w-3.5 mx-auto mb-1" />
+                              In Progress
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setEditStatus('done')}
+                              className={cn(
+                                "flex-1 px-3 py-2 rounded-md text-xs font-medium border transition-all",
+                                editStatus === 'done'
+                                  ? 'bg-green-100 text-green-700 border-green-400 dark:bg-green-900/50 dark:text-green-200 dark:border-green-700'
+                                  : 'bg-background border-border hover:border-border/80'
+                              )}
+                            >
+                              <CheckCircle2 className="h-3.5 w-3.5 mx-auto mb-1" />
+                              Done
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2 pt-2">
+                          <Button type="submit" disabled={isUpdatePending} className="flex-1">
+                            {isUpdatePending ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                {t.tasks?.saving || 'Saving...'}
+                              </>
+                            ) : (
+                              <>
+                                <Check className="mr-2 h-4 w-4" />
+                                {t.tasks?.save || 'Save'}
+                              </>
+                            )}
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleCancelEdit}
+                            className="flex-1"
+                          >
+                            <X className="mr-2 h-4 w-4" />
+                            {t.tasks?.cancel || 'Cancel'}
+                          </Button>
+                        </div>
                       </div>
                     </form>
                   ) : (
@@ -486,21 +561,41 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
                               day: 'numeric',
                             })}
                           </div>
-                          <button
-                            onClick={() => {
-                              const statusCycle: Record<string, 'todo' | 'in_progress' | 'done'> = {
-                                todo: 'in_progress',
-                                in_progress: 'done',
-                                done: 'todo',
-                              };
-                              handleTaskStatusUpdate(task.id, statusCycle[task.status || 'todo']);
-                            }}
-                            disabled={updatingTaskId === task.id}
-                            className={`px-2 py-0.5 rounded-full text-xs font-medium border flex items-center gap-1 hover:opacity-80 transition-opacity ${getTaskStatusColor(task.status || 'todo')}`}
-                          >
-                            {getTaskStatusIcon(task.status || 'todo')}
-                            <span>{updatingTaskId === task.id ? '...' : getTaskStatusLabel(task.status || 'todo')}</span>
-                          </button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button
+                                disabled={updatingTaskId === task.id}
+                                className={`px-2 py-0.5 rounded-full text-xs font-medium border flex items-center gap-1 hover:opacity-80 transition-opacity ${getTaskStatusColor(task.status || 'todo')}`}
+                              >
+                                {getTaskStatusIcon(task.status || 'todo')}
+                                <span>{updatingTaskId === task.id ? '...' : getTaskStatusLabel(task.status || 'todo')}</span>
+                                <ChevronDown className="h-3 w-3 ml-0.5" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start">
+                              <DropdownMenuItem
+                                onClick={() => handleTaskStatusUpdate(task.id, 'todo')}
+                                className="flex items-center gap-2"
+                              >
+                                <Circle className="h-3.5 w-3.5" />
+                                To Do
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleTaskStatusUpdate(task.id, 'in_progress')}
+                                className="flex items-center gap-2"
+                              >
+                                <Clock className="h-3.5 w-3.5" />
+                                In Progress
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleTaskStatusUpdate(task.id, 'done')}
+                                className="flex items-center gap-2"
+                              >
+                                <CheckCircle2 className="h-3.5 w-3.5" />
+                                Done
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                         <p className="text-foreground">{task.task_text}</p>
                       </div>
@@ -539,6 +634,32 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate }: Ta
           </div>
         )}
       </CardContent>
+
+      {/* Success Message */}
+      {showSuccessMessage.show && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 duration-300">
+          <Card className="border-2 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/50 shadow-lg">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                  <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-green-900 dark:text-green-100">
+                    {showSuccessMessage.message}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowSuccessMessage({ show: false, message: '' })}
+                  className="flex-shrink-0 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
+                >
+                  <XCircle className="h-4 w-4" />
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </Card>
   );
 }
