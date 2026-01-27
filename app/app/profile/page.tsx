@@ -126,17 +126,32 @@ export default function ProfilePage() {
                           profileData.subscriptionData.subscription_status === 'active' ||
                           profileData.subscriptionData.subscription_status === 'trialing'
                             ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
+                            : profileData.subscriptionData.subscription_status === 'canceling'
+                            ? 'bg-orange-500/10 text-orange-700 dark:text-orange-400 border border-orange-500/20'
                             : profileData.subscriptionData.subscription_status === 'free'
                             ? 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20'
                             : 'bg-muted text-foreground border border-border'
                         }`}
                       >
-                        {profileData.subscriptionData.subscription_status
+                        {profileData.subscriptionData.subscription_status === 'canceling'
+                          ? 'Canceling'
+                          : profileData.subscriptionData.subscription_status
                           ? profileData.subscriptionData.subscription_status.charAt(0).toUpperCase() +
                             profileData.subscriptionData.subscription_status.slice(1)
                           : 'Free'}
                       </span>
                     </p>
+                    {profileData.subscriptionData.subscription_status === 'canceling' && 
+                     profileData.subscriptionData.subscription_end_date && (
+                      <p className="text-sm text-orange-600 dark:text-orange-400 mt-2">
+                        {t.profile?.accessUntil || 'Access until'}{' '}
+                        {new Date(profileData.subscriptionData.subscription_end_date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </p>
+                    )}
                   </div>
                   {profileData.subscriptionData.plan_name && (
                     <div>
@@ -151,16 +166,21 @@ export default function ProfilePage() {
                       </p>
                     </div>
                   )}
-                  {profileData.subscriptionData.stripe_customer_id && profileData.subscriptionData.subscription_status === 'active' ? (
+                  {profileData.subscriptionData.stripe_customer_id && 
+                   (profileData.subscriptionData.subscription_status === 'active' || 
+                    profileData.subscriptionData.subscription_status === 'canceling' ||
+                    profileData.subscriptionData.subscription_status === 'trialing') ? (
                     <div className="pt-4 flex flex-col sm:flex-row gap-3">
                       <form action={manageSubscriptionAction}>
                         <Button type="submit" className="w-full sm:w-auto">
                           <Settings className="mr-2 h-4 w-4" />
-                          {t.profile?.manageSubscription || 'Manage Subscription'}
+                          {profileData.subscriptionData.subscription_status === 'canceling'
+                            ? t.profile?.reactivateSubscription || 'Reactivate Subscription'
+                            : t.profile?.manageSubscription || 'Manage Subscription'}
                         </Button>
                       </form>
                       <Button asChild variant="outline" className="w-full sm:w-auto">
-                        <a href="/pricing">
+                        <a href="/app/pricing">
                           <ExternalLink className="mr-2 h-4 w-4" />
                           {t.profile?.viewPricing || 'View Pricing Plans'}
                         </a>
