@@ -27,13 +27,13 @@ export function PricingCards({
   isLoggedIn,
 }: PricingCardsProps) {
   // Set initial interval based on current subscription or default to monthly
-  const defaultInterval: BillingInterval = 
+  const defaultInterval: BillingInterval =
     currentSubscription?.billing_interval === 'year' ? 'year' : 'month';
   const [interval, setInterval] = useState<BillingInterval>(defaultInterval);
 
   const activePriceId = interval === 'month' ? monthlyPriceId : yearlyPriceId;
   const activeAmount = interval === 'month' ? monthlyAmount : yearlyAmount;
-  
+
   // Calculate savings for yearly plan
   const monthlyCost = monthlyAmount / 100;
   const yearlyCost = yearlyAmount / 100;
@@ -41,12 +41,12 @@ export function PricingCards({
   const savingsPercent = Math.round(((monthlyCost - yearlyMonthlyCost) / monthlyCost) * 100);
 
   // Determine current plan status
-  const isOnFreePlan = !currentSubscription || currentSubscription.plan_name === 'Free' || 
+  const isOnFreePlan = !currentSubscription || currentSubscription.plan_name === 'Free' ||
     currentSubscription.subscription_status === 'free';
-  const isOnPlusPlan = currentSubscription?.plan_name === 'Plus' && 
-    (currentSubscription.subscription_status === 'active' || 
-     currentSubscription.subscription_status === 'trialing' ||
-     currentSubscription.subscription_status === 'canceling');
+  const isOnPlusPlan = currentSubscription?.plan_name === 'Plus' &&
+    (currentSubscription.subscription_status === 'active' ||
+      currentSubscription.subscription_status === 'trialing' ||
+      currentSubscription.subscription_status === 'canceling');
   const currentBillingInterval = currentSubscription?.billing_interval;
 
   return (
@@ -56,21 +56,19 @@ export function PricingCards({
         <div className="inline-flex items-center gap-4 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
           <button
             onClick={() => setInterval('month')}
-            className={`px-6 py-2 rounded-md font-medium transition-all ${
-              interval === 'month'
+            className={`px-6 py-2 rounded-md font-medium transition-all ${interval === 'month'
                 ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
+              }`}
           >
             Monthly
           </button>
           <button
             onClick={() => setInterval('year')}
-            className={`px-6 py-2 rounded-md font-medium transition-all relative ${
-              interval === 'year'
+            className={`px-6 py-2 rounded-md font-medium transition-all relative ${interval === 'year'
                 ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
+              }`}
           >
             Yearly
             {savingsPercent > 0 && (
@@ -84,7 +82,7 @@ export function PricingCards({
 
       {/* Pricing Cards */}
       <div className="grid md:grid-cols-2 gap-6 lg:gap-8 overflow-visible">
-        <FreePlanCard 
+        <FreePlanCard
           isCurrentPlan={isOnFreePlan}
           isLoggedIn={isLoggedIn}
         />
@@ -104,11 +102,10 @@ export function PricingCards({
 
 function FreePlanCard({ isCurrentPlan, isLoggedIn }: { isCurrentPlan: boolean; isLoggedIn: boolean }) {
   return (
-    <div className={`relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl ${
-      isCurrentPlan 
-        ? 'border-primary bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 shadow-lg' 
+    <div className={`relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl ${isCurrentPlan
+        ? 'border-primary bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 shadow-lg'
         : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:shadow-lg'
-    }`}>
+      }`}>
       {isCurrentPlan && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <span className="px-4 py-1 bg-primary text-white text-sm font-semibold rounded-full shadow-lg flex items-center gap-1">
@@ -178,7 +175,7 @@ function ProPlanCard({
   // Determine button text and action
   let buttonText = 'Get Started';
   let buttonAction: 'checkout' | 'manage' | 'disabled' = 'checkout';
-  
+
   if (isCurrentPlan) {
     buttonText = 'Manage Subscription';
     buttonAction = 'manage';
@@ -193,11 +190,10 @@ function ProPlanCard({
   }
 
   return (
-    <div className={`relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl overflow-visible ${
-      isCurrentPlan 
-        ? 'border-primary bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 shadow-xl' 
+    <div className={`relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl overflow-visible ${isCurrentPlan
+        ? 'border-primary bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 shadow-xl'
         : 'border-primary/30 bg-gradient-to-br from-white to-primary/5 dark:from-slate-900 dark:to-primary/10 shadow-lg'
-    }`}>
+      }`}>
       {/* Show either "Popular" OR "Current" badge, not both */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
         {isCurrentPlan ? (
@@ -240,7 +236,7 @@ function ProPlanCard({
           </li>
         ))}
       </ul>
-      
+
       {buttonAction === 'manage' ? (
         <form action={customerPortalAction}>
           <SubmitButton text={buttonText} variant="outline" />
