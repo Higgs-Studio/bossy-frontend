@@ -247,26 +247,26 @@ export function DashboardContent({
     const MoodIcon = getBossMoodEmoji(bossMood);
 
     return (
-        <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
-            <div className="max-w-5xl mx-auto space-y-6">
+        <div className="flex-1 p-6 lg:p-12 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+            <div className="max-w-6xl mx-auto space-y-8">
                 {!activeGoal ? (
                     <>
                         <div>
-                            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+                            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">
                                 {t.dashboard?.title || 'Dashboard'}
                             </h1>
-                            <p className="text-muted-foreground text-lg">{today}</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-base">{today}</p>
                         </div>
-                        <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
-                            <CardContent className="pt-6">
+                        <Card className="border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all duration-200 bg-white dark:bg-slate-800">
+                            <CardContent className="pt-8 pb-8">
                                 <div className="text-center py-12">
-                                    <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-br from-muted to-muted/80 mb-6">
-                                        <Target className="h-10 w-10 text-muted-foreground" />
+                                    <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-indigo-100 dark:bg-indigo-900/30 mb-6">
+                                        <Target className="h-10 w-10 text-indigo-600 dark:text-indigo-400" />
                                     </div>
-                                    <h3 className="text-xl font-semibold text-foreground mb-3">
+                                    <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-3">
                                         {t.dashboard?.noGoal?.title || 'No active goal'}
                                     </h3>
-                                    <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                                    <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-md mx-auto">
                                         {t.dashboard?.noGoal?.description || 'Create a goal to get started with daily accountability.'}
                                     </p>
                                     <Button size="lg" asChild>
@@ -280,11 +280,11 @@ export function DashboardContent({
                     <>
                         {/* Header with Boss Mood */}
                         <div className="text-center space-y-4">
-                            <div className="flex items-center justify-center gap-3">
-                                <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
+                            <div className="flex items-center justify-center gap-3 flex-wrap">
+                                <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white">
                                     Performance Report to
                                 </h1>
-                                <div className="relative w-10 h-10 lg:w-12 lg:h-12 rounded-full overflow-hidden border-2 border-border">
+                                <div className="relative w-10 h-10 lg:w-12 lg:h-12 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700">
                                     <Image
                                         src={boss.avatar}
                                         alt={boss.name}
@@ -292,20 +292,27 @@ export function DashboardContent({
                                         className="object-cover"
                                     />
                                 </div>
-                                <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
+                                <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white">
                                     {boss.name}
                                 </h1>
                             </div>
-                            <p className="text-muted-foreground text-sm">{today}</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-sm">{today}</p>
                         </div>
 
-                        {/* Boss Mood Card */}
-                        <Card className={`border-2 bg-gradient-to-br ${moodColor} text-white shadow-xl`}>
+                        {/* Boss Mood Card - Subtle Design */}
+                        <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
                             <CardContent className="pt-6 pb-6">
-                                <div className="flex flex-col items-center gap-4">
-                                    <div className="flex items-center gap-3">
-                                        <MoodIcon className="h-8 w-8 lg:h-10 lg:w-10" />
-                                        <p className="text-xl lg:text-2xl font-bold text-center">
+                                <div className="flex items-start gap-4">
+                                    <div className={`flex-shrink-0 w-12 h-12 lg:w-14 lg:h-14 rounded-xl bg-gradient-to-br ${moodColor} flex items-center justify-center shadow-lg`}>
+                                        <MoodIcon className="h-6 w-6 lg:h-7 lg:w-7 text-white" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                                Boss Feedback
+                                            </span>
+                                        </div>
+                                        <p className="text-base lg:text-lg font-medium text-slate-900 dark:text-white leading-relaxed">
                                             {moodMessage}
                                         </p>
                                     </div>
@@ -314,32 +321,26 @@ export function DashboardContent({
                         </Card>
 
                         {/* KPI Metrics Grid */}
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                             {/* Today's Task */}
-                            <Card className={`border-2 transition-all duration-200 ${
-                                todayCompleted 
-                                    ? 'border-green-500 bg-green-50 dark:bg-green-950/20' 
-                                    : kpis.overdueCount > 0 
-                                        ? 'border-red-500 bg-red-50 dark:bg-red-950/20'
-                                        : 'border-border'
-                            }`}>
-                                <CardContent className="pt-6">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <div className={`p-3 rounded-full ${
+                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
+                                <CardContent className="pt-6 pb-6">
+                                    <div className="flex flex-col items-center gap-3">
+                                        <div className={`p-3 rounded-lg ${
                                             todayCompleted 
-                                                ? 'bg-green-500' 
-                                                : 'bg-muted'
+                                                ? 'bg-emerald-100 dark:bg-emerald-900/30' 
+                                                : 'bg-slate-100 dark:bg-slate-700'
                                         }`}>
                                             {todayCompleted ? (
-                                                <CheckCircle2 className="h-6 w-6 text-white" />
+                                                <CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                                             ) : (
-                                                <Clock className="h-6 w-6 text-muted-foreground" />
+                                                <Clock className="h-6 w-6 text-slate-600 dark:text-slate-400" />
                                             )}
                                         </div>
-                                        <p className="text-2xl lg:text-3xl font-bold text-foreground">
+                                        <p className="text-3xl font-bold text-slate-900 dark:text-white">
                                             {todayCompleted ? '✓' : '...'}
                                         </p>
-                                        <p className="text-xs text-muted-foreground text-center font-medium">
+                                        <p className="text-xs text-slate-600 dark:text-slate-400 text-center font-medium">
                                             Today's Task
                                         </p>
                                     </div>
@@ -347,24 +348,24 @@ export function DashboardContent({
                             </Card>
 
                             {/* Overdue Tasks */}
-                            <Card className={`border-2 transition-all duration-200 ${
-                                kpis.overdueCount > 0 
-                                    ? 'border-red-500 bg-red-50 dark:bg-red-950/20' 
-                                    : 'border-border'
-                            }`}>
-                                <CardContent className="pt-6">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <div className={`p-3 rounded-full ${
+                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
+                                <CardContent className="pt-6 pb-6">
+                                    <div className="flex flex-col items-center gap-3">
+                                        <div className={`p-3 rounded-lg ${
                                             kpis.overdueCount > 0 
-                                                ? 'bg-red-500' 
-                                                : 'bg-green-500'
+                                                ? 'bg-red-100 dark:bg-red-900/30' 
+                                                : 'bg-emerald-100 dark:bg-emerald-900/30'
                                         }`}>
-                                            <AlertTriangle className="h-6 w-6 text-white" />
+                                            <AlertTriangle className={`h-6 w-6 ${
+                                                kpis.overdueCount > 0
+                                                    ? 'text-red-600 dark:text-red-400'
+                                                    : 'text-emerald-600 dark:text-emerald-400'
+                                            }`} />
                                         </div>
-                                        <p className="text-2xl lg:text-3xl font-bold text-foreground">
+                                        <p className="text-3xl font-bold text-slate-900 dark:text-white">
                                             {kpis.overdueCount}
                                         </p>
-                                        <p className="text-xs text-muted-foreground text-center font-medium">
+                                        <p className="text-xs text-slate-600 dark:text-slate-400 text-center font-medium">
                                             Overdue Tasks
                                         </p>
                                     </div>
@@ -372,24 +373,24 @@ export function DashboardContent({
                             </Card>
 
                             {/* Current Streak */}
-                            <Card className={`border-2 transition-all duration-200 ${
-                                kpis.currentStreak >= 3 
-                                    ? 'border-orange-500 bg-orange-50 dark:bg-orange-950/20' 
-                                    : 'border-border'
-                            }`}>
-                                <CardContent className="pt-6">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <div className={`p-3 rounded-full ${
+                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
+                                <CardContent className="pt-6 pb-6">
+                                    <div className="flex flex-col items-center gap-3">
+                                        <div className={`p-3 rounded-lg ${
                                             kpis.currentStreak >= 3 
-                                                ? 'bg-orange-500' 
-                                                : 'bg-muted'
+                                                ? 'bg-orange-100 dark:bg-orange-900/30' 
+                                                : 'bg-slate-100 dark:bg-slate-700'
                                         }`}>
-                                            <Flame className="h-6 w-6 text-white" />
+                                            <Flame className={`h-6 w-6 ${
+                                                kpis.currentStreak >= 3
+                                                    ? 'text-orange-600 dark:text-orange-400'
+                                                    : 'text-slate-600 dark:text-slate-400'
+                                            }`} />
                                         </div>
-                                        <p className="text-2xl lg:text-3xl font-bold text-foreground">
+                                        <p className="text-3xl font-bold text-slate-900 dark:text-white">
                                             {kpis.currentStreak}
                                         </p>
-                                        <p className="text-xs text-muted-foreground text-center font-medium">
+                                        <p className="text-xs text-slate-600 dark:text-slate-400 text-center font-medium">
                                             Day Streak
                                         </p>
                                     </div>
@@ -397,28 +398,28 @@ export function DashboardContent({
                             </Card>
 
                             {/* Completion Rate */}
-                            <Card className={`border-2 transition-all duration-200 ${
-                                kpis.completionRate >= 80 
-                                    ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/20' 
-                                    : kpis.completionRate >= 60
-                                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
-                                        : 'border-border'
-                            }`}>
-                                <CardContent className="pt-6">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <div className={`p-3 rounded-full ${
+                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
+                                <CardContent className="pt-6 pb-6">
+                                    <div className="flex flex-col items-center gap-3">
+                                        <div className={`p-3 rounded-lg ${
                                             kpis.completionRate >= 80 
-                                                ? 'bg-purple-500' 
+                                                ? 'bg-indigo-100 dark:bg-indigo-900/30' 
                                                 : kpis.completionRate >= 60
-                                                    ? 'bg-blue-500'
-                                                    : 'bg-muted'
+                                                    ? 'bg-blue-100 dark:bg-blue-900/30'
+                                                    : 'bg-slate-100 dark:bg-slate-700'
                                         }`}>
-                                            <Trophy className="h-6 w-6 text-white" />
+                                            <Trophy className={`h-6 w-6 ${
+                                                kpis.completionRate >= 80
+                                                    ? 'text-indigo-600 dark:text-indigo-400'
+                                                    : kpis.completionRate >= 60
+                                                        ? 'text-blue-600 dark:text-blue-400'
+                                                        : 'text-slate-600 dark:text-slate-400'
+                                            }`} />
                                         </div>
-                                        <p className="text-2xl lg:text-3xl font-bold text-foreground">
+                                        <p className="text-3xl font-bold text-slate-900 dark:text-white">
                                             {kpis.completionRate.toFixed(0)}%
                                         </p>
-                                        <p className="text-xs text-muted-foreground text-center font-medium">
+                                        <p className="text-xs text-slate-600 dark:text-slate-400 text-center font-medium">
                                             Completion Rate
                                         </p>
                                     </div>
@@ -427,22 +428,22 @@ export function DashboardContent({
                         </div>
 
                         {/* Task List */}
-                        <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
-                            <CardHeader>
-                                <div className="flex items-center justify-between">
-                                    <CardTitle>Task Status Report</CardTitle>
-                                    <span className="text-xs font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                        <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
+                            <CardHeader className="pb-4">
+                                <div className="flex items-center justify-between gap-4 flex-wrap">
+                                    <CardTitle className="text-xl font-bold text-slate-900 dark:text-white">Task Status Report</CardTitle>
+                                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-4 py-1.5 rounded-full">
                                         {kpis.completedTasks} / {kpis.totalTasks} completed
                                     </span>
                                 </div>
                             </CardHeader>
                             <CardContent>
                                 {dashboardTasks.length === 0 ? (
-                                    <div className="text-center py-8 text-muted-foreground">
+                                    <div className="text-center py-12 text-slate-600 dark:text-slate-400">
                                         No tasks to display
                                     </div>
                                 ) : (
-                                    <div className="space-y-2">
+                                    <div className="space-y-3">
                                         {dashboardTasks.map((task) => {
                                             const isToday = task.task_date === new Date().toISOString().split('T')[0];
                                             const isPast = task.task_date < new Date().toISOString().split('T')[0];
@@ -450,40 +451,40 @@ export function DashboardContent({
                                             return (
                                                 <div
                                                     key={task.id}
-                                                    className={`p-4 rounded-lg border-l-4 transition-all duration-200 ${
+                                                    className={`p-5 rounded-xl border-l-4 transition-all duration-200 bg-slate-50 dark:bg-slate-700/50 ${
                                                         task.status === 'completed'
-                                                            ? 'border-green-500 bg-green-50/50 dark:bg-green-950/10'
+                                                            ? 'border-emerald-500'
                                                             : task.status === 'missed'
-                                                                ? 'border-red-500 bg-red-50/50 dark:bg-red-950/10'
-                                                                : 'border-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/10'
+                                                                ? 'border-red-500'
+                                                                : 'border-amber-500'
                                                     }`}
                                                 >
-                                                    <div className="flex items-start gap-3">
-                                                        <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
+                                                    <div className="flex items-start gap-4">
+                                                        <div className={`mt-1 flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
                                                             task.status === 'completed'
-                                                                ? 'bg-green-500'
+                                                                ? 'bg-emerald-100 dark:bg-emerald-900/30'
                                                                 : task.status === 'missed'
-                                                                    ? 'bg-red-500'
-                                                                    : 'bg-yellow-500'
+                                                                    ? 'bg-red-100 dark:bg-red-900/30'
+                                                                    : 'bg-amber-100 dark:bg-amber-900/30'
                                                         }`}>
                                                             {task.status === 'completed' && (
-                                                                <CheckCircle2 className="h-4 w-4 text-white" />
+                                                                <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                                                             )}
                                                             {task.status === 'missed' && (
-                                                                <XCircle className="h-4 w-4 text-white" />
+                                                                <XCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
                                                             )}
                                                             {task.status === 'pending' && (
-                                                                <Clock className="h-4 w-4 text-white" />
+                                                                <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                                                             )}
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                                                <span className={`text-xs font-bold px-2 py-0.5 rounded ${
+                                                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                                                                <span className={`text-xs font-bold px-2.5 py-1 rounded-md ${
                                                                     isToday
-                                                                        ? 'bg-blue-500 text-white'
+                                                                        ? 'bg-indigo-600 text-white'
                                                                         : isPast && task.status !== 'completed'
-                                                                            ? 'bg-red-500 text-white'
-                                                                            : 'bg-muted text-muted-foreground'
+                                                                            ? 'bg-red-600 text-white'
+                                                                            : 'bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300'
                                                                 }`}>
                                                                     {isToday ? 'TODAY' : new Date(task.task_date).toLocaleDateString('en-US', { 
                                                                         month: 'short', 
@@ -491,19 +492,19 @@ export function DashboardContent({
                                                                         year: 'numeric'
                                                                     })}
                                                                 </span>
-                                                                <span className={`text-xs font-medium px-2 py-0.5 rounded ${
+                                                                <span className={`text-xs font-semibold px-2.5 py-1 rounded-md ${
                                                                     task.status === 'completed'
-                                                                        ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
+                                                                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300'
                                                                         : task.status === 'missed'
-                                                                            ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
-                                                                            : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
+                                                                            ? 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300'
+                                                                            : 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300'
                                                                 }`}>
                                                                     {task.status === 'completed' && '✓ COMPLETED'}
                                                                     {task.status === 'missed' && '✗ MISSED'}
                                                                     {task.status === 'pending' && '⏰ PENDING'}
                                                                 </span>
                                                             </div>
-                                                            <p className="text-sm text-foreground font-medium">
+                                                            <p className="text-base text-slate-900 dark:text-white font-medium leading-relaxed">
                                                                 {task.task_text}
                                                             </p>
                                                         </div>
@@ -545,32 +546,32 @@ export function DashboardContent({
 
                         {/* Boss Feedback History */}
                         {recentEvents.length > 0 && bossType && (
-                            <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
-                                <CardHeader>
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle>Recent Feedback from {boss.name}</CardTitle>
-                                        <span className="text-xs font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
+                                <CardHeader className="pb-4">
+                                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                                        <CardTitle className="text-xl font-bold text-slate-900 dark:text-white">Recent Feedback from {boss.name}</CardTitle>
+                                        <span className="text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-4 py-1.5 rounded-full">
                                             Last {recentEvents.length} messages
                                         </span>
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="space-y-3">
+                                    <div className="space-y-4">
                                         {recentEvents.map((event) => {
                                             const context = event.context as { message?: string } | null;
                                             const eventColor = 
                                                 event.event_type === 'praise' 
-                                                    ? 'border-green-500 bg-green-50/50 dark:bg-green-950/10'
+                                                    ? 'border-emerald-500'
                                                     : event.event_type === 'warning'
-                                                        ? 'border-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/10'
-                                                        : 'border-red-500 bg-red-50/50 dark:bg-red-950/10';
+                                                        ? 'border-amber-500'
+                                                        : 'border-red-500';
                                             return (
                                                 <div
                                                     key={event.id}
-                                                    className={`p-4 rounded-lg border-l-4 ${eventColor} transition-all duration-200`}
+                                                    className={`p-5 rounded-xl border-l-4 ${eventColor} bg-slate-50 dark:bg-slate-700/50 transition-all duration-200`}
                                                 >
-                                                    <div className="flex items-start gap-3">
-                                                        <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-border">
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border-2 border-slate-200 dark:border-slate-600">
                                                             <Image
                                                                 src={boss.avatar}
                                                                 alt={boss.name}
@@ -579,9 +580,9 @@ export function DashboardContent({
                                                             />
                                                         </div>
                                                         <div className="flex-1">
-                                                            <div className="flex items-center gap-2 mb-1">
-                                                                <span className="text-sm font-bold text-foreground">{boss.name}</span>
-                                                                <span className="text-xs text-muted-foreground">
+                                                            <div className="flex items-center gap-2 mb-2">
+                                                                <span className="text-sm font-bold text-slate-900 dark:text-white">{boss.name}</span>
+                                                                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                                                                     {new Date(event.created_at).toLocaleDateString('en-US', {
                                                                         month: 'short',
                                                                         day: 'numeric',
@@ -590,7 +591,7 @@ export function DashboardContent({
                                                                     })}
                                                                 </span>
                                                             </div>
-                                                            <p className="text-sm text-foreground leading-relaxed">
+                                                            <p className="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
                                                                 {context?.message || 'No message'}
                                                             </p>
                                                         </div>
@@ -608,22 +609,22 @@ export function DashboardContent({
                 {/* Success Message */}
                 {showSuccessMessage.show && (
                     <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 duration-300">
-                        <Card className="border-2 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/50 shadow-lg">
-                            <CardContent className="pt-4">
+                        <Card className="border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/50 shadow-xl">
+                            <CardContent className="pt-4 pb-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                                        <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                    <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center">
+                                        <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-medium text-green-900 dark:text-green-100">
+                                        <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">
                                             {showSuccessMessage.message}
                                         </p>
                                     </div>
                                     <button
                                         onClick={() => setShowSuccessMessage({ show: false, message: '' })}
-                                        className="flex-shrink-0 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
+                                        className="flex-shrink-0 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors"
                                     >
-                                        <CloseIcon className="h-4 w-4" />
+                                        <CloseIcon className="h-5 w-5" />
                                     </button>
                                 </div>
                             </CardContent>

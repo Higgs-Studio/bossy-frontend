@@ -226,7 +226,7 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
   };
 
   return (
-    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
+    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>

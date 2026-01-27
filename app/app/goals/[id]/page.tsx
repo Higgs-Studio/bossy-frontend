@@ -63,7 +63,7 @@ export default function EditGoalPage() {
 
     if (loading) {
         return (
-            <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
+            <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
                 <div className="max-w-4xl mx-auto">
                     <div className="h-64 flex items-center justify-center">
                         <p className="text-muted-foreground">{t.nav?.loading || 'Loading...'}</p>
@@ -83,7 +83,7 @@ export default function EditGoalPage() {
     const timeHorizon = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
     return (
-        <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
+        <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
             <div className="max-w-7xl mx-auto space-y-6">
                 <div className="flex items-center gap-4">
                     <Button

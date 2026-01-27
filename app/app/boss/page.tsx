@@ -17,7 +17,7 @@ export default function BossPage() {
 
   if (!bossData) {
     return (
-      <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
+      <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
         <div className="max-w-3xl mx-auto">
           <div className="h-64 flex items-center justify-center">
             <p className="text-muted-foreground">{t.nav?.loading || 'Loading...'}</p>
@@ -28,7 +28,7 @@ export default function BossPage() {
   }
 
   return (
-    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-muted/50 to-background">
+    <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
       <div className="max-w-7xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
