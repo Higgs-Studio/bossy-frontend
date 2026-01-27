@@ -16,7 +16,6 @@ export function AppHeader({ userMenu }: AppHeaderProps) {
   const navLinks = [
     { href: '/app/dashboard', label: t.nav?.dashboard || 'Dashboard' },
     { href: '/app/goals', label: t.nav?.goals || 'Goals' },
-    { href: '/app/goal', label: t.nav?.createGoal || 'Create Goal' },
     { href: '/app/boss', label: t.nav?.boss || 'Boss' },
   ];
 

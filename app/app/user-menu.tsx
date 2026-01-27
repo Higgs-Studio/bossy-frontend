@@ -6,9 +6,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Home, LogOut, Settings } from 'lucide-react';
+import { Home, LogOut, Settings, CreditCard } from 'lucide-react';
 import { signOut } from '@/app/(login)/actions';
 import { useTranslation } from '@/contexts/translation-context';
 
@@ -47,6 +48,13 @@ export function UserMenu({ user }: UserMenuProps) {
             <span>{t.nav?.profile || 'Profile'}</span>
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          <Link href="/app/pricing" className="flex w-full items-center">
+            <CreditCard className="mr-2 h-4 w-4" />
+            <span>{t.common?.pricing || 'Pricing'}</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <form action={signOut} className="w-full">
           <button type="submit" className="flex w-full">
             <DropdownMenuItem className="w-full flex-1 cursor-pointer">
