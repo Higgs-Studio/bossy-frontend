@@ -26,13 +26,16 @@ export function PublicHeader() {
   return (
     <header className="border-b border-border bg-background/95 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex items-center h-16 relative">
+          {/* Logo - Left */}
           <Link href="/" className="flex items-center group">
             <span className="text-xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-200">
               Bossy
             </span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-8">
+          
+          {/* Centered Navigation */}
+          <nav className="hidden md:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2">
             <Link
               href="/#features"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
@@ -55,7 +58,9 @@ export function PublicHeader() {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-200"></span>
             </Link>
           </nav>
-          <div className="hidden md:flex items-center gap-3">
+          
+          {/* Actions - Right */}
+          <div className="hidden md:flex items-center gap-3 ml-auto">
             <ThemeSwitcher />
             <Button variant="ghost" asChild>
               <Link href="/sign-in">Sign In</Link>
@@ -64,7 +69,9 @@ export function PublicHeader() {
               <Link href="/sign-up">Get Started</Link>
             </Button>
           </div>
-          <div className="md:hidden flex items-center gap-2">
+          
+          {/* Mobile Menu */}
+          <div className="md:hidden flex items-center gap-2 ml-auto">
             <ThemeSwitcher />
             <MobileMenu links={navLinks} actions={mobileActions} />
           </div>
