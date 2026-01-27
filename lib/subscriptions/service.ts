@@ -45,5 +45,6 @@ export async function canChangeBossType(userId: string): Promise<boolean> {
 export async function hasActiveSubscription(userId: string): Promise<boolean> {
   const subscription = await getUserSubscription(userId);
   return subscription?.subscription_status === 'active' || 
-         subscription?.subscription_status === 'trialing';
+         subscription?.subscription_status === 'trialing' ||
+         subscription?.subscription_status === 'canceling';
 }

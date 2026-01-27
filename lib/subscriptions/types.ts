@@ -1,5 +1,5 @@
 export type PlanName = 'Free' | 'Plus' | 'Pro';
-export type SubscriptionStatus = 'free' | 'active' | 'trialing' | 'past_due' | 'canceled' | 'unpaid';
+export type SubscriptionStatus = 'free' | 'active' | 'trialing' | 'past_due' | 'canceled' | 'unpaid' | 'canceling';
 export type BillingInterval = 'month' | 'year';
 
 export interface SubscriptionData {

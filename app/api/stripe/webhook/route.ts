@@ -32,11 +32,12 @@ export async function POST(request: NextRequest) {
 
       case 'customer.subscription.created':
       case 'customer.subscription.updated':
-        // Subscription activated or updated (plan change, monthly to yearly)
+        // Subscription activated or updated (plan change, monthly to yearly, or cancel_at_period_end changed)
         const updatedSubscription = event.data.object as Stripe.Subscription;
         logInfo('Subscription created/updated', { 
           subscriptionId: updatedSubscription.id,
-          status: updatedSubscription.status 
+          status: updatedSubscription.status,
+          cancelAtPeriodEnd: updatedSubscription.cancel_at_period_end
         });
         await handleSubscriptionChange(updatedSubscription);
         break;

@@ -124,6 +124,7 @@ export async function handleSubscriptionChange(
   const customerId = subscription.customer as string;
   const subscriptionId = subscription.id;
   const status = subscription.status;
+  const cancelAtPeriodEnd = subscription.cancel_at_period_end;
 
   const userSubscription = await getSubscriptionByStripeCustomerId(customerId);
 
@@ -141,11 +142,14 @@ export async function handleSubscriptionChange(
     // Type assertion needed because Stripe types don't expose current_period_end properly
     const currentPeriodEnd = (subscription as any).current_period_end;
 
+    // If subscription is set to cancel at period end, show a different status
+    const effectiveStatus = cancelAtPeriodEnd ? 'canceling' : status;
+
     await updateUserSubscription(userId, {
       stripe_subscription_id: subscriptionId,
       stripe_product_id: product.id,
       plan_name: 'Plus',
-      subscription_status: status,
+      subscription_status: effectiveStatus as any,
       billing_interval: billingInterval,
       subscription_end_date: currentPeriodEnd 
         ? new Date(currentPeriodEnd * 1000).toISOString()
