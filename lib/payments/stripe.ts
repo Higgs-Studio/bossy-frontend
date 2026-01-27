@@ -113,7 +113,7 @@ export async function createCustomerPortalSession(userId: string) {
 
   return stripe.billingPortal.sessions.create({
     customer: subscription.stripe_customer_id,
-    return_url: `${process.env.BASE_URL}/app/profile`,
+    return_url: `${process.env.BASE_URL}/app/profile?from=stripe`,
     configuration: configuration.id
   });
 }

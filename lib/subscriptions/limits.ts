@@ -14,11 +14,19 @@ export const PLAN_LIMITS: Record<PlanName, PlanLimits> = {
     canChangeBossType: true,
     defaultBossType: 'execution',
     features: ['all_boss_types', 'unlimited_goals', 'unlimited_history', 'priority_support']
+  },
+  Pro: {
+    maxActiveGoals: -1, // unlimited
+    historyDays: -1, // unlimited
+    canChangeBossType: true,
+    defaultBossType: 'execution',
+    features: ['all_boss_types', 'unlimited_goals', 'unlimited_history', 'priority_support']
   }
 };
 
 export function getPlanLimits(planName: PlanName): PlanLimits {
-  return PLAN_LIMITS[planName];
+  // Fallback to Free plan if plan name is not recognized
+  return PLAN_LIMITS[planName] || PLAN_LIMITS.Free;
 }
 
 export function isUnlimited(value: number): boolean {

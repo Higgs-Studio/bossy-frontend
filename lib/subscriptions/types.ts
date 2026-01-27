@@ -1,4 +1,4 @@
-export type PlanName = 'Free' | 'Plus';
+export type PlanName = 'Free' | 'Plus' | 'Pro';
 export type SubscriptionStatus = 'free' | 'active' | 'trialing' | 'past_due' | 'canceled' | 'unpaid';
 export type BillingInterval = 'month' | 'year';
 

@@ -2,25 +2,47 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, CreditCard, Settings } from 'lucide-react';
+import { User, CreditCard, Settings, ExternalLink } from 'lucide-react';
 import { manageSubscriptionAction } from './actions';
 import { ProfileSettings } from './profile-settings';
 import { PersonalInfo } from './personal-info';
 import { useTranslation } from '@/contexts/translation-context';
 import { useEffect, useState } from 'react';
 import { getProfileData } from './actions';
+import { useSearchParams } from 'next/navigation';
 
 export default function ProfilePage() {
   const { t } = useTranslation();
   const [profileData, setProfileData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
-    getProfileData().then(data => {
+    // Refresh data when component mounts or when returning from Stripe
+    const loadData = async () => {
+      setLoading(true);
+      const data = await getProfileData();
       setProfileData(data);
       setLoading(false);
-    });
-  }, []);
+    };
+
+    loadData();
+
+    // Check if we're returning from Stripe portal
+    const returnedFromStripe = searchParams.get('from') === 'stripe';
+    if (returnedFromStripe) {
+      // Clear the URL parameter
+      window.history.replaceState({}, '', '/app/profile');
+      
+      // Set up a delayed refresh to allow webhook processing
+      const timer = setTimeout(() => {
+        setRefreshTrigger(prev => prev + 1);
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, refreshTrigger]);
 
   if (loading) {
     return (
@@ -130,13 +152,19 @@ export default function ProfilePage() {
                     </div>
                   )}
                   {profileData.subscriptionData.stripe_customer_id && profileData.subscriptionData.subscription_status === 'active' ? (
-                    <div className="pt-4">
+                    <div className="pt-4 flex flex-col sm:flex-row gap-3">
                       <form action={manageSubscriptionAction}>
                         <Button type="submit" className="w-full sm:w-auto">
                           <Settings className="mr-2 h-4 w-4" />
                           {t.profile?.manageSubscription || 'Manage Subscription'}
                         </Button>
                       </form>
+                      <Button asChild variant="outline" className="w-full sm:w-auto">
+                        <a href="/pricing">
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          {t.profile?.viewPricing || 'View Pricing Plans'}
+                        </a>
+                      </Button>
                     </div>
                   ) : profileData.subscriptionData.subscription_status === 'free' ? (
                     <div className="pt-4">
