@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Crown } from 'lucide-react';
 import { checkoutAction } from '@/lib/payments/actions';
 import { SubmitButton } from './submit-button';
 import { Button } from '@/components/ui/button';
+import type { SubscriptionData } from '@/lib/subscriptions/types';
 
 type BillingInterval = 'month' | 'year';
 
@@ -13,6 +14,8 @@ type PricingCardsProps = {
   monthlyAmount: number;
   yearlyPriceId?: string;
   yearlyAmount: number;
+  currentSubscription: SubscriptionData | null;
+  isLoggedIn: boolean;
 };
 
 export function PricingCards({
@@ -20,8 +23,13 @@ export function PricingCards({
   monthlyAmount,
   yearlyPriceId,
   yearlyAmount,
+  currentSubscription,
+  isLoggedIn,
 }: PricingCardsProps) {
-  const [interval, setInterval] = useState<BillingInterval>('month');
+  // Set initial interval based on current subscription or default to monthly
+  const defaultInterval: BillingInterval = 
+    currentSubscription?.billing_interval === 'year' ? 'year' : 'month';
+  const [interval, setInterval] = useState<BillingInterval>(defaultInterval);
 
   const activePriceId = interval === 'month' ? monthlyPriceId : yearlyPriceId;
   const activeAmount = interval === 'month' ? monthlyAmount : yearlyAmount;
@@ -31,6 +39,15 @@ export function PricingCards({
   const yearlyCost = yearlyAmount / 100;
   const yearlyMonthlyCost = yearlyCost / 12;
   const savingsPercent = Math.round(((monthlyCost - yearlyMonthlyCost) / monthlyCost) * 100);
+
+  // Determine current plan status
+  const isOnFreePlan = !currentSubscription || currentSubscription.plan_name === 'Free' || 
+    currentSubscription.subscription_status === 'free';
+  const isOnPlusPlan = currentSubscription?.plan_name === 'Plus' && 
+    (currentSubscription.subscription_status === 'active' || 
+     currentSubscription.subscription_status === 'trialing' ||
+     currentSubscription.subscription_status === 'canceling');
+  const currentBillingInterval = currentSubscription?.billing_interval;
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -67,20 +84,39 @@ export function PricingCards({
 
       {/* Pricing Cards */}
       <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-        <FreePlanCard />
+        <FreePlanCard 
+          isCurrentPlan={isOnFreePlan}
+          isLoggedIn={isLoggedIn}
+        />
         <ProPlanCard
           priceId={activePriceId}
           amount={activeAmount}
           interval={interval}
+          isCurrentPlan={isOnPlusPlan && currentBillingInterval === interval}
+          isOnPlusPlan={isOnPlusPlan}
+          currentBillingInterval={currentBillingInterval}
+          isLoggedIn={isLoggedIn}
         />
       </div>
     </div>
   );
 }
 
-function FreePlanCard() {
+function FreePlanCard({ isCurrentPlan, isLoggedIn }: { isCurrentPlan: boolean; isLoggedIn: boolean }) {
   return (
-    <div className="relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:shadow-lg">
+    <div className={`relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl ${
+      isCurrentPlan 
+        ? 'border-primary bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 shadow-lg' 
+        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:shadow-lg'
+    }`}>
+      {isCurrentPlan && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <span className="px-4 py-1 bg-primary text-white text-sm font-semibold rounded-full shadow-lg flex items-center gap-1">
+            <Crown className="h-3 w-3" />
+            Current Plan
+          </span>
+        </div>
+      )}
       <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Free</h2>
       <div className="mb-6">
         <p className="text-5xl font-bold text-slate-900 dark:text-white mb-1">
@@ -105,9 +141,19 @@ function FreePlanCard() {
           </li>
         ))}
       </ul>
-      <Button asChild className="w-full" variant="outline" size="lg">
-        <a href="/sign-up">Get Started</a>
-      </Button>
+      {isCurrentPlan ? (
+        <Button className="w-full" variant="outline" size="lg" disabled>
+          Current Plan
+        </Button>
+      ) : isLoggedIn ? (
+        <Button asChild className="w-full" variant="outline" size="lg">
+          <a href="/app/dashboard">Go to Dashboard</a>
+        </Button>
+      ) : (
+        <Button asChild className="w-full" variant="outline" size="lg">
+          <a href="/sign-up">Get Started</a>
+        </Button>
+      )}
     </div>
   );
 }
@@ -116,17 +162,53 @@ function ProPlanCard({
   priceId,
   amount,
   interval,
+  isCurrentPlan,
+  isOnPlusPlan,
+  currentBillingInterval,
+  isLoggedIn,
 }: {
   priceId?: string;
   amount: number;
   interval: BillingInterval;
+  isCurrentPlan: boolean;
+  isOnPlusPlan: boolean;
+  currentBillingInterval: BillingInterval | null | undefined;
+  isLoggedIn: boolean;
 }) {
+  // Determine button text and action
+  let buttonText = 'Get Started';
+  let buttonAction: 'checkout' | 'dashboard' | 'disabled' = 'checkout';
+  
+  if (isCurrentPlan) {
+    buttonText = 'Current Plan';
+    buttonAction = 'disabled';
+  } else if (isOnPlusPlan) {
+    // User is on Plus but different billing interval
+    buttonText = interval === 'month' ? 'Switch to Monthly' : 'Switch to Yearly';
+    buttonAction = 'checkout';
+  } else if (isLoggedIn) {
+    // User is on Free plan
+    buttonText = 'Upgrade to Plus';
+    buttonAction = 'checkout';
+  }
+
   return (
-    <div className="relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl border-primary/30 bg-gradient-to-br from-white to-primary/5 dark:from-slate-900 dark:to-primary/10 shadow-lg">
+    <div className={`relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl ${
+      isCurrentPlan 
+        ? 'border-primary bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 shadow-xl' 
+        : 'border-primary/30 bg-gradient-to-br from-white to-primary/5 dark:from-slate-900 dark:to-primary/10 shadow-lg'
+    }`}>
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <span className="px-4 py-1 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold rounded-full shadow-lg">
-          Popular
-        </span>
+        {isCurrentPlan ? (
+          <span className="px-4 py-1 bg-primary text-white text-sm font-semibold rounded-full shadow-lg flex items-center gap-1">
+            <Crown className="h-3 w-3" />
+            Current Plan
+          </span>
+        ) : (
+          <span className="px-4 py-1 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold rounded-full shadow-lg">
+            Popular
+          </span>
+        )}
       </div>
       <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Plus</h2>
       <div className="mb-6">
@@ -157,10 +239,17 @@ function ProPlanCard({
           </li>
         ))}
       </ul>
-      <form action={checkoutAction}>
-        <input type="hidden" name="priceId" value={priceId} />
-        <SubmitButton />
-      </form>
+      
+      {buttonAction === 'disabled' ? (
+        <Button className="w-full" size="lg" disabled>
+          {buttonText}
+        </Button>
+      ) : (
+        <form action={checkoutAction}>
+          <input type="hidden" name="priceId" value={priceId} />
+          <SubmitButton text={buttonText} />
+        </form>
+      )}
     </div>
   );
 }
