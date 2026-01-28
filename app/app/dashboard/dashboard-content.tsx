@@ -3,16 +3,16 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2, XCircle, Clock, Target, Flame, AlertTriangle, Trophy, Frown, Meh, Smile, PartyPopper, X as CloseIcon } from 'lucide-react';
-import { checkInAction, markMissedAction } from './actions';
+import { CheckCircle2, Clock, Target, AlertTriangle, Frown, Meh, Smile, PartyPopper, X as CloseIcon } from 'lucide-react';
+import { markTaskDoneAction } from './actions';
 import { useActionState, useState, useEffect } from 'react';
-import type { Goal, DailyTask, CheckIn, BossEvent, DashboardKPIs, TaskWithStatus } from '@/lib/supabase/queries';
+import type { Goal, BossEvent, DashboardKPIs, TaskWithStatus } from '@/lib/supabase/queries';
+import { useRouter } from 'next/navigation';
 import { getBossPersonality } from '@/lib/boss/reactions';
 import { useTranslation } from '@/contexts/translation-context';
 
 type DashboardContentProps = {
     activeGoal: Goal | null;
-    todayTasks: DailyTask[];
     recentEvents: BossEvent[];
     bossType?: 'execution' | 'supportive' | 'mentor' | 'drill-sergeant';
     kpis: DashboardKPIs;
@@ -22,30 +22,31 @@ type DashboardContentProps = {
 // Boss mood based on KPIs
 type BossMood = 'thrilled' | 'happy' | 'neutral' | 'concerned' | 'angry';
 
-function calculateBossMood(kpis: DashboardKPIs, todayCompleted: boolean): BossMood {
-    const { overdueCount, currentStreak, completionRate } = kpis;
+function calculateBossMood(kpis: DashboardKPIs): BossMood {
+    const { overdueCount, todayPendingCount } = kpis;
+    const totalOutstanding = overdueCount + todayPendingCount;
     
-    // Angry: High overdue tasks (3+) OR very low completion rate (<40%)
-    if (overdueCount >= 3 || (completionRate < 40 && kpis.totalTasks > 5)) {
+    // Angry: High overdue tasks (3+)
+    if (overdueCount >= 3) {
         return 'angry';
     }
     
-    // Concerned: Some overdue (1-2) OR low completion (<60%)
-    if (overdueCount > 0 || (completionRate < 60 && kpis.totalTasks > 5)) {
+    // Concerned: Some overdue (1-2)
+    if (overdueCount > 0) {
         return 'concerned';
     }
     
-    // Thrilled: Today completed + good streak (3+) + high completion (80%+)
-    if (todayCompleted && currentStreak >= 3 && completionRate >= 80) {
+    // Thrilled: No overdue AND no pending today (all done!)
+    if (totalOutstanding === 0) {
         return 'thrilled';
     }
     
-    // Happy: Today completed OR decent streak OR good completion
-    if (todayCompleted || currentStreak >= 2 || completionRate >= 70) {
+    // Happy: No overdue but has some pending today
+    if (todayPendingCount <= 2) {
         return 'happy';
     }
     
-    // Neutral: Everything else
+    // Neutral: Everything else (many pending today)
     return 'neutral';
 }
 
@@ -189,19 +190,15 @@ function getBossMoodEmoji(mood: BossMood) {
 
 export function DashboardContent({
     activeGoal,
-    todayTasks,
     recentEvents,
     bossType,
     kpis,
     dashboardTasks,
 }: DashboardContentProps) {
     const { t } = useTranslation();
-    const [checkInState, checkInFormAction, isCheckInPending] = useActionState(
-        checkInAction,
-        null
-    );
-    const [missedState, missedFormAction, isMissedPending] = useActionState(
-        markMissedAction,
+    const router = useRouter();
+    const [actionState, formAction, isPending] = useActionState(
+        markTaskDoneAction,
         null
     );
 
@@ -217,19 +214,13 @@ export function DashboardContent({
         }, 4000);
     };
 
-    // Watch for successful check-in
+    // Watch for successful action and refresh page
     useEffect(() => {
-        if (!isCheckInPending && checkInState?.success) {
-            showNotification(checkInState.success);
+        if (!isPending && actionState?.success) {
+            showNotification(actionState.success);
+            router.refresh();
         }
-    }, [isCheckInPending, checkInState]);
-
-    // Watch for successful missed marking
-    useEffect(() => {
-        if (!isMissedPending && missedState?.success) {
-            showNotification(missedState.success);
-        }
-    }, [isMissedPending, missedState]);
+    }, [isPending, actionState, router]);
 
     const today = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
@@ -240,8 +231,7 @@ export function DashboardContent({
 
     // Calculate boss mood
     const boss = getBossPersonality(bossType);
-    const todayCompleted = kpis.todayCompleted > 0;
-    const bossMood = calculateBossMood(kpis, todayCompleted);
+    const bossMood = calculateBossMood(kpis);
     const moodMessage = getBossMoodMessage(bossMood, boss.name, bossType);
     const moodColor = getBossMoodColor(bossMood);
     const MoodIcon = getBossMoodEmoji(bossMood);
@@ -321,219 +311,149 @@ export function DashboardContent({
                         </Card>
 
                         {/* KPI Metrics Grid */}
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                            {/* Today's Task */}
-                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
-                                <CardContent className="pt-6 pb-6">
-                                    <div className="flex flex-col items-center gap-3">
-                                        <div className={`p-3 rounded-lg ${
-                                            todayCompleted 
-                                                ? 'bg-emerald-100 dark:bg-emerald-900/30' 
-                                                : 'bg-slate-100 dark:bg-slate-700'
-                                        }`}>
-                                            {todayCompleted ? (
-                                                <CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
-                                            ) : (
-                                                <Clock className="h-6 w-6 text-slate-600 dark:text-slate-400" />
-                                            )}
-                                        </div>
-                                        <p className="text-3xl font-bold text-slate-900 dark:text-white">
-                                            {todayCompleted ? '✓' : '...'}
-                                        </p>
-                                        <p className="text-xs text-slate-600 dark:text-slate-400 text-center font-medium">
-                                            Today's Task
-                                        </p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* Overdue Tasks */}
-                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
-                                <CardContent className="pt-6 pb-6">
-                                    <div className="flex flex-col items-center gap-3">
-                                        <div className={`p-3 rounded-lg ${
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* (A) Overdue Tasks - before today, not done */}
+                            <Card className={`border-2 transition-all duration-200 ${
+                                kpis.overdueCount > 0 
+                                    ? 'border-red-500 bg-red-50 dark:bg-red-950/20' 
+                                    : 'border-green-500 bg-green-50 dark:bg-green-950/20'
+                            }`}>
+                                <CardContent className="pt-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-4 rounded-full ${
                                             kpis.overdueCount > 0 
                                                 ? 'bg-red-100 dark:bg-red-900/30' 
                                                 : 'bg-emerald-100 dark:bg-emerald-900/30'
                                         }`}>
-                                            <AlertTriangle className={`h-6 w-6 ${
-                                                kpis.overdueCount > 0
-                                                    ? 'text-red-600 dark:text-red-400'
-                                                    : 'text-emerald-600 dark:text-emerald-400'
-                                            }`} />
+                                            <AlertTriangle className="h-8 w-8 text-white" />
                                         </div>
-                                        <p className="text-3xl font-bold text-slate-900 dark:text-white">
-                                            {kpis.overdueCount}
-                                        </p>
-                                        <p className="text-xs text-slate-600 dark:text-slate-400 text-center font-medium">
-                                            Overdue Tasks
-                                        </p>
+                                        <div className="flex-1">
+                                            <p className="text-3xl lg:text-4xl font-bold text-foreground">
+                                                {kpis.overdueCount}
+                                            </p>
+                                            <p className="text-sm font-semibold text-foreground">
+                                                Overdue Tasks
+                                            </p>
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                                Tasks from previous days that are not yet completed
+                                            </p>
+                                        </div>
                                     </div>
                                 </CardContent>
                             </Card>
 
-                            {/* Current Streak */}
-                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
-                                <CardContent className="pt-6 pb-6">
-                                    <div className="flex flex-col items-center gap-3">
-                                        <div className={`p-3 rounded-lg ${
-                                            kpis.currentStreak >= 3 
-                                                ? 'bg-orange-100 dark:bg-orange-900/30' 
-                                                : 'bg-slate-100 dark:bg-slate-700'
+                            {/* (B) Today's Tasks - dated today, not done */}
+                            <Card className={`border-2 transition-all duration-200 ${
+                                kpis.todayPendingCount > 0 
+                                    ? 'border-yellow-500 bg-yellow-50 dark:bg-yellow-950/20' 
+                                    : 'border-green-500 bg-green-50 dark:bg-green-950/20'
+                            }`}>
+                                <CardContent className="pt-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-4 rounded-full ${
+                                            kpis.todayPendingCount > 0 
+                                                ? 'bg-yellow-500' 
+                                                : 'bg-green-500'
                                         }`}>
-                                            <Flame className={`h-6 w-6 ${
-                                                kpis.currentStreak >= 3
-                                                    ? 'text-orange-600 dark:text-orange-400'
-                                                    : 'text-slate-600 dark:text-slate-400'
-                                            }`} />
+                                            <Clock className="h-8 w-8 text-white" />
                                         </div>
-                                        <p className="text-3xl font-bold text-slate-900 dark:text-white">
-                                            {kpis.currentStreak}
-                                        </p>
-                                        <p className="text-xs text-slate-600 dark:text-slate-400 text-center font-medium">
-                                            Day Streak
-                                        </p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* Completion Rate */}
-                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
-                                <CardContent className="pt-6 pb-6">
-                                    <div className="flex flex-col items-center gap-3">
-                                        <div className={`p-3 rounded-lg ${
-                                            kpis.completionRate >= 80 
-                                                ? 'bg-indigo-100 dark:bg-indigo-900/30' 
-                                                : kpis.completionRate >= 60
-                                                    ? 'bg-blue-100 dark:bg-blue-900/30'
-                                                    : 'bg-slate-100 dark:bg-slate-700'
-                                        }`}>
-                                            <Trophy className={`h-6 w-6 ${
-                                                kpis.completionRate >= 80
-                                                    ? 'text-indigo-600 dark:text-indigo-400'
-                                                    : kpis.completionRate >= 60
-                                                        ? 'text-blue-600 dark:text-blue-400'
-                                                        : 'text-slate-600 dark:text-slate-400'
-                                            }`} />
+                                        <div className="flex-1">
+                                            <p className="text-3xl lg:text-4xl font-bold text-foreground">
+                                                {kpis.todayPendingCount}
+                                            </p>
+                                            <p className="text-sm font-semibold text-foreground">
+                                                Today's Tasks
+                                            </p>
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                                Tasks scheduled for today that are pending completion
+                                            </p>
                                         </div>
-                                        <p className="text-3xl font-bold text-slate-900 dark:text-white">
-                                            {kpis.completionRate.toFixed(0)}%
-                                        </p>
-                                        <p className="text-xs text-slate-600 dark:text-slate-400 text-center font-medium">
-                                            Completion Rate
-                                        </p>
                                     </div>
                                 </CardContent>
                             </Card>
                         </div>
 
-                        {/* Task List */}
-                        <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
-                            <CardHeader className="pb-4">
-                                <div className="flex items-center justify-between gap-4 flex-wrap">
-                                    <CardTitle className="text-xl font-bold text-slate-900 dark:text-white">Task Status Report</CardTitle>
-                                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-4 py-1.5 rounded-full">
-                                        {kpis.completedTasks} / {kpis.totalTasks} completed
+                        {/* Outstanding Tasks for Today */}
+                        <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
+                            <CardHeader>
+                                <div className="flex items-center justify-between">
+                                    <CardTitle>Outstanding Tasks for Today</CardTitle>
+                                    <span className="text-xs font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                                        {dashboardTasks.length} outstanding
                                     </span>
                                 </div>
                             </CardHeader>
                             <CardContent>
                                 {dashboardTasks.length === 0 ? (
-                                    <div className="text-center py-12 text-slate-600 dark:text-slate-400">
-                                        No tasks to display
+                                    <div className="text-center py-8 text-muted-foreground">
+                                        <CheckCircle2 className="h-12 w-12 mx-auto mb-3 text-green-500" />
+                                        <p className="font-medium">All caught up!</p>
+                                        <p className="text-sm">No overdue or pending tasks</p>
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
                                         {dashboardTasks.map((task) => {
-                                            const isToday = task.task_date === new Date().toISOString().split('T')[0];
-                                            const isPast = task.task_date < new Date().toISOString().split('T')[0];
+                                            const isOverdue = task.status === 'overdue';
+                                            const isPending = task.status === 'pending';
                                             
                                             return (
                                                 <div
                                                     key={task.id}
-                                                    className={`p-5 rounded-xl border-l-4 transition-all duration-200 bg-slate-50 dark:bg-slate-700/50 ${
-                                                        task.status === 'completed'
-                                                            ? 'border-emerald-500'
-                                                            : task.status === 'missed'
-                                                                ? 'border-red-500'
-                                                                : 'border-amber-500'
+                                                    className={`p-4 rounded-lg border-l-4 transition-all duration-200 ${
+                                                        isOverdue
+                                                            ? 'border-red-500 bg-red-50/50 dark:bg-red-950/10'
+                                                            : 'border-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/10'
                                                     }`}
                                                 >
-                                                    <div className="flex items-start gap-4">
-                                                        <div className={`mt-1 flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
-                                                            task.status === 'completed'
-                                                                ? 'bg-emerald-100 dark:bg-emerald-900/30'
-                                                                : task.status === 'missed'
-                                                                    ? 'bg-red-100 dark:bg-red-900/30'
-                                                                    : 'bg-amber-100 dark:bg-amber-900/30'
+                                                    <div className="flex items-start gap-3">
+                                                        <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
+                                                            isOverdue ? 'bg-red-500' : 'bg-yellow-500'
                                                         }`}>
-                                                            {task.status === 'completed' && (
-                                                                <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                                                            )}
-                                                            {task.status === 'missed' && (
-                                                                <XCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
-                                                            )}
-                                                            {task.status === 'pending' && (
-                                                                <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                                                            {isOverdue ? (
+                                                                <AlertTriangle className="h-4 w-4 text-white" />
+                                                            ) : (
+                                                                <Clock className="h-4 w-4 text-white" />
                                                             )}
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <div className="flex items-center gap-2 mb-2 flex-wrap">
-                                                                <span className={`text-xs font-bold px-2.5 py-1 rounded-md ${
-                                                                    isToday
-                                                                        ? 'bg-indigo-600 text-white'
-                                                                        : isPast && task.status !== 'completed'
-                                                                            ? 'bg-red-600 text-white'
-                                                                            : 'bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300'
+                                                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                                                {/* Date badge */}
+                                                                <span className={`text-xs font-bold px-2 py-0.5 rounded ${
+                                                                    isPending
+                                                                        ? 'bg-blue-500 text-white'
+                                                                        : 'bg-red-500 text-white'
                                                                 }`}>
-                                                                    {isToday ? 'TODAY' : new Date(task.task_date).toLocaleDateString('en-US', { 
+                                                                    {isPending ? 'TODAY' : new Date(task.task_date).toLocaleDateString('en-US', { 
                                                                         month: 'short', 
                                                                         day: 'numeric',
                                                                         year: 'numeric'
                                                                     })}
                                                                 </span>
-                                                                <span className={`text-xs font-semibold px-2.5 py-1 rounded-md ${
-                                                                    task.status === 'completed'
-                                                                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300'
-                                                                        : task.status === 'missed'
-                                                                            ? 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300'
-                                                                            : 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300'
+                                                                {/* Status badge */}
+                                                                <span className={`text-xs font-medium px-2 py-0.5 rounded ${
+                                                                    isOverdue
+                                                                        ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
+                                                                        : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
                                                                 }`}>
-                                                                    {task.status === 'completed' && '✓ COMPLETED'}
-                                                                    {task.status === 'missed' && '✗ MISSED'}
-                                                                    {task.status === 'pending' && '⏰ PENDING'}
+                                                                    {isOverdue ? 'OVERDUE' : 'PENDING'}
                                                                 </span>
                                                             </div>
                                                             <p className="text-base text-slate-900 dark:text-white font-medium leading-relaxed">
                                                                 {task.task_text}
                                                             </p>
                                                         </div>
-                                                        {task.status === 'pending' && isToday && (
-                                                            <form action={checkInFormAction} className="flex-shrink-0">
-                                                                <input type="hidden" name="taskId" value={task.id} />
-                                                                <Button
-                                                                    type="submit"
-                                                                    size="sm"
-                                                                    disabled={isCheckInPending}
-                                                                    className="bg-green-600 hover:bg-green-700"
-                                                                >
-                                                                    {isCheckInPending ? '...' : 'Done'}
-                                                                </Button>
-                                                            </form>
-                                                        )}
-                                                        {task.status === 'missed' && isPast && (
-                                                            <form action={missedFormAction} className="flex-shrink-0">
-                                                                <input type="hidden" name="taskId" value={task.id} />
-                                                                <Button
-                                                                    type="submit"
-                                                                    size="sm"
-                                                                    variant="outline"
-                                                                    disabled={isMissedPending}
-                                                                >
-                                                                    {isMissedPending ? '...' : 'Ack'}
-                                                                </Button>
-                                                            </form>
-                                                        )}
+                                                        {/* Done button for all tasks */}
+                                                        <form action={formAction} className="flex-shrink-0">
+                                                            <input type="hidden" name="taskId" value={task.id} />
+                                                            <Button
+                                                                type="submit"
+                                                                size="sm"
+                                                                disabled={isPending}
+                                                                className="bg-green-600 hover:bg-green-700"
+                                                            >
+                                                                {isPending ? '...' : 'Done'}
+                                                            </Button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             );

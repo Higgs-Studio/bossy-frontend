@@ -105,7 +105,8 @@ export async function getTodayTasks(userId: string): Promise<DailyTask[]> {
     .from('daily_tasks')
     .select('*')
     .in('goal_id', goalIds)
-    .eq('task_date', today)
+    .lte('task_date', today)
+    .neq('status', 'done')
     .order('created_at', { ascending: true });
 
   if (error) throw error;
@@ -400,19 +401,15 @@ export async function getConsecutiveMisses(userId: string, goalId: string): Prom
 // ==========================================
 
 export type DashboardKPIs = {
-  todayCompleted: number;
-  overdueCount: number;
-  currentStreak: number;
-  totalTasks: number;
-  completedTasks: number;
-  completionRate: number;
+  overdueCount: number;       // (A) Tasks dated before today, not done
+  todayPendingCount: number;  // (B) Tasks dated today, not done
 };
 
 export type TaskWithStatus = {
   id: string;
   task_date: string;
   task_text: string;
-  status: 'completed' | 'missed' | 'pending';
+  status: 'overdue' | 'pending';  // 'overdue' = before today, not done | 'pending' = today, not done
   goal_title: string;
   goal_id: string;
 };
@@ -423,96 +420,45 @@ export async function getDashboardKPIs(userId: string): Promise<DashboardKPIs> {
   
   if (activeGoals.length === 0) {
     return {
-      todayCompleted: 0,
       overdueCount: 0,
-      currentStreak: 0,
-      totalTasks: 0,
-      completedTasks: 0,
-      completionRate: 0,
+      todayPendingCount: 0,
     };
   }
 
   const today = new Date().toISOString().split('T')[0];
   const goalIds = activeGoals.map(goal => goal.id);
 
-  // Get all tasks for all active goals
+  // Get all incomplete tasks for all active goals up to and including today
   const { data: allTasks } = await supabase
     .from('daily_tasks')
-    .select('id, task_date, goal_id')
+    .select('id, task_date, goal_id, status')
     .in('goal_id', goalIds)
+    .lte('task_date', today)
+    .neq('status', 'done')
     .order('task_date', { ascending: true });
 
   if (!allTasks || allTasks.length === 0) {
     return {
-      todayCompleted: 0,
       overdueCount: 0,
-      currentStreak: 0,
-      totalTasks: 0,
-      completedTasks: 0,
-      completionRate: 0,
+      todayPendingCount: 0,
     };
   }
 
-  // Get all check-ins for these tasks
-  const taskIds = allTasks.map(t => t.id);
-  const { data: checkIns } = await supabase
-    .from('check_ins')
-    .select('task_id, status')
-    .in('task_id', taskIds)
-    .eq('user_id', userId);
+  // Calculate metrics based on task status field only
+  let overdueCount = 0;       // (A) Tasks before today, not done
+  let todayPendingCount = 0;  // (B) Tasks dated today, not done
 
-  const checkInMap = new Map(checkIns?.map(ci => [ci.task_id, ci.status]) || []);
-
-  // Calculate metrics
-  let todayCompleted = 0;
-  let overdueCount = 0;
-  let completedTasks = 0;
-  let currentStreak = 0;
-  let streakBroken = false;
-
-  // Process tasks from most recent to oldest for streak calculation
-  const sortedTasks = [...allTasks].sort((a, b) => b.task_date.localeCompare(a.task_date));
-
-  // Count today's completed tasks
-  const todayTasks = allTasks.filter(t => t.task_date === today);
-  todayCompleted = todayTasks.filter(t => checkInMap.get(t.id) === 'done').length;
-
-  for (const task of sortedTasks) {
-    const checkInStatus = checkInMap.get(task.id);
-    const isCompleted = checkInStatus === 'done';
-    const isMissed = checkInStatus === 'missed';
-
-    // Count overdue (tasks before today with no check-in or missed)
-    if (task.task_date < today && (!checkInStatus || isMissed)) {
-      overdueCount++;
-    }
-
-    // Count total completed
-    if (isCompleted) {
-      completedTasks++;
-    }
-
-    // Calculate current streak (from today backwards)
-    if (task.task_date <= today && !streakBroken) {
-      if (isCompleted) {
-        currentStreak++;
-      } else if (task.task_date < today) {
-        // Only break streak for past tasks, not today's pending task
-        streakBroken = true;
-      }
+  for (const task of allTasks) {
+    if (task.task_date === today) {
+      todayPendingCount++;   // (B)
+    } else if (task.task_date < today) {
+      overdueCount++;        // (A)
     }
   }
 
-  const totalTasks = allTasks.length;
-  const completionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-
   return {
-    todayCompleted,
     overdueCount,
-    currentStreak,
-    totalTasks,
-    completedTasks,
-    completionRate: Math.round(completionRate * 10) / 10, // Round to 1 decimal
+    todayPendingCount,
   };
 }
 
@@ -530,59 +476,34 @@ export async function getDashboardTasks(userId: string): Promise<TaskWithStatus[
   // Create a map of goal IDs to goal titles for quick lookup
   const goalMap = new Map(activeGoals.map(goal => [goal.id, goal.title]));
 
-  // Get all tasks for all active goals up to today
+  // Get all tasks for all active goals up to today that are not done
   const { data: tasks } = await supabase
     .from('daily_tasks')
-    .select('id, task_date, task_text, goal_id')
+    .select('id, task_date, task_text, goal_id, status')
     .in('goal_id', goalIds)
     .lte('task_date', today)
+    .neq('status', 'done')
     .order('task_date', { ascending: false });
 
   if (!tasks || tasks.length === 0) {
     return [];
   }
 
-  // Get all check-ins for these tasks
-  const taskIds = tasks.map(t => t.id);
-  const { data: checkIns } = await supabase
-    .from('check_ins')
-    .select('task_id, status')
-    .in('task_id', taskIds)
-    .eq('user_id', userId);
+  // Map tasks with their status
+  // (A) overdue = dated before today, not done
+  // (B) pending = dated today, not done
+  const tasksWithStatus: TaskWithStatus[] = tasks.map(task => {
+    const status: 'overdue' | 'pending' = task.task_date < today ? 'overdue' : 'pending';
 
-  const checkInMap = new Map(checkIns?.map(ci => [ci.task_id, ci.status]) || []);
-
-  // Map tasks with their status and filter for incomplete tasks only
-  const tasksWithStatus: TaskWithStatus[] = tasks
-    .map(task => {
-      const checkInStatus = checkInMap.get(task.id);
-      let status: 'completed' | 'missed' | 'pending';
-      
-      if (checkInStatus === 'done') {
-        status = 'completed';
-      } else if (checkInStatus === 'missed') {
-        status = 'missed';
-      } else if (task.task_date < today) {
-        status = 'missed'; // Overdue tasks are considered missed
-      } else {
-        status = 'pending'; // Today's task
-      }
-
-      return {
-        id: task.id,
-        task_date: task.task_date,
-        task_text: task.task_text,
-        status,
-        goal_title: goalMap.get(task.goal_id) || 'Unknown Goal',
-        goal_id: task.goal_id,
-      };
-    })
-    .filter(task => {
-      // Only return tasks that are:
-      // 1. Overdue and not done (status = 'missed')
-      // 2. Today and not done (status = 'pending')
-      return task.status === 'missed' || task.status === 'pending';
-    });
+    return {
+      id: task.id,
+      task_date: task.task_date,
+      task_text: task.task_text,
+      status,
+      goal_title: goalMap.get(task.goal_id) || 'Unknown Goal',
+      goal_id: task.goal_id,
+    };
+  });
 
   return tasksWithStatus;
 }
@@ -967,3 +888,32 @@ export async function deleteTask(taskId: string, userId: string): Promise<boolea
   return true;
 }
 
+export async function markTaskDone(taskId: string, userId: string): Promise<DailyTask> {
+  const supabase = await createClient();
+
+  // First get the task and verify ownership through goal
+  const { data: task, error: fetchError } = await supabase
+    .from('daily_tasks')
+    .select('*, goals!inner(user_id)')
+    .eq('id', taskId)
+    .single();
+
+  if (fetchError || !task) throw new Error('Task not found');
+  
+  // Check if the goal belongs to the user
+  const goalData = task.goals as { user_id: string };
+  if (goalData.user_id !== userId) {
+    throw new Error('Unauthorized');
+  }
+
+  // Update task status to done
+  const { data: updatedTask, error } = await supabase
+    .from('daily_tasks')
+    .update({ status: 'done' })
+    .eq('id', taskId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return updatedTask as DailyTask;
+}

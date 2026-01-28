@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/supabase/get-session';
 import {
   getActiveGoals,
-  getTodayTasks,
   getRecentBossEvents,
   getUserBossType,
   getDashboardKPIs,
@@ -22,8 +21,7 @@ export default async function DashboardPage() {
   // Use the most recent active goal for backward compatibility with UI
   const activeGoal = activeGoals.length > 0 ? activeGoals[0] : null;
 
-  const [todayTasks, recentEvents, bossType, kpis, dashboardTasks] = await Promise.all([
-    getTodayTasks(user.id), // Returns array of tasks from all active goals
+  const [recentEvents, bossType, kpis, dashboardTasks] = await Promise.all([
     getRecentBossEvents(user.id, 3),
     getUserBossType(user.id),
     getDashboardKPIs(user.id),
@@ -33,7 +31,6 @@ export default async function DashboardPage() {
   return (
     <DashboardContent
       activeGoal={activeGoal}
-      todayTasks={todayTasks}
       recentEvents={recentEvents}
       bossType={bossType}
       kpis={kpis}
