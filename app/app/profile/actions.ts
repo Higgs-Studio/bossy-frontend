@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { customerPortalAction } from '@/lib/payments/actions';
 import { getUser } from '@/lib/supabase/get-session';
 import { getTeamForUser } from '@/lib/db/queries';
-import { getUserPreferences, setUserPhone } from '@/lib/supabase/queries';
+import { getUserPreferences, setUserPhone, getUserPhone } from '@/lib/supabase/queries';
 import { getUserSubscription } from '@/lib/subscriptions/queries';
 
 export { customerPortalAction as manageSubscriptionAction };
@@ -40,11 +40,28 @@ export async function updatePhoneNumber(phone: string | null) {
   }
 
   try {
-    await setUserPhone(user.id, phone);
+    // Remove the "+" sign before saving to Supabase
+    const cleanedPhone = phone ? phone.replace(/^\+/, '') : null;
+    await setUserPhone(user.id, cleanedPhone);
     return { success: true };
   } catch (error) {
     console.error('Error updating phone number:', error);
     return { success: false, error: 'Failed to update phone number' };
+  }
+}
+
+export async function getUserPhoneAction(): Promise<string | null> {
+  const user = await getUser();
+  if (!user) {
+    return null;
+  }
+
+  try {
+    const phone = await getUserPhone(user.id);
+    return phone;
+  } catch (error) {
+    console.error('Error fetching phone number:', error);
+    return null;
   }
 }
 

@@ -14,13 +14,11 @@ export default async function PricingPage() {
     redirect('/pricing');
   }
 
-  const [prices, products] = await Promise.all([
+  const [prices, products, currentSubscription] = await Promise.all([
     getStripePrices(),
     getStripeProducts(),
+    getUserSubscription(user.id),
   ]);
-
-  // Get user's subscription
-  const currentSubscription = await getUserSubscription(user.id);
 
   const proPlan = products.find((product) => product.name === 'Plus');
   const proPrices = prices.filter((price) => price.productId === proPlan?.id);

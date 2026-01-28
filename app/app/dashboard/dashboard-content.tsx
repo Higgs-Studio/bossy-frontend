@@ -202,6 +202,7 @@ export function DashboardContent({
         null
     );
 
+    const [pendingTaskId, setPendingTaskId] = useState<string | null>(null);
     const [showSuccessMessage, setShowSuccessMessage] = useState<{show: boolean; message: string}>({
         show: false,
         message: ''
@@ -218,6 +219,7 @@ export function DashboardContent({
     useEffect(() => {
         if (!isPending && actionState?.success) {
             showNotification(actionState.success);
+            setPendingTaskId(null);
             router.refresh();
         }
     }, [isPending, actionState, router]);
@@ -443,15 +445,15 @@ export function DashboardContent({
                                                             </p>
                                                         </div>
                                                         {/* Done button for all tasks */}
-                                                        <form action={formAction} className="flex-shrink-0">
+                                                        <form action={formAction} className="flex-shrink-0" onSubmit={() => setPendingTaskId(task.id)}>
                                                             <input type="hidden" name="taskId" value={task.id} />
                                                             <Button
                                                                 type="submit"
                                                                 size="sm"
-                                                                disabled={isPending}
+                                                                disabled={pendingTaskId === task.id}
                                                                 className="bg-green-600 hover:bg-green-700"
                                                             >
-                                                                {isPending ? '...' : 'Done'}
+                                                                {pendingTaskId === task.id ? '...' : 'Done'}
                                                             </Button>
                                                         </form>
                                                     </div>
@@ -462,67 +464,6 @@ export function DashboardContent({
                                 )}
                             </CardContent>
                         </Card>
-
-
-                        {/* Boss Feedback History */}
-                        {recentEvents.length > 0 && bossType && (
-                            <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-xl transition-all duration-200">
-                                <CardHeader className="pb-4">
-                                    <div className="flex items-center justify-between gap-4 flex-wrap">
-                                        <CardTitle className="text-xl font-bold text-slate-900 dark:text-white">Recent Feedback from {boss.name}</CardTitle>
-                                        <span className="text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-4 py-1.5 rounded-full">
-                                            Last {recentEvents.length} messages
-                                        </span>
-                                    </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-4">
-                                        {recentEvents.map((event) => {
-                                            const context = event.context as { message?: string } | null;
-                                            const eventColor = 
-                                                event.event_type === 'praise' 
-                                                    ? 'border-emerald-500'
-                                                    : event.event_type === 'warning'
-                                                        ? 'border-amber-500'
-                                                        : 'border-red-500';
-                                            return (
-                                                <div
-                                                    key={event.id}
-                                                    className={`p-5 rounded-xl border-l-4 ${eventColor} bg-slate-50 dark:bg-slate-700/50 transition-all duration-200`}
-                                                >
-                                                    <div className="flex items-start gap-4">
-                                                        <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border-2 border-slate-200 dark:border-slate-600">
-                                                            <Image
-                                                                src={boss.avatar}
-                                                                alt={boss.name}
-                                                                fill
-                                                                className="object-cover"
-                                                            />
-                                                        </div>
-                                                        <div className="flex-1">
-                                                            <div className="flex items-center gap-2 mb-2">
-                                                                <span className="text-sm font-bold text-slate-900 dark:text-white">{boss.name}</span>
-                                                                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                                                    {new Date(event.created_at).toLocaleDateString('en-US', {
-                                                                        month: 'short',
-                                                                        day: 'numeric',
-                                                                        hour: 'numeric',
-                                                                        minute: '2-digit'
-                                                                    })}
-                                                                </span>
-                                                            </div>
-                                                            <p className="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
-                                                                {context?.message || 'No message'}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        )}
                     </>
                 )}
 

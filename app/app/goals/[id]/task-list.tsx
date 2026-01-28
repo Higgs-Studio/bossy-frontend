@@ -58,43 +58,71 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
     }, 4000);
   };
 
+  // Track if create was just initiated to show notification on success
+  const [wasCreating, setWasCreating] = useState(false);
+  
+  useEffect(() => {
+    if (isCreatePending) {
+      setWasCreating(true);
+    }
+  }, [isCreatePending]);
+
   // Watch for successful task creation
   useEffect(() => {
-    if (!isCreatePending && createState === null && showAddForm) {
-      // Task was successfully created (state is null and not pending)
-      const prevTaskCount = optimisticTasks.length;
-      if (initialTasks.length > prevTaskCount) {
-        showNotification('Task created successfully.');
-        setShowAddForm(false);
-        onTasksChange?.();
-      }
+    if (!isCreatePending && createState === null && wasCreating) {
+      // Task was successfully created - hide form, show notification and refresh
+      showNotification('Task created successfully.');
+      setShowAddForm(false);
+      setWasCreating(false);
+      onTasksChange?.();
     }
-  }, [isCreatePending, createState, showAddForm, optimisticTasks.length, initialTasks.length, onTasksChange]);
+  }, [isCreatePending, createState, wasCreating, onTasksChange]);
+
+  // Track if update was just initiated to show notification on success
+  const [wasUpdating, setWasUpdating] = useState(false);
+  
+  useEffect(() => {
+    if (isUpdatePending) {
+      setWasUpdating(true);
+    }
+  }, [isUpdatePending]);
 
   // Watch for successful task update
   useEffect(() => {
-    if (!isUpdatePending && updateState === null && editingTaskId) {
-      // Task was successfully updated
+    if (!isUpdatePending && updateState === null && wasUpdating) {
+      // Task was successfully updated - close edit form and refresh
       showNotification('Task updated successfully.');
       setEditingTaskId(null);
       setEditText('');
+      setShowEditCalendar(false);
+      setWasUpdating(false);
       onTasksChange?.();
     }
-  }, [isUpdatePending, updateState, editingTaskId, onTasksChange]);
+  }, [isUpdatePending, updateState, wasUpdating, onTasksChange]);
+
+  // Track if delete was just initiated to show notification on success
+  const [wasDeleting, setWasDeleting] = useState(false);
+  
+  useEffect(() => {
+    if (isDeletePending) {
+      setWasDeleting(true);
+    }
+  }, [isDeletePending]);
 
   // Watch for successful task deletion
   useEffect(() => {
-    if (!isDeletePending && deleteState === null) {
-      // Task was successfully deleted
-      const prevTaskCount = optimisticTasks.length;
-      if (initialTasks.length < prevTaskCount) {
-        showNotification('Task deleted successfully.');
-        onTasksChange?.();
-      }
+    if (!isDeletePending && deleteState === null && wasDeleting) {
+      // Task was successfully deleted - show notification and refresh the list
+      showNotification('Task deleted successfully.');
+      setWasDeleting(false);
+      onTasksChange?.();
     }
-  }, [isDeletePending, deleteState, optimisticTasks.length, initialTasks.length, onTasksChange]);
+  }, [isDeletePending, deleteState, wasDeleting, onTasksChange]);
 
   const handleEditClick = (task: DailyTask) => {
+    // Close add form if it's open
+    setShowAddForm(false);
+    // Set up edit mode
     setEditingTaskId(task.id);
     setEditText(task.task_text);
     setEditDate(new Date(task.task_date));
@@ -266,7 +294,15 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
             )}
             <Button
               size="sm"
-              onClick={() => setShowAddForm(!showAddForm)}
+              onClick={() => {
+                // Close any edit forms when opening add form
+                if (!showAddForm) {
+                  setEditingTaskId(null);
+                  setEditText('');
+                  setShowEditCalendar(false);
+                }
+                setShowAddForm(!showAddForm);
+              }}
               variant={showAddForm ? 'outline' : 'default'}
             >
               {showAddForm ? (

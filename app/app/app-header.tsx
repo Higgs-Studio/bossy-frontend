@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { MobileMenu } from '@/components/mobile-menu';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { WhatsAppNavIcon } from '@/components/whatsapp-nav-icon';
 import { useTranslation } from '@/contexts/translation-context';
 
 interface AppHeaderProps {
@@ -57,6 +58,7 @@ export function AppHeader({ userMenu }: AppHeaderProps) {
           
           {/* Actions - Right */}
           <div className="hidden md:flex items-center gap-2 ml-auto">
+            <WhatsAppNavIcon />
             <ThemeSwitcher />
             <LanguageSwitcher />
             {userMenu}
@@ -64,6 +66,7 @@ export function AppHeader({ userMenu }: AppHeaderProps) {
           
           {/* Mobile Menu */}
           <div className="md:hidden flex items-center gap-2 ml-auto">
+            <WhatsAppNavIcon />
             <ThemeSwitcher />
             <LanguageSwitcher />
             {userMenu}
