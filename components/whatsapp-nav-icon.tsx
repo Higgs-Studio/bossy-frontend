@@ -46,7 +46,7 @@ export function WhatsAppNavIcon() {
         aria-label="WhatsApp Contact"
       >
         <MessageCircle className="h-5 w-5" />
-        <span className="text-sm font-medium">text boss</span>
+        <span className="text-sm font-medium">Text Boss</span>
       </button>
 
       {/* Hover Tooltip */}
@@ -63,14 +63,8 @@ export function WhatsAppNavIcon() {
                     💬 Message your boss!
                   </p>
                   <p className="text-xs text-green-700 dark:text-green-300 mb-3">
-                    Your accountability partner is just a click away
+                    Your boss is just a click away
                   </p>
-                  <button
-                    onClick={handleClick}
-                    className="w-full px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors"
-                  >
-                    Chat Now
-                  </button>
                 </div>
               </div>
             </div>

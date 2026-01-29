@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { PublicUserMenu } from './public-user-menu';
 import { getUser } from '@/lib/supabase/get-session';
@@ -12,9 +13,14 @@ async function Header() {
         <div className="flex items-center h-16 relative">
           {/* Logo - Left */}
           <Link href={user ? '/app/dashboard' : '/'} className="flex items-center group">
-            <span className="text-xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-200">
-              Bossy
-            </span>
+            <Image 
+              src="/logo.png" 
+              alt="Bossy" 
+              width={160} 
+              height={60}
+              className="h-12 w-auto transition-opacity group-hover:opacity-80"
+              priority
+            />
           </Link>
           
           {/* Centered Navigation */}

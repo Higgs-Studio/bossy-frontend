@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useActionState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -33,9 +34,14 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center mb-8">
-          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-            {t.common?.appName || 'Bossy'}
-          </h1>
+          <Image 
+            src="/logo.png" 
+            alt="Bossy" 
+            width={200} 
+            height={75}
+            className="h-16 w-auto"
+            priority
+          />
         </div>
         <h2 className="text-center text-3xl sm:text-4xl font-bold text-slate-900 mb-2">
           {mode === 'signin'

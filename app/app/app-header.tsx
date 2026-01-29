@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { MobileMenu } from '@/components/mobile-menu';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { LanguageSwitcher } from '@/components/language-switcher';
@@ -26,9 +27,14 @@ export function AppHeader({ userMenu }: AppHeaderProps) {
         <div className="flex items-center h-16 relative">
           {/* Logo - Left */}
           <Link href="/app/dashboard" className="flex items-center group">
-            <span className="text-xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-200">
-              Bossy
-            </span>
+            <Image 
+              src="/logo.png" 
+              alt="Bossy" 
+              width={160} 
+              height={60}
+              className="h-12 w-auto transition-opacity group-hover:opacity-80"
+              priority
+            />
           </Link>
           
           {/* Centered Navigation */}
