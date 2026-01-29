@@ -11,6 +11,8 @@ export type Goal = {
   status: 'active' | 'completed' | 'abandoned';
   boss_type: BossType;
   created_at: string;
+  total_tasks?: number;
+  completed_tasks?: number;
 };
 
 export type DailyTask = {
@@ -18,6 +20,7 @@ export type DailyTask = {
   goal_id: string;
   task_date: string;
   task_text: string;
+  status: 'todo' | 'in_progress' | 'done';
   created_at: string;
 };
 
@@ -40,49 +43,74 @@ export type BossEvent = {
 
 export async function getUserGoals(userId: string) {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data: goals, error } = await supabase
     .from('goals')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return data as Goal[];
+  
+  // Fetch task statistics for each goal
+  if (goals && goals.length > 0) {
+    const goalsWithStats = await Promise.all(
+      goals.map(async (goal) => {
+        const { data: tasks } = await supabase
+          .from('daily_tasks')
+          .select('status')
+          .eq('goal_id', goal.id);
+        
+        const total_tasks = tasks?.length || 0;
+        const completed_tasks = tasks?.filter(t => t.status === 'done').length || 0;
+        
+        return {
+          ...goal,
+          total_tasks,
+          completed_tasks,
+        };
+      })
+    );
+    
+    return goalsWithStats as Goal[];
+  }
+  
+  return goals as Goal[];
 }
 
-export async function getActiveGoal(userId: string) {
+export async function getActiveGoals(userId: string): Promise<Goal[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('goals')
     .select('*')
     .eq('user_id', userId)
     .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single();
+    .order('created_at', { ascending: false });
 
-  if (error && error.code !== 'PGRST116') throw error;
-  return data as Goal | null;
+  if (error) throw error;
+  return (data as Goal[]) || [];
 }
 
-export async function getTodayTask(userId: string) {
+export async function getTodayTasks(userId: string): Promise<DailyTask[]> {
   const supabase = await createClient();
   const today = new Date().toISOString().split('T')[0];
 
-  // Get active goal first
-  const activeGoal = await getActiveGoal(userId);
-  if (!activeGoal) return null;
+  // Get all active goals
+  const activeGoals = await getActiveGoals(userId);
+  if (activeGoals.length === 0) return [];
 
-  // Get today's task
+  const goalIds = activeGoals.map(goal => goal.id);
+
+  // Get today's tasks for all active goals
   const { data, error } = await supabase
     .from('daily_tasks')
     .select('*')
-    .eq('goal_id', activeGoal.id)
-    .eq('task_date', today)
-    .single();
+    .in('goal_id', goalIds)
+    .lte('task_date', today)
+    .neq('status', 'done')
+    .order('created_at', { ascending: true });
 
-  if (error && error.code !== 'PGRST116') throw error;
-  return data as DailyTask | null;
+  if (error) throw error;
+  return (data as DailyTask[]) || [];
 }
 
 export async function getCheckInsForTask(taskId: string) {
@@ -368,6 +396,118 @@ export async function getConsecutiveMisses(userId: string, goalId: string): Prom
   return consecutiveMisses;
 }
 
+// ==========================================
+// Dashboard KPI Queries
+// ==========================================
+
+export type DashboardKPIs = {
+  overdueCount: number;       // (A) Tasks dated before today, not done
+  todayPendingCount: number;  // (B) Tasks dated today, not done
+};
+
+export type TaskWithStatus = {
+  id: string;
+  task_date: string;
+  task_text: string;
+  status: 'overdue' | 'pending';  // 'overdue' = before today, not done | 'pending' = today, not done
+  goal_title: string;
+  goal_id: string;
+};
+
+export async function getDashboardKPIs(userId: string): Promise<DashboardKPIs> {
+  const supabase = await createClient();
+  const activeGoals = await getActiveGoals(userId);
+  
+  if (activeGoals.length === 0) {
+    return {
+      overdueCount: 0,
+      todayPendingCount: 0,
+    };
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+  const goalIds = activeGoals.map(goal => goal.id);
+
+  // Get all incomplete tasks for all active goals up to and including today
+  const { data: allTasks } = await supabase
+    .from('daily_tasks')
+    .select('id, task_date, goal_id, status')
+    .in('goal_id', goalIds)
+    .lte('task_date', today)
+    .neq('status', 'done')
+    .order('task_date', { ascending: true });
+
+  if (!allTasks || allTasks.length === 0) {
+    return {
+      overdueCount: 0,
+      todayPendingCount: 0,
+    };
+  }
+
+  // Calculate metrics based on task status field only
+  let overdueCount = 0;       // (A) Tasks before today, not done
+  let todayPendingCount = 0;  // (B) Tasks dated today, not done
+
+  for (const task of allTasks) {
+    if (task.task_date === today) {
+      todayPendingCount++;   // (B)
+    } else if (task.task_date < today) {
+      overdueCount++;        // (A)
+    }
+  }
+
+  return {
+    overdueCount,
+    todayPendingCount,
+  };
+}
+
+export async function getDashboardTasks(userId: string): Promise<TaskWithStatus[]> {
+  const supabase = await createClient();
+  const activeGoals = await getActiveGoals(userId);
+  
+  if (activeGoals.length === 0) {
+    return [];
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+  const goalIds = activeGoals.map(goal => goal.id);
+
+  // Create a map of goal IDs to goal titles for quick lookup
+  const goalMap = new Map(activeGoals.map(goal => [goal.id, goal.title]));
+
+  // Get all tasks for all active goals up to today that are not done
+  const { data: tasks } = await supabase
+    .from('daily_tasks')
+    .select('id, task_date, task_text, goal_id, status')
+    .in('goal_id', goalIds)
+    .lte('task_date', today)
+    .neq('status', 'done')
+    .order('task_date', { ascending: false });
+
+  if (!tasks || tasks.length === 0) {
+    return [];
+  }
+
+  // Map tasks with their status
+  // (A) overdue = dated before today, not done
+  // (B) pending = dated today, not done
+  const tasksWithStatus: TaskWithStatus[] = tasks.map(task => {
+    const status: 'overdue' | 'pending' = task.task_date < today ? 'overdue' : 'pending';
+
+    return {
+      id: task.id,
+      task_date: task.task_date,
+      task_text: task.task_text,
+      status,
+      goal_title: goalMap.get(task.goal_id) || 'Unknown Goal',
+      goal_id: task.goal_id,
+    };
+  });
+
+  return tasksWithStatus;
+}
+
 export async function updateGoal(
   goalId: string,
   userId: string,
@@ -495,6 +635,13 @@ export type UserPreferences = {
   email?: string | null;
   next_checkin_at?: string | null;
   last_checkin_at?: string | null;
+  stripe_customer_id?: string | null;
+  stripe_subscription_id?: string | null;
+  stripe_product_id?: string | null;
+  subscription_status?: string | null;
+  plan_name?: string | null;
+  billing_interval?: string | null;
+  subscription_end_date?: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -741,3 +888,32 @@ export async function deleteTask(taskId: string, userId: string): Promise<boolea
   return true;
 }
 
+export async function markTaskDone(taskId: string, userId: string): Promise<DailyTask> {
+  const supabase = await createClient();
+
+  // First get the task and verify ownership through goal
+  const { data: task, error: fetchError } = await supabase
+    .from('daily_tasks')
+    .select('*, goals!inner(user_id)')
+    .eq('id', taskId)
+    .single();
+
+  if (fetchError || !task) throw new Error('Task not found');
+  
+  // Check if the goal belongs to the user
+  const goalData = task.goals as { user_id: string };
+  if (goalData.user_id !== userId) {
+    throw new Error('Unauthorized');
+  }
+
+  // Update task status to done
+  const { data: updatedTask, error } = await supabase
+    .from('daily_tasks')
+    .update({ status: 'done' })
+    .eq('id', taskId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return updatedTask as DailyTask;
+}

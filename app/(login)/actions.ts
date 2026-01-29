@@ -33,7 +33,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
     redirect('/pricing');
   }
 
-  redirect('/app/dashboard');
+  redirect('/app/goals');
 });
 
 const signUpSchema = z.object({
@@ -49,7 +49,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.BASE_URL || 'http://localhost:3000'}/app/dashboard`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.BASE_URL || 'http://localhost:3000'}/app/goals`,
     },
   });
 
@@ -70,7 +70,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
     if (redirectTo === 'checkout') {
       redirect('/pricing');
     }
-    redirect('/app/dashboard');
+    redirect('/app/goals');
   } else {
     // Email confirmation required
     return {

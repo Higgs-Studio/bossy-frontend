@@ -1,21 +1,17 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { getUser } from '@/lib/supabase/get-session';
 import {
-  getTodayTask,
-  createCheckIn,
-  createBossEvent,
-  markTaskMissed,
+  markTaskDone,
   abandonGoal,
   completeGoal,
-  getConsecutiveMisses,
-  getActiveGoal,
+  createBossEvent,
 } from '@/lib/supabase/queries';
-import { getBossReaction } from '@/lib/boss/reactions';
 import { logError } from '@/lib/utils/logger';
 
-export async function checkInAction(
+export async function markTaskDoneAction(
   prevState: any,
   formData: FormData
 ): Promise<{ success?: string; error?: string } | null> {
@@ -30,81 +26,16 @@ export async function checkInAction(
   }
 
   try {
-    // Validate task belongs to user and is today
-    const todayTask = await getTodayTask(user.id);
-    if (!todayTask || todayTask.id !== taskId) {
-      return { error: 'Invalid task' };
-    }
+    // Mark task as done (this also validates ownership)
+    await markTaskDone(taskId, user.id);
 
-    const today = new Date().toISOString().split('T')[0];
-    if (todayTask.task_date !== today) {
-      return { error: 'This task is not for today' };
-    }
+    // Revalidate the dashboard page to refresh the data
+    revalidatePath('/app/dashboard');
 
-    // Create check-in
-    await createCheckIn({
-      taskId,
-      userId: user.id,
-      status: 'done',
-    });
-
-    // Get active goal to use boss type
-    const activeGoal = await getActiveGoal(user.id);
-
-    // Create boss reaction
-    const reaction = getBossReaction('done', { bossType: activeGoal?.boss_type });
-    await createBossEvent({
-      userId: user.id,
-      eventType: reaction.eventType,
-      context: { message: reaction.message },
-    });
-
-    return { success: 'Check-in recorded!' };
+    return { success: 'Task marked as done!' };
   } catch (error) {
-    logError('Check-in error', error, { userId: user.id, taskId });
-    return { error: 'Failed to record check-in' };
-  }
-}
-
-export async function markMissedAction(
-  prevState: any,
-  formData: FormData
-): Promise<{ success?: string; error?: string } | null> {
-  const user = await getUser();
-  if (!user) {
-    redirect('/sign-in');
-  }
-
-  const taskId = formData.get('taskId') as string;
-  if (!taskId) {
-    return { error: 'Task ID is required' };
-  }
-
-  try {
-    // Mark task as missed
-    await markTaskMissed(taskId, user.id);
-
-    // Get active goal to calculate consecutive misses
-    const activeGoal = await getActiveGoal(user.id);
-    const consecutiveMisses = activeGoal 
-      ? await getConsecutiveMisses(user.id, activeGoal.id)
-      : 1;
-
-    // Create boss reaction with actual consecutive miss count and boss type
-    const reaction = getBossReaction('missed', { 
-      consecutiveMisses,
-      bossType: activeGoal?.boss_type 
-    });
-    await createBossEvent({
-      userId: user.id,
-      eventType: reaction.eventType,
-      context: { message: reaction.message },
-    });
-
-    return { success: 'Missed check-in recorded' };
-  } catch (error) {
-    logError('Mark missed error', error, { userId: user.id, taskId });
-    return { error: 'Failed to record missed check-in' };
+    logError('Mark task done error', error, { userId: user.id, taskId });
+    return { error: 'Failed to mark task as done' };
   }
 }
 

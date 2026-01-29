@@ -9,10 +9,10 @@
         "pricing": "價格方案"
     },
     "hero": {
-        "badge": "AI驅動的問責老闆",
+        "badge": "AI驅動的問責老細",
         "title": "聘請你的專屬",
-        "titleHighlight": "AI問責老闆",
-        "subtitle": "別再設定你永遠無法完成的目標。你的AI老闆每天都會監督你的進度。",
+        "titleHighlight": "AI問責老細",
+        "subtitle": "別再設定你永遠無法完成的目標。你的AI老細每天都會監督你的進度。",
         "description": "沒有談判。沒有藉口。只有持續的每日行動和真實的成果。",
         "cta": "免費開始",
         "secondaryCta": "查看運作方式",
@@ -21,7 +21,7 @@
         "cancelAnytime": "隨時取消"
     },
     "stats": {
-        "title": "你的AI老闆永不休息",
+        "title": "你的AI老細永不休息",
         "subtitle": "持續問責、全天候追蹤、對藉口零容忍",
         "completionRate": "完成率",
         "usersAccountable": "用戶數",
@@ -31,17 +31,17 @@
     "bossSection": {
         "badge": "AI驅動",
         "title": "認識你的",
-        "titleHighlight": "AI問責老闆",
-        "description": "與傳統的目標追蹤應用程式不同，Bossy為你提供一個直接、不廢話的AI老闆，每天監控你的進度並讓你負起責任。",
-        "cta": "立即聘請你的AI老闆",
+        "titleHighlight": "AI問責老細",
+        "description": "與傳統的目標追蹤應用程式不同，Bossy為你提供一個直接、不廢話的AI老細，每天監控你的進度並讓你負起責任。",
+        "cta": "立即聘請你的AI老細",
         "features": {
             "realtime": {
                 "title": "即時回饋",
-                "description": "你的AI老闆會即時回應每次簽到，提供個人化的反饋"
+                "description": "你的AI老細會即時回應每次簽到，提供個人化的反饋"
             },
             "noNegotiations": {
                 "title": "不容談判",
-                "description": "承諾是最終的。你的AI老闆不接受藉口，只接受結果"
+                "description": "承諾是最終的。你的AI老細不接受藉口，只接受結果"
             },
             "pattern": {
                 "title": "模式識別",
@@ -52,10 +52,10 @@
     "auth": {
         "signIn": {
             "title": "歡迎回來",
-            "subtitle": "你的AI問責老闆正在等待"
+            "subtitle": "你的AI問責老細正在等待"
         },
         "signUp": {
-            "title": "聘請你的AI老闆",
+            "title": "聘請你的AI老細",
             "subtitle": "開始你的AI驅動問責之旅"
         },
         "email": "電子郵件",
@@ -68,7 +68,7 @@
         "signInExisting": "登入現有帳號"
     },
     "dashboard": {
-        "title": "儀表板",
+        "title": "進度報告",
         "noGoal": {
             "title": "沒有進行中的目標",
             "description": "建立目標以開始每日問責。",
@@ -105,7 +105,7 @@
         "timeHorizonHelp": "你將承諾多長時間來完成這個目標？",
         "intensity": "強度",
         "intensityHelp": "你每天要投入多少承諾？",
-        "chooseBoss": "選擇你的AI老闆",
+        "chooseBoss": "選擇你的AI老細",
         "chooseBossHelp": "選擇能激勵你的問責風格",
         "startDate": "開始日期",
         "startDateHelp": "選擇你想要開始問責之旅的日期。",
@@ -155,8 +155,8 @@
             "description": "每天追蹤你的進度。通過持續的簽到建立動力，看著你的連續記錄增長。"
         },
         "aiBoss": {
-            "title": "AI老闆",
-            "description": "你的AI問責老闆全天候監控你的進度。錯過一天？你會聽到反饋。保持一致？你會得到認可。"
+            "title": "AI老細",
+            "description": "你的AI問責老細全天候監控你的進度。錯過一天？你會聽到反饋。保持一致？你會得到認可。"
         },
         "progressTracking": {
             "title": "進度追蹤",
@@ -192,17 +192,17 @@
         "subtitle": "看看我們的用戶對他們的轉變有何評價"
     },
     "cta": {
-        "badge": "你的AI老闆已準備就緒",
+        "badge": "你的AI老細已準備就緒",
         "title": "準備好聘請你的",
-        "titleLine2": "AI問責老闆了嗎？",
+        "titleLine2": "AI問責老細了嗎？",
         "subtitle": "加入數千名停止找藉口並通過AI驅動問責開始實現目標的人們。",
-        "button": "免費開始—聘請你的老闆",
+        "button": "免費開始—聘請你的老細",
         "secondaryButton": "查看價格",
-        "features": "免費開始 • 無需信用卡 • 你的AI老闆全天候待命"
+        "features": "免費開始 • 無需信用卡 • 你的AI老細全天候待命"
     },
     "preview": {
         "seeItInAction": "實際操作演示",
-        "dashboard": "儀表板",
+        "dashboard": "進度報告",
         "activeGoal": "進行中的目標",
         "inProgress": "進行中",
         "intensity": "強度",
@@ -219,20 +219,20 @@
         "lastMessages": "最近3則訊息"
     },
     "boss": {
-        "title": "你的AI老闆",
+        "title": "你的AI老細",
         "subtitle": "選擇你的問責夥伴",
         "aiPartner": "你的AI問責夥伴",
         "rules": "規則",
         "noNegotiations": "不容談判",
-        "noNegotiationsDesc": "這個老闆不談判。承諾是最終的。問責是不可談判的。",
-        "changeBoss": "更換你的老闆",
-        "bossPersonality": "老闆性格",
-        "bossLanguage": "老闆語言",
-        "bossLanguageDesc": "選擇你的AI老闆使用的反饋語言（獨立於應用語言）",
+        "noNegotiationsDesc": "這個老細不談判。承諾是最終的。問責是不可談判的。",
+        "changeBoss": "更換你的老細",
+        "bossPersonality": "老細性格",
+        "bossLanguage": "老細語言",
+        "bossLanguageDesc": "選擇你的AI老細使用的反饋語言（獨立於應用語言）",
         "current": "當前",
         "saveChanges": "儲存更改",
-        "changingBoss": "更換老闆中...",
-        "bossChanged": "老闆更換成功！",
+        "changingBoss": "更換老細中...",
+        "bossChanged": "老細更換成功！",
         "personalities": {
             "execution": {
                 "nickname": "我讓你持續前進。每一天。",
@@ -288,6 +288,9 @@
         "status": "狀態",
         "plan": "計劃",
         "manageSubscription": "管理訂閱",
+        "reactivateSubscription": "重新激活訂閱",
+        "upgradeToPro": "升級到Plus",
+        "accessUntil": "訪問權限至",
         "noSubscription": "沒有活動訂閱",
         "viewPricing": "查看價格計劃",
         "appLanguage": "應用語言",
@@ -303,9 +306,9 @@
         "phoneSaveError": "儲存手機號碼失敗"
     },
     "nav": {
-        "dashboard": "儀表板",
+        "dashboard": "進度報告",
         "goals": "目標",
-        "boss": "老闆",
+        "boss": "老細",
         "profile": "個人資料",
         "signOut": "登出",
         "createGoal": "建立目標",

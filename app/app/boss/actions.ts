@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { getUser } from '@/lib/supabase/get-session';
 import { setUserBossType, setUserBossLanguage, getUserPreferences, getUserBossType, getUserBossLanguage } from '@/lib/supabase/queries';
+import { canChangeBossType, getUserPlan } from '@/lib/subscriptions/service';
 import type { BossType, BossLanguage } from '@/lib/boss/reactions';
 import { logError } from '@/lib/utils/logger';
 import { createClient } from '@/lib/supabase/server';
@@ -20,6 +21,22 @@ export async function getBossTypeAndLanguage(): Promise<{ bossType: BossType; bo
   ]);
 
   return { bossType, bossLanguage };
+}
+
+export async function checkSubscription(): Promise<boolean> {
+  const user = await getUser();
+  if (!user) {
+    redirect('/sign-in');
+  }
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('user_preferences')
+    .select('subscription_status')
+    .eq('user_id', user.id)
+    .single();
+
+  return data?.subscription_status === 'active' || data?.subscription_status === 'trialing';
 }
 
 export async function changeBossAction(
@@ -53,6 +70,17 @@ export async function changeBossAction(
   }
 
   try {
+    // Check if user can change boss type (based on subscription)
+    const currentBossType = await getUserBossType(user.id);
+    if (bossType !== currentBossType) {
+      const canChange = await canChangeBossType(user.id);
+      if (!canChange) {
+        const plan = await getUserPlan(user.id);
+        return { 
+          error: `Upgrade to Plus to unlock all boss personalities. You're currently on the ${plan.planName} plan.`
+        };
+      }
+    }
     // Use upsert to update both boss_type and boss_language at once
     const supabase = await createClient();
     const { error } = await supabase

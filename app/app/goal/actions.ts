@@ -4,12 +4,12 @@ import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/supabase/get-session';
 import {
   createGoal,
-  createDailyTasks,
   updateGoal,
   deleteGoal,
   getGoalById,
   getUserBossType,
 } from '@/lib/supabase/queries';
+import { canCreateGoal, getUserPlan, getActiveGoalsCount } from '@/lib/subscriptions/service';
 import { logError, getErrorMessage } from '@/lib/utils/logger';
 
 export async function createGoalAction(
@@ -39,6 +39,16 @@ export async function createGoalAction(
   }
 
   try {
+    // Check subscription limits before creating goal
+    const canCreate = await canCreateGoal(user.id);
+    if (!canCreate) {
+      const plan = await getUserPlan(user.id);
+      const activeCount = await getActiveGoalsCount(user.id);
+      return { 
+        error: `Goal limit reached. You're on the ${plan.planName} plan (${activeCount}/${plan.limits.maxActiveGoals} active goal${plan.limits.maxActiveGoals === 1 ? '' : 's'}). Upgrade to Plus for unlimited goals.`
+      };
+    }
+
     // Get user's boss type from preferences
     const bossType = await getUserBossType(user.id);
 
@@ -52,23 +62,8 @@ export async function createGoalAction(
       bossType,
     });
 
-    // Generate task text based on intensity
-    const taskText =
-      intensity === 'high'
-        ? `Work 90 minutes on: ${title}`
-        : intensity === 'medium'
-          ? `Work 60 minutes on: ${title}`
-          : `Work 30 minutes on: ${title}`;
-
-    // Generate daily tasks
-    await createDailyTasks(
-      goal.id,
-      start.toISOString().split('T')[0],
-      end.toISOString().split('T')[0],
-      taskText
-    );
-
-    redirect('/app/dashboard');
+    // Redirect to goal detail page where user can add tasks
+    redirect(`/app/goals/${goal.id}`);
   } catch (error) {
     // Re-throw redirect errors
     if (

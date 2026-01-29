@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { updateGoalAction } from '@/app/app/goal/actions';
-import { Loader2, Target, CheckCircle2, XCircle, Zap } from 'lucide-react';
+import { Loader2, Target, CheckCircle2, XCircle, Zap, Flame, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Goal } from '@/lib/supabase/queries';
 import { useTranslation } from '@/contexts/translation-context';
@@ -132,11 +132,10 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                                         // Adjust end date if it's before new start date
                                         if (endDate < newStartDate) {
                                             const start = new Date(newStartDate);
-                                            start.setDate(start.getDate() + 30);
+                                            start.setDate(start.getDate() + 1);
                                             setEndDate(start.toISOString().split('T')[0]);
                                         }
                                     }}
-                                    min={new Date().toISOString().split('T')[0]}
                                     className="h-11"
                                     required
                                 />
@@ -182,11 +181,12 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             <label 
                                 htmlFor="edit-intensity-low"
                                 className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${intensity === 'low'
-                                    ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                                    ? 'border-green-500 bg-green-500/10 shadow-sm'
                                     : 'border-border hover:border-border/80 hover:bg-muted/50'
                                 }`}
                             >
                                 <RadioGroupItem value="low" id="edit-intensity-low" />
+                                <TrendingDown className={cn("h-5 w-5", intensity === 'low' ? 'text-green-600 dark:text-green-400' : 'text-muted-foreground')} />
                                 <span className="font-medium cursor-pointer flex-1">
                                     <span className="block text-base mb-1">{t.goal?.intensityLow || 'Low'}</span>
                                     <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityLowDesc || 'Light daily commitment'}</span>
@@ -195,11 +195,12 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             <label 
                                 htmlFor="edit-intensity-medium"
                                 className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${intensity === 'medium'
-                                    ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                                    ? 'border-yellow-500 bg-yellow-500/10 shadow-sm'
                                     : 'border-border hover:border-border/80 hover:bg-muted/50'
                                 }`}
                             >
                                 <RadioGroupItem value="medium" id="edit-intensity-medium" />
+                                <TrendingUp className={cn("h-5 w-5", intensity === 'medium' ? 'text-yellow-600 dark:text-yellow-400' : 'text-muted-foreground')} />
                                 <span className="font-medium cursor-pointer flex-1">
                                     <span className="block text-base mb-1">{t.goal?.intensityMedium || 'Medium'}</span>
                                     <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityMediumDesc || 'Moderate daily commitment'}</span>
@@ -208,11 +209,12 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             <label 
                                 htmlFor="edit-intensity-high"
                                 className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${intensity === 'high'
-                                    ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                                    ? 'border-red-500 bg-red-500/10 shadow-sm'
                                     : 'border-border hover:border-border/80 hover:bg-muted/50'
                                 }`}
                             >
                                 <RadioGroupItem value="high" id="edit-intensity-high" />
+                                <Flame className={cn("h-5 w-5", intensity === 'high' ? 'text-red-600 dark:text-red-400' : 'text-muted-foreground')} />
                                 <span className="font-medium cursor-pointer flex-1">
                                     <span className="block text-base mb-1">{t.goal?.intensityHigh || 'High'}</span>
                                     <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityHighDesc || 'Significant daily commitment'}</span>
@@ -227,16 +229,15 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                         </div>
                     )}
 
-                    <div className="flex gap-3">
+                    <div className="sticky bottom-0 bg-background border-t border-border pt-4 -mx-6 px-6 -mb-6 pb-6 flex gap-3">
                         <Button
                             type="button"
                             variant="outline"
                             asChild
-                            className="flex-1"
                         >
                             <a href="/app/goals">{t.editGoal?.cancel || 'Cancel'}</a>
                         </Button>
-                        <Button type="submit" disabled={isPending} className="flex-1" size="lg">
+                        <Button type="submit" disabled={isPending} size="lg" className="flex-1">
                             {isPending ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

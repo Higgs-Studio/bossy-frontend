@@ -1,10 +1,9 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { User, Phone, Save, Loader2 } from 'lucide-react';
+import { PhoneInput } from '@/components/ui/phone-input';
+import { User, Save, Loader2 } from 'lucide-react';
 import { useTranslation } from '@/contexts/translation-context';
 import { useState, useEffect } from 'react';
 import { updatePhoneNumber } from './actions';
@@ -56,15 +55,8 @@ export function PersonalInfo({ initialPhone }: PersonalInfoProps) {
     }
   };
 
-  const validatePhone = (value: string) => {
-    // Allow empty string, or validate format
-    if (!value) return true;
-    // Basic phone validation - allows international formats
-    const phoneRegex = /^[\d\s+()-]{10,20}$/;
-    return phoneRegex.test(value);
-  };
-
-  const isPhoneValid = validatePhone(phone);
+  // Phone validation is handled by PhoneInput component
+  const isPhoneValid = true; // Always true as PhoneInput handles validation
 
   return (
     <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
@@ -76,28 +68,12 @@ export function PersonalInfo({ initialPhone }: PersonalInfoProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="phone" className="flex items-center gap-2">
-              <Phone className="h-4 w-4" />
-              {t.profile?.phoneNumber || 'Mobile Phone'}
-            </Label>
-            <Input
-              id="phone"
-              type="tel"
-              placeholder={t.profile?.phonePlaceholder || '+1 (555) 123-4567'}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className={`${!isPhoneValid && phone ? 'border-red-500' : ''}`}
-            />
-            {!isPhoneValid && phone && (
-              <p className="text-sm text-red-500">
-                {t.profile?.phoneInvalid || 'Please enter a valid phone number'}
-              </p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              {t.profile?.phoneDescription || 'Optional. Used for account recovery and notifications.'}
-            </p>
-          </div>
+          <PhoneInput
+            value={phone}
+            onChange={setPhone}
+            label={t.profile?.phoneNumber || 'Mobile Phone'}
+            placeholder="9542 7840"
+          />
 
           {hasChanges && (
             <div className="flex items-center gap-2">

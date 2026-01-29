@@ -1,11 +1,8 @@
-import { eq } from 'drizzle-orm';
-import { db } from '@/lib/db/drizzle';
-import { users, teams, teamMembers } from '@/lib/db/schema';
-import { setSession } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/payments/stripe';
 import Stripe from 'stripe';
 import { logError } from '@/lib/utils/logger';
+import { updateUserSubscription } from '@/lib/subscriptions/queries';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -38,13 +35,14 @@ export async function GET(request: NextRequest) {
       expand: ['items.data.price.product'],
     });
 
-    const plan = subscription.items.data[0]?.price;
+    const price = subscription.items.data[0]?.price;
 
-    if (!plan) {
-      throw new Error('No plan found for this subscription.');
+    if (!price) {
+      throw new Error('No price found for this subscription.');
     }
 
-    const productId = (plan.product as Stripe.Product).id;
+    const product = price.product as Stripe.Product;
+    const productId = product.id;
 
     if (!productId) {
       throw new Error('No product ID found for this subscription.');
@@ -55,44 +53,46 @@ export async function GET(request: NextRequest) {
       throw new Error("No user ID found in session's client_reference_id.");
     }
 
-    const user = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, Number(userId)))
-      .limit(1);
+    // Get billing interval from price
+    const billingInterval = price.recurring?.interval as 'month' | 'year';
 
-    if (user.length === 0) {
-      throw new Error('User not found in database.');
-    }
+    // Map Stripe status to our SubscriptionStatus type
+    const mapStripeStatus = (status: Stripe.Subscription.Status): 'active' | 'trialing' | 'past_due' | 'canceled' | 'unpaid' | 'free' => {
+      switch (status) {
+        case 'active':
+          return 'active';
+        case 'trialing':
+          return 'trialing';
+        case 'past_due':
+          return 'past_due';
+        case 'canceled':
+          return 'canceled';
+        case 'unpaid':
+          return 'unpaid';
+        case 'incomplete':
+        case 'incomplete_expired':
+        case 'paused':
+        default:
+          return 'free';
+      }
+    };
 
-    const userTeam = await db
-      .select({
-        teamId: teamMembers.teamId,
-      })
-      .from(teamMembers)
-      .where(eq(teamMembers.userId, user[0].id))
-      .limit(1);
+    // Update user subscription in user_preferences table
+    await updateUserSubscription(userId, {
+      stripe_customer_id: customerId,
+      stripe_subscription_id: subscriptionId,
+      stripe_product_id: productId,
+      plan_name: 'Plus',
+      subscription_status: mapStripeStatus(subscription.status),
+      billing_interval: billingInterval,
+      subscription_end_date: (subscription as any).current_period_end 
+        ? new Date((subscription as any).current_period_end * 1000).toISOString()
+        : null
+    });
 
-    if (userTeam.length === 0) {
-      throw new Error('User is not associated with any team.');
-    }
-
-    await db
-      .update(teams)
-      .set({
-        stripeCustomerId: customerId,
-        stripeSubscriptionId: subscriptionId,
-        stripeProductId: productId,
-        planName: (plan.product as Stripe.Product).name,
-        subscriptionStatus: subscription.status,
-        updatedAt: new Date(),
-      })
-      .where(eq(teams.id, userTeam[0].teamId));
-
-    await setSession(user[0]);
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    return NextResponse.redirect(new URL('/app/goals', request.url));
   } catch (error) {
     logError('Error handling successful checkout', error, { sessionId });
-    return NextResponse.redirect(new URL('/error', request.url));
+    return NextResponse.redirect(new URL('/pricing', request.url));
   }
 }

@@ -1,12 +1,15 @@
 import Link from 'next/link';
-import { PublicHeader } from '@/components/public-header';
 
 export default function PrivacyPage() {
   return (
-    <>
-      <PublicHeader />
-      <main className="min-h-screen py-16 bg-white">
+    <main className="min-h-screen py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <Link href="/" className="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+            ← Back to Home
+          </Link>
+        </div>
+
         <h1 className="text-4xl font-bold text-slate-900 mb-4">Privacy Policy</h1>
         <p className="text-slate-600 mb-8">Last updated: {new Date().toLocaleDateString()}</p>
 
@@ -174,7 +177,6 @@ export default function PrivacyPage() {
         </div>
       </div>
     </main>
-    </>
   );
 }
 
