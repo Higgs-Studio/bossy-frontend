@@ -36,6 +36,7 @@ export function BossSelector({ currentBossType, currentBossLanguage, hasActiveSu
   const boss = {
     ...bossBase,
     nickname: t.boss?.personalities?.[selectedBoss]?.nickname || bossBase.nickname,
+    subtitle: t.boss?.personalities?.[selectedBoss]?.subtitle || bossBase.subtitle,
     description: t.boss?.personalities?.[selectedBoss]?.description || bossBase.description,
     rules: t.boss?.personalities?.[selectedBoss]?.rules || bossBase.rules,
   };
@@ -74,7 +75,7 @@ export function BossSelector({ currentBossType, currentBossLanguage, hasActiveSu
             <div className="flex-1">
               <CardTitle className="text-2xl">{boss.name}</CardTitle>
               <p className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">"{boss.nickname}"</p>
-              <p className="text-sm text-muted-foreground mt-1">{t.boss?.aiPartner || 'Your AI Accountability Partner'}</p>
+              <p className="text-sm text-muted-foreground mt-1">{boss.subtitle}</p>
             </div>
           </div>
         </CardHeader>

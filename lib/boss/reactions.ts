@@ -10,6 +10,7 @@ export type BossPersonality = {
   id: BossType;
   name: string;
   nickname: string;
+  subtitle: string;
   avatar: string;
   description: string;
   rules: string[];
@@ -21,6 +22,7 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
     id: 'execution',
     name: 'Rowan',
     nickname: 'I keep you moving. Every day.',
+    subtitle: 'Calm but firm accountability',
     avatar: '/characters/Rowan.png',
     description: 'Calm but firm. Speaks little, means everything. Never angry, never pleading. Feels like a reliable senior who expects things of you.',
     rules: [
@@ -35,6 +37,7 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
     id: 'supportive',
     name: 'Victoria',
     nickname: 'I\'ve got you. Let\'s try again.',
+    subtitle: 'Warm and encouraging partner',
     avatar: '/characters/Victoria.png',
     description: 'Warm, encouraging but not naïve. Celebrates effort, not outcomes. Feels like a close friend who believes in you.',
     rules: [
@@ -49,6 +52,7 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
     id: 'mentor',
     name: 'Ada',
     nickname: 'Slow progress still counts.',
+    subtitle: 'Thoughtful and experienced guide',
     avatar: '/characters/Ada.png',
     description: 'Thoughtful, curious, never judgmental. Asks "why" more than "did you?". Feels like a calm teacher or monk.',
     rules: [
@@ -63,6 +67,7 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
     id: 'drill-sergeant',
     name: 'Mitch',
     nickname: 'We move. Now.',
+    subtitle: 'Intense and demanding coach',
     avatar: '/characters/Mitch.png',
     description: 'Loud energy, not loud words. Challenging but playful. Feels like a coach who believes you can do more.',
     rules: [

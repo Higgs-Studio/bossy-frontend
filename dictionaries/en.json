@@ -236,6 +236,7 @@
     "personalities": {
       "execution": {
         "nickname": "I keep you moving. Every day.",
+        "subtitle": "Calm but firm accountability",
         "description": "Calm but firm. Speaks little, means everything. Never angry, never pleading. Feels like a reliable senior who expects things of you.",
         "rules": [
           "Silence creates pressure—I don't need to shout.",
@@ -246,6 +247,7 @@
       },
       "supportive": {
         "nickname": "I've got you. Let's try again.",
+        "subtitle": "Warm and encouraging partner",
         "description": "Warm, encouraging but not naïve. Celebrates effort, not outcomes. Feels like a close friend who believes in you.",
         "rules": [
           "Progress over perfection—every step counts.",
@@ -256,6 +258,7 @@
       },
       "mentor": {
         "nickname": "You're capable. Let me show you how.",
+        "subtitle": "Thoughtful and experienced guide",
         "description": "Thoughtful and experienced. Challenges your thinking, not your worth. Feels like a coach who's been there before.",
         "rules": [
           "Smart doesn't mean perfect. It means learning fast.",
@@ -266,6 +269,7 @@
       },
       "drill-sergeant": {
         "nickname": "No excuses. Get it done.",
+        "subtitle": "Intense and demanding coach",
         "description": "Intense and demanding. Zero tolerance for excuses. Pushes you hard because mediocrity isn't an option.",
         "rules": [
           "Discomfort is temporary. Regret lasts forever.",
