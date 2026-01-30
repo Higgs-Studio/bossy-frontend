@@ -1,12 +1,11 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { PhoneInput } from '@/components/ui/phone-input';
-import { User, Save, Loader2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { User, Lock } from 'lucide-react';
 import { useTranslation } from '@/contexts/translation-context';
-import { useState, useEffect } from 'react';
-import { updatePhoneNumber } from './actions';
+import { parsePhoneNumber } from 'libphonenumber-js';
 
 interface PersonalInfoProps {
   initialPhone?: string | null;
@@ -14,49 +13,27 @@ interface PersonalInfoProps {
 
 export function PersonalInfo({ initialPhone }: PersonalInfoProps) {
   const { t } = useTranslation();
-  const [phone, setPhone] = useState(initialPhone || '');
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [hasChanges, setHasChanges] = useState(false);
-
-  useEffect(() => {
-    setHasChanges(phone !== (initialPhone || ''));
-  }, [phone, initialPhone]);
-
-  const handleSave = async () => {
-    setIsSaving(true);
-    setSaveMessage(null);
-
+  
+  // Format phone number for display
+  const formatPhoneNumber = (phone: string | null | undefined) => {
+    if (!phone) return t.profile?.notSet || 'Not set';
+    
     try {
-      const result = await updatePhoneNumber(phone || null);
+      // Add '+' if not present
+      const phoneWithPlus = phone.startsWith('+') ? phone : `+${phone}`;
+      const parsed = parsePhoneNumber(phoneWithPlus);
       
-      if (result.success) {
-        setSaveMessage({
-          type: 'success',
-          text: t.profile?.phoneSaved || 'Phone number saved successfully',
-        });
-        setHasChanges(false);
-        
-        // Clear success message after 3 seconds
-        setTimeout(() => setSaveMessage(null), 3000);
-      } else {
-        setSaveMessage({
-          type: 'error',
-          text: result.error || (t.profile?.phoneSaveError || 'Failed to save phone number'),
-        });
+      if (parsed) {
+        // Format as international format
+        return parsed.formatInternational();
       }
-    } catch (error) {
-      setSaveMessage({
-        type: 'error',
-        text: t.profile?.phoneSaveError || 'Failed to save phone number',
-      });
-    } finally {
-      setIsSaving(false);
+    } catch (e) {
+      // If parsing fails, just display with '+'
+      return phone.startsWith('+') ? phone : `+${phone}`;
     }
+    
+    return phone.startsWith('+') ? phone : `+${phone}`;
   };
-
-  // Phone validation is handled by PhoneInput component
-  const isPhoneValid = true; // Always true as PhoneInput handles validation
 
   return (
     <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
@@ -68,46 +45,26 @@ export function PersonalInfo({ initialPhone }: PersonalInfoProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <PhoneInput
-            value={phone}
-            onChange={setPhone}
-            label={t.profile?.phoneNumber || 'Mobile Phone'}
-            placeholder="9542 7840"
-          />
-
-          {hasChanges && (
-            <div className="flex items-center gap-2">
-              <Button
-                onClick={handleSave}
-                disabled={isSaving || !isPhoneValid}
-                className="w-full sm:w-auto"
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t.profile?.saving || 'Saving...'}
-                  </>
-                ) : (
-                  <>
-                    <Save className="mr-2 h-4 w-4" />
-                    {t.profile?.saveChanges || 'Save Changes'}
-                  </>
-                )}
-              </Button>
+          <div className="space-y-2">
+            <Label htmlFor="phone" className="text-sm font-medium text-muted-foreground">
+              {t.profile?.phoneNumber || 'Mobile Phone'}
+            </Label>
+            <div className="relative">
+              <Input
+                id="phone"
+                type="text"
+                value={formatPhoneNumber(initialPhone)}
+                readOnly
+                disabled
+                className="bg-muted/50 cursor-not-allowed pr-10"
+              />
+              <Lock className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             </div>
-          )}
-
-          {saveMessage && (
-            <div
-              className={`p-3 rounded-lg text-sm ${
-                saveMessage.type === 'success'
-                  ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
-                  : 'bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/20'
-              }`}
-            >
-              {saveMessage.text}
-            </div>
-          )}
+            <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+              <Lock className="h-3 w-3" />
+              {t.profile?.phoneReadOnly || 'Phone number cannot be changed for security reasons'}
+            </p>
+          </div>
         </div>
       </CardContent>
     </Card>

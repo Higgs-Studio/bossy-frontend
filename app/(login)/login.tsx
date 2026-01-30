@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useActionState } from 'react';
+import { useActionState, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { CircleIcon, Loader2 } from 'lucide-react';
-import { signIn, signUp } from './actions';
+import { sendOtp, verifyOtp } from './actions';
 import { ActionState } from '@/lib/auth/middleware';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { ThemeSwitcher } from '@/components/theme-switcher';
@@ -20,10 +21,53 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const redirect = searchParams.get('redirect');
   const priceId = searchParams.get('priceId');
   const inviteId = searchParams.get('inviteId');
+  const [otpSent, setOtpSent] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [isResending, setIsResending] = useState(false);
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
-    mode === 'signin' ? signIn : signUp,
+    otpSent ? verifyOtp : sendOtp,
     { error: '' }
   );
+
+  // Watch for otpSent in state
+  useEffect(() => {
+    if (state?.otpSent && !otpSent) {
+      setOtpSent(true);
+      setResendCooldown(60); // 60 second cooldown
+    }
+  }, [state, otpSent]);
+
+  // Countdown timer for resend button
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      const timer = setTimeout(() => {
+        setResendCooldown(resendCooldown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendCooldown]);
+
+  // Handle resend OTP
+  const handleResendOtp = async () => {
+    if (resendCooldown > 0 || isResending) return;
+    
+    setIsResending(true);
+    try {
+      const formData = new FormData();
+      formData.append('phone', `+${phoneNumber}`);
+      
+      const result = await sendOtp({} as ActionState, formData);
+      
+      if (result?.success) {
+        setResendCooldown(60); // Reset cooldown
+      }
+    } catch (error) {
+      console.error('Failed to resend OTP:', error);
+    } finally {
+      setIsResending(false);
+    }
+  };
 
   return (
     <div className="min-h-[100dvh] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-50 relative overflow-hidden">
@@ -50,8 +94,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
         </h2>
         <p className="text-center text-sm sm:text-base text-slate-600 mb-8">
           {mode === 'signin'
-            ? (t.auth?.signIn?.subtitle || 'Your AI accountability boss is waiting')
-            : (t.auth?.signUp?.subtitle || 'Start your AI-powered accountability journey')}
+            ? (t.auth?.signIn?.subtitle || 'Sign in with your phone number')
+            : (t.auth?.signUp?.subtitle || 'Get started with your phone number')}
         </p>
       </div>
 
@@ -61,52 +105,85 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             <input type="hidden" name="redirect" value={redirect || ''} />
             <input type="hidden" name="priceId" value={priceId || ''} />
             <input type="hidden" name="inviteId" value={inviteId || ''} />
-            <div>
-              <Label
-                htmlFor="email"
-                className="block text-sm font-medium text-slate-700"
-              >
-                {t.auth?.email || 'Email'}
-              </Label>
-              <div className="mt-1">
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  defaultValue={state.email}
-                  required
-                  maxLength={50}
-                  placeholder={t.auth?.enterEmail || 'Enter your email'}
-                  className="border-slate-300"
+            
+            {!otpSent ? (
+              <div>
+                <PhoneInput
+                  value={phoneNumber}
+                  onChange={(value) => setPhoneNumber(value)}
+                  label={t.auth?.phone || 'Phone Number'}
+                  placeholder="1234 5678"
+                  error={state?.error && state.error.includes('phone') ? state.error : undefined}
                 />
+                <input type="hidden" name="phone" value={phoneNumber ? `+${phoneNumber}` : ''} />
               </div>
-            </div>
+            ) : (
+              <>
+                <div>
+                  <Label
+                    htmlFor="phone-display"
+                    className="block text-sm font-medium text-slate-700"
+                  >
+                    {t.auth?.phone || 'Phone Number'}
+                  </Label>
+                  <div className="mt-1">
+                    <Input
+                      id="phone-display"
+                      type="tel"
+                      value={state.phone || `+${phoneNumber}`}
+                      readOnly
+                      className="border-slate-300 bg-slate-50"
+                    />
+                    <input type="hidden" name="phone" value={state.phone || `+${phoneNumber}`} />
+                  </div>
+                </div>
 
-            <div>
-              <Label
-                htmlFor="password"
-                className="block text-sm font-medium text-slate-700"
-              >
-                {t.auth?.password || 'Password'}
-              </Label>
-              <div className="mt-1">
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete={
-                    mode === 'signin' ? 'current-password' : 'new-password'
-                  }
-                  defaultValue={state.password}
-                  required
-                  minLength={8}
-                  maxLength={100}
-                  placeholder={t.auth?.enterPassword || 'Enter your password'}
-                  className="border-slate-300"
-                />
-              </div>
-            </div>
+                <div>
+                  <Label
+                    htmlFor="otp"
+                    className="block text-sm font-medium text-slate-700"
+                  >
+                    {t.auth?.otp || 'Verification Code'}
+                  </Label>
+                  <div className="mt-1">
+                    <Input
+                      id="otp"
+                      name="otp"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      autoComplete="one-time-code"
+                      defaultValue={state.otp}
+                      required
+                      maxLength={6}
+                      placeholder={t.auth?.enterOtp || 'Enter 6-digit code'}
+                      className="border-slate-300"
+                    />
+                  </div>
+                  <div className="mt-2 flex items-center justify-between">
+                    <p className="text-xs text-slate-500">
+                      {t.auth?.otpHint || 'Check your phone for the verification code'}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleResendOtp}
+                      disabled={resendCooldown > 0 || isResending}
+                      className={`text-xs font-medium ${
+                        resendCooldown > 0 || isResending
+                          ? 'text-slate-400 cursor-not-allowed'
+                          : 'text-indigo-600 hover:text-indigo-700'
+                      }`}
+                    >
+                      {isResending
+                        ? 'Sending...'
+                        : resendCooldown > 0
+                        ? `Resend (${resendCooldown}s)`
+                        : t.auth?.resendCode || 'Resend Code'}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
 
             {state?.error && (
               <div className="text-red-700 text-sm bg-red-50 p-4 rounded-lg border border-red-200 font-medium">
@@ -131,13 +208,27 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                     <Loader2 className="animate-spin mr-2 h-4 w-4" />
                     {t.nav?.loading || 'Loading...'}
                   </>
+                ) : otpSent ? (
+                  t.auth?.verifyCode || 'Verify Code'
                 ) : mode === 'signin' ? (
-                  t.common?.signIn || 'Sign in'
+                  t.auth?.sendCode || 'Send Code'
                 ) : (
-                  t.common?.signUp || 'Sign up'
+                  t.auth?.sendCode || 'Send Code'
                 )}
               </Button>
             </div>
+
+            {otpSent && (
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => setOtpSent(false)}
+                  className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                >
+                  {t.auth?.changePhone || 'Change phone number'}
+                </button>
+              </div>
+            )}
           </form>
         </div>
 

@@ -11,7 +11,7 @@ This is a starter template for building a SaaS application using **Next.js** wit
 - Dashboard pages with CRUD operations on users/teams
 - Basic RBAC with Owner and Member roles
 - Subscription management with Stripe Customer Portal
-- Email/password authentication with JWTs stored to cookies
+- Phone number authentication with OTP verification via Supabase Auth
 - Global middleware to protect logged-in routes
 - Local middleware to protect Server Actions or validate Zod schemas
 - Activity logging system for any user events
@@ -46,19 +46,15 @@ Use the included setup script to create your `.env` file:
 pnpm db:setup
 ```
 
-Run the database migrations and seed the database with a default user and team:
+Run the database migrations:
 
 ```bash
 pnpm db:migrate
-pnpm db:seed
 ```
 
-This will create the following user and team:
+To create a new user, use the `/sign-up` route with your phone number in E.164 format (e.g., +1234567890).
 
-- User: `test@test.com`
-- Password: `admin123`
-
-You can also create new users through the `/sign-up` route.
+**Note**: Phone authentication requires configuring an SMS provider in Supabase. See [PHONE_AUTH_SETUP.md](./PHONE_AUTH_SETUP.md) for detailed setup instructions.
 
 Finally, run the Next.js development server:
 
