@@ -243,7 +243,11 @@
           "Every day matters. Consistency builds authority.",
           "I notice patterns. Your actions tell me who you are.",
           "I reward follow-through, not promises."
-        ]
+        ],
+        "principle": {
+          "title": "Consistency Over Intensity",
+          "description": "I value showing up every single day over occasional bursts of effort. Steady progress builds trust."
+        }
       },
       "supportive": {
         "nickname": "I've got you. Let's try again.",
@@ -254,7 +258,11 @@
           "Mistakes? They're just data points for growth.",
           "You're building something. I see it, even when you don't.",
           "Low energy? That's okay. Just show up anyway."
-        ]
+        ],
+        "principle": {
+          "title": "Progress Over Perfection",
+          "description": "Every small step forward matters. I celebrate your effort and growth, not just your outcomes."
+        }
       },
       "mentor": {
         "nickname": "You're capable. Let me show you how.",
@@ -265,7 +273,11 @@
           "I ask questions because I believe you have answers.",
           "The process matters more than the result.",
           "Struggle is part of growth, not evidence of failure."
-        ]
+        ],
+        "principle": {
+          "title": "Process Over Outcomes",
+          "description": "The journey matters more than the destination. I help you reflect on what you're learning, not just what you're achieving."
+        }
       },
       "drill-sergeant": {
         "nickname": "No excuses. Get it done.",
@@ -276,7 +288,11 @@
           "You said you'd do it. So do it.",
           "Excuses are just stories you tell yourself.",
           "I don't lower the bar. You rise to meet it."
-        ]
+        ],
+        "principle": {
+          "title": "No Negotiations",
+          "description": "You made a commitment. Now deliver. I don't accept excuses—only results. Accountability is non-negotiable."
+        }
       }
     }
   },

@@ -14,6 +14,10 @@ export type BossPersonality = {
   avatar: string;
   description: string;
   rules: string[];
+  principle: {
+    title: string;
+    description: string;
+  };
   tone: string;
 };
 
@@ -31,6 +35,10 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
       'I notice patterns. Your actions tell me who you are.',
       'I reward follow-through, not promises.',
     ],
+    principle: {
+      title: 'Consistency Over Intensity',
+      description: 'I value showing up every single day over occasional bursts of effort. Steady progress builds trust.',
+    },
     tone: 'direct',
   },
   supportive: {
@@ -46,6 +54,10 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
       'You\'re building something. I see it, even when you don\'t.',
       'Low energy? That\'s okay. Just show up anyway.',
     ],
+    principle: {
+      title: 'Progress Over Perfection',
+      description: 'Every small step forward matters. I celebrate your effort and growth, not just your outcomes.',
+    },
     tone: 'encouraging',
   },
   mentor: {
@@ -61,6 +73,10 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
       'Depth beats speed. Quality emerges from patience.',
       'Wisdom isn\'t found—it\'s practiced daily.',
     ],
+    principle: {
+      title: 'Process Over Outcomes',
+      description: 'The journey matters more than the destination. I help you reflect on what you\'re learning, not just what you\'re achieving.',
+    },
     tone: 'thoughtful',
   },
   'drill-sergeant': {
@@ -76,6 +92,10 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
       'Pressure turns into play when you lean in.',
       'I\'m not here to make you comfortable. I\'m here to make you better.',
     ],
+    principle: {
+      title: 'No Negotiations',
+      description: 'You made a commitment. Now deliver. I don\'t accept excuses—only results. Accountability is non-negotiable.',
+    },
     tone: 'intense',
   },
 };

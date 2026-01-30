@@ -39,6 +39,7 @@ export function BossSelector({ currentBossType, currentBossLanguage, hasActiveSu
     subtitle: t.boss?.personalities?.[selectedBoss]?.subtitle || bossBase.subtitle,
     description: t.boss?.personalities?.[selectedBoss]?.description || bossBase.description,
     rules: t.boss?.personalities?.[selectedBoss]?.rules || bossBase.rules,
+    principle: t.boss?.personalities?.[selectedBoss]?.principle || bossBase.principle,
   };
 
   // Update selected boss when currentBossType changes (after server revalidation)
@@ -100,10 +101,10 @@ export function BossSelector({ currentBossType, currentBossLanguage, hasActiveSu
 
           <div className="mt-6 p-5 bg-muted/50 border border-border rounded-lg">
             <p className="text-foreground font-semibold text-base mb-2">
-              {t.boss?.noNegotiations || 'No Negotiations'}
+              {boss.principle?.title}
             </p>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              {t.boss?.noNegotiationsDesc || 'This boss does not negotiate. Commitments are final. Accountability is non-negotiable.'}
+              {boss.principle?.description}
             </p>
           </div>
         </CardContent>
