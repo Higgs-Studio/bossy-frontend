@@ -49,7 +49,7 @@ export function BossSelector({ currentBossType, currentBossLanguage, hasActiveSu
   const hasChanges = selectedBoss !== currentBossType || selectedLanguage !== currentBossLanguage;
   
   // Check if user selected a paid boss without subscription
-  const isFreeBoss = (bossType: BossType) => bossType === 'supportive'; // Only Pip is free
+  const isFreeBoss = (bossType: BossType) => bossType === 'supportive'; // Only Victoria is free
   const selectedPaidBossWithoutSubscription = !hasActiveSubscription && !isFreeBoss(selectedBoss) && selectedBoss !== currentBossType;
   
   const handleUpgradeClick = () => {

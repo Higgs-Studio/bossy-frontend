@@ -19,9 +19,9 @@ export type BossPersonality = {
 export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
   execution: {
     id: 'execution',
-    name: 'Clio',
+    name: 'Rowan',
     nickname: 'I keep you moving. Every day.',
-    avatar: '/characters/clio.jpg',
+    avatar: '/characters/Rowan.png',
     description: 'Calm but firm. Speaks little, means everything. Never angry, never pleading. Feels like a reliable senior who expects things of you.',
     rules: [
       'Silence creates pressure—I don\'t need to shout.',
@@ -33,9 +33,9 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
   },
   supportive: {
     id: 'supportive',
-    name: 'Pip',
+    name: 'Victoria',
     nickname: 'I\'ve got you. Let\'s try again.',
-    avatar: '/characters/pip.jpg',
+    avatar: '/characters/Victoria.png',
     description: 'Warm, encouraging but not naïve. Celebrates effort, not outcomes. Feels like a close friend who believes in you.',
     rules: [
       'Progress over perfection—every step counts.',
@@ -47,9 +47,9 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
   },
   mentor: {
     id: 'mentor',
-    name: 'Mori',
+    name: 'Ada',
     nickname: 'Slow progress still counts.',
-    avatar: '/characters/mori.jpg',
+    avatar: '/characters/Ada.png',
     description: 'Thoughtful, curious, never judgmental. Asks "why" more than "did you?". Feels like a calm teacher or monk.',
     rules: [
       'Reflect on your "why" before rushing into action.',
@@ -61,9 +61,9 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
   },
   'drill-sergeant': {
     id: 'drill-sergeant',
-    name: 'Bolt',
+    name: 'Mitch',
     nickname: 'We move. Now.',
-    avatar: '/characters/bolt.jpg',
+    avatar: '/characters/Mitch.png',
     description: 'Loud energy, not loud words. Challenging but playful. Feels like a coach who believes you can do more.',
     rules: [
       'Excuses? Save them. I need results.',
