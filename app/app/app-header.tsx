@@ -28,11 +28,11 @@ export function AppHeader({ userMenu }: AppHeaderProps) {
           {/* Logo - Left */}
           <Link href="/app/dashboard" className="flex items-center group">
             <Image 
-              src="/logo.png" 
+              src="/logo.svg" 
               alt="Bossy" 
-              width={160} 
-              height={60}
-              className="h-12 w-auto transition-opacity group-hover:opacity-80"
+              width={375} 
+              height={140}
+              className="h-[90px] w-auto transition-all duration-300 group-hover:brightness-0 group-hover:saturate-100 group-hover:[filter:brightness(0)_saturate(100%)_invert(34%)_sepia(85%)_saturate(3038%)_hue-rotate(250deg)_brightness(93%)_contrast(94%)]"
               priority
             />
           </Link>

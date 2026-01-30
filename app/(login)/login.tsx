@@ -35,11 +35,11 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center mb-8">
           <Image 
-            src="/logo.png" 
+            src="/logo.svg" 
             alt="Bossy" 
-            width={200} 
-            height={75}
-            className="h-16 w-auto"
+            width={500} 
+            height={187}
+            className="h-[120px] w-auto transition-all duration-300 hover:brightness-0 hover:saturate-100 hover:[filter:brightness(0)_saturate(100%)_invert(34%)_sepia(85%)_saturate(3038%)_hue-rotate(250deg)_brightness(93%)_contrast(94%)]"
             priority
           />
         </div>
