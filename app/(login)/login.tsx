@@ -59,7 +59,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
       
       const result = await sendOtp({} as ActionState, formData);
       
-      if (result?.success) {
+      if (result && 'success' in result && result.success) {
         setResendCooldown(60); // Reset cooldown
       }
     } catch (error) {
