@@ -34,20 +34,12 @@ export async function getProfileData() {
 }
 
 export async function updatePhoneNumber(phone: string | null) {
-  const user = await getUser();
-  if (!user) {
-    throw new Error('Not authenticated');
-  }
-
-  try {
-    // Remove the "+" sign before saving to Supabase
-    const cleanedPhone = phone ? phone.replace(/^\+/, '') : null;
-    await setUserPhone(user.id, cleanedPhone);
-    return { success: true };
-  } catch (error) {
-    console.error('Error updating phone number:', error);
-    return { success: false, error: 'Failed to update phone number' };
-  }
+  // Phone number updates are disabled for security reasons
+  // Phone numbers can only be set during account creation
+  return { 
+    success: false, 
+    error: 'Phone number cannot be changed for security reasons' 
+  };
 }
 
 export async function getUserPhoneAction(): Promise<string | null> {

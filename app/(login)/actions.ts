@@ -5,6 +5,106 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { validatedAction } from '@/lib/auth/middleware';
 
+// Phone number validation schema
+const sendOtpSchema = z.object({
+  phone: z.string().regex(/^\+[1-9]\d{1,14}$/, 'Phone number must include country code (e.g., +1234567890)')
+});
+
+export const sendOtp = validatedAction(sendOtpSchema, async (data, formData) => {
+  const { phone } = data;
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signInWithOtp({
+    phone,
+  });
+
+  if (error) {
+    return {
+      error: error.message || 'Failed to send verification code. Please try again.',
+      phone
+    };
+  }
+
+  return {
+    success: 'Verification code sent to your phone!',
+    otpSent: true,
+    phone
+  };
+});
+
+// OTP verification schema
+const verifyOtpSchema = z.object({
+  phone: z.string().regex(/^\+[1-9]\d{1,14}$/),
+  otp: z.string().length(6, 'Verification code must be 6 digits')
+});
+
+export const verifyOtp = validatedAction(verifyOtpSchema, async (data, formData) => {
+  const { phone, otp } = data;
+  const supabase = await createClient();
+
+  const { data: verifyData, error } = await supabase.auth.verifyOtp({
+    phone,
+    token: otp,
+    type: 'sms'
+  });
+
+  if (error) {
+    return {
+      error: error.message || 'Invalid verification code. Please try again.',
+      phone,
+      otp
+    };
+  }
+
+  if (!verifyData.session || !verifyData.user) {
+    return {
+      error: 'Failed to create session. Please try again.',
+      phone,
+      otp
+    };
+  }
+
+  // Successfully authenticated - create user_preferences record if it doesn't exist
+  const userId = verifyData.user.id;
+  
+  // Remove '+' sign from phone number before saving
+  const phoneWithoutPlus = phone.replace(/^\+/, '');
+  
+  // Check if user preferences already exist
+  const { data: existingPrefs } = await supabase
+    .from('user_preferences')
+    .select('id')
+    .eq('user_id', userId)
+    .single();
+
+  // If no preferences exist, create them
+  if (!existingPrefs) {
+    const { error: prefsError } = await supabase
+      .from('user_preferences')
+      .insert({
+        user_id: userId,
+        phone_no: phoneWithoutPlus, // Store without '+' sign
+        boss_type: 'execution', // Default boss type
+        boss_language: 'en', // Default language
+      });
+
+    if (prefsError) {
+      console.error('Failed to create user preferences:', prefsError);
+      // Don't fail the authentication if preferences creation fails
+      // User can still use the app, preferences can be created later
+    }
+  }
+
+  // Successfully authenticated
+  const redirectTo = formData.get('redirect') as string | null;
+  if (redirectTo === 'checkout') {
+    redirect('/pricing');
+  }
+
+  redirect('/app/goals');
+});
+
+// Keep old email/password functions for backward compatibility or alternative auth
 const signInSchema = z.object({
   email: z.string().email().min(3).max(255),
   password: z.string().min(8).max(100)
@@ -14,7 +114,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
   const { email, password } = data;
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data: signInData, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -25,6 +125,28 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
       email,
       password
     };
+  }
+
+  // Ensure user preferences exist (for users created before this change)
+  if (signInData.user) {
+    const userId = signInData.user.id;
+    
+    const { data: existingPrefs } = await supabase
+      .from('user_preferences')
+      .select('id')
+      .eq('user_id', userId)
+      .single();
+
+    if (!existingPrefs) {
+      await supabase
+        .from('user_preferences')
+        .insert({
+          user_id: userId,
+          email: email,
+          boss_type: 'execution',
+          boss_language: 'en',
+        });
+    }
   }
 
   const redirectTo = formData.get('redirect') as string | null;
@@ -66,6 +188,32 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   // Otherwise, show a message that they need to confirm their email
   if (signUpData.user && signUpData.session) {
     // User is immediately authenticated (no email confirmation required)
+    const userId = signUpData.user.id;
+    
+    // Check if user preferences already exist
+    const { data: existingPrefs } = await supabase
+      .from('user_preferences')
+      .select('id')
+      .eq('user_id', userId)
+      .single();
+
+    // If no preferences exist, create them
+    if (!existingPrefs) {
+      const { error: prefsError } = await supabase
+        .from('user_preferences')
+        .insert({
+          user_id: userId,
+          email: email,
+          boss_type: 'execution', // Default boss type
+          boss_language: 'en', // Default language
+        });
+
+      if (prefsError) {
+        console.error('Failed to create user preferences:', prefsError);
+        // Don't fail the authentication if preferences creation fails
+      }
+    }
+
     const redirectTo = formData.get('redirect') as string | null;
     if (redirectTo === 'checkout') {
       redirect('/pricing');
