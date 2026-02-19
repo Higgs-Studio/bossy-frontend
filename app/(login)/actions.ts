@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { validatedAction } from '@/lib/auth/middleware';
+import { logError } from '@/lib/utils/logger';
 
 // Phone number validation schema
 const sendOtpSchema = z.object({
@@ -89,13 +90,10 @@ export const verifyOtp = validatedAction(verifyOtpSchema, async (data, formData)
       });
 
     if (prefsError) {
-      console.error('Failed to create user preferences:', prefsError);
-      // Don't fail the authentication if preferences creation fails
-      // User can still use the app, preferences can be created later
+      logError('Failed to create user preferences', prefsError);
     }
   }
 
-  // Successfully authenticated
   const redirectTo = formData.get('redirect') as string | null;
   if (redirectTo === 'checkout') {
     redirect('/pricing');
@@ -209,8 +207,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
         });
 
       if (prefsError) {
-        console.error('Failed to create user preferences:', prefsError);
-        // Don't fail the authentication if preferences creation fails
+        logError('Failed to create user preferences', prefsError);
       }
     }
 

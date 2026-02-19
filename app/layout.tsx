@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { TranslationProvider } from '@/contexts/translation-context';
 import { ThemeProvider } from '@/components/theme-provider';
+import { ToastProvider } from '@/components/ui/toast';
 import enTranslations from '@/dictionaries/en.json';
 
 export const metadata: Metadata = {
@@ -40,7 +41,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TranslationProvider initialTranslations={enTranslations}>
-            {children}
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </TranslationProvider>
         </ThemeProvider>
       </body>

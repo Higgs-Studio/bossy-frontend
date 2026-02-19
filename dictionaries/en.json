@@ -6,7 +6,17 @@
     "getStarted": "Get Started",
     "features": "Features",
     "howItWorks": "How It Works",
-    "pricing": "Pricing"
+    "pricing": "Pricing",
+    "cancel": "Cancel",
+    "back": "Back",
+    "done": "Done",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "error": "Something went wrong",
+    "tryAgain": "Try again",
+    "allCaughtUp": "All caught up!",
+    "upgradePlus": "Upgrade to Plus"
   },
   "hero": {
     "badge": "AI-Powered Accountability Boss",
@@ -65,7 +75,15 @@
     "newToPlatform": "New to Bossy?",
     "alreadyHaveAccount": "Already have an account?",
     "createAccount": "Create an account",
-    "signInExisting": "Sign in to existing account"
+    "signInExisting": "Sign in to existing account",
+    "phone": "Phone Number",
+    "otp": "Verification Code",
+    "enterOtp": "Enter verification code",
+    "otpHint": "Enter the 6-digit code sent to your phone",
+    "resendCode": "Resend Code",
+    "verifyCode": "Verify Code",
+    "sendCode": "Send Code",
+    "changePhone": "Change Phone Number"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -74,6 +92,15 @@
       "description": "Create a goal to get started with daily accountability.",
       "cta": "Create Goal"
     },
+    "performanceReport": "Performance Report to",
+    "bossFeedback": "Boss Feedback",
+    "overdueTasks": "Overdue Tasks",
+    "overdueTasksDesc": "Tasks from previous days that are not yet completed",
+    "todaysTasks": "Today's Tasks",
+    "todaysTasksDesc": "Tasks scheduled for today that are pending completion",
+    "outstandingTasks": "Outstanding Tasks for Today",
+    "outstanding": "outstanding",
+    "noOutstandingTasks": "No overdue or pending tasks",
     "activeGoal": "Active Goal",
     "inProgress": "In Progress",
     "todaysTask": "Today's Task",
@@ -233,6 +260,116 @@
     "saveChanges": "Save Changes",
     "changingBoss": "Changing Boss...",
     "bossChanged": "Boss changed successfully!",
+    "moods": {
+      "execution": {
+        "thrilled": [
+          "Excellent execution. This is the standard. Keep it exactly like this.",
+          "Your consistency speaks volumes. This is what commitment looks like.",
+          "Outstanding. You're showing everyone what's possible."
+        ],
+        "happy": [
+          "Good. You're staying on track. Don't let up.",
+          "Solid performance. Now maintain this momentum.",
+          "You're doing what you said you'd do. That's what matters."
+        ],
+        "neutral": [
+          "I'm watching. Show me you're serious about this.",
+          "You can do better. I know you can.",
+          "Time to prove what you're capable of."
+        ],
+        "concerned": [
+          "This isn't the performance I expected from you.",
+          "You're falling behind. We need to talk about this.",
+          "Your numbers are slipping. What's going on?"
+        ],
+        "angry": [
+          "This is completely unacceptable. Explain yourself.",
+          "I trusted you with this goal. Don't waste that trust.",
+          "Either fix this now, or we're done here."
+        ]
+      },
+      "supportive": {
+        "thrilled": [
+          "I KNEW you could do it! You're absolutely amazing!",
+          "Look at you GO! I'm so incredibly proud of you!",
+          "You're doing phenomenally! Keep this amazing energy!"
+        ],
+        "happy": [
+          "You're doing great! I'm really proud of your effort!",
+          "Nice work! You're building something wonderful here.",
+          "You're showing up every day. That's what counts!"
+        ],
+        "neutral": [
+          "I believe in you. Let's get back on track together.",
+          "You've got this. Just need to refocus a bit.",
+          "No worries, we all have off days. Let's bounce back!"
+        ],
+        "concerned": [
+          "Hey, I'm a bit worried about you. Everything okay?",
+          "Let's work through this together. What's holding you back?",
+          "I know you're trying. Let's figure out what's not working."
+        ],
+        "angry": [
+          "I'm really concerned now. We need to talk about what's happening.",
+          "This isn't like you. Please tell me what's going on.",
+          "I care about you, but this pattern needs to change. Soon."
+        ]
+      },
+      "mentor": {
+        "thrilled": [
+          "Remarkable discipline. You understand the practice now.",
+          "This level of consistency reveals mastery. Well done.",
+          "You've internalized the lesson. This is true progress."
+        ],
+        "happy": [
+          "Good practice. Reflect on what made today successful.",
+          "Your effort is evident. Keep observing your patterns.",
+          "Steady progress. This is how wisdom accumulates."
+        ],
+        "neutral": [
+          "Pause and reflect. What is your practice showing you?",
+          "The path requires presence. Are you truly here?",
+          "Notice the resistance. What is it teaching you?"
+        ],
+        "concerned": [
+          "Your pattern reveals something. Time to reflect deeply.",
+          "Setbacks are teachers. What is this one telling you?",
+          "The struggle points to something important. Investigate it."
+        ],
+        "angry": [
+          "This pattern demands serious reflection. Why this resistance?",
+          "You're avoiding the real work. Face it honestly.",
+          "Is this goal aligned with your truth? Question deeply."
+        ]
+      },
+      "drill-sergeant": {
+        "thrilled": [
+          "HELL YEAH! THAT'S WHAT I'M TALKING ABOUT!",
+          "YOU'RE A MACHINE! KEEP DESTROYING THOSE GOALS!",
+          "NOW THAT'S EXECUTION! THIS IS YOUR STANDARD!"
+        ],
+        "happy": [
+          "Good work! But don't get comfortable. NEXT!",
+          "Decent! Now do it again tomorrow. NO EXCUSES!",
+          "You showed up. That's expected. Keep going!"
+        ],
+        "neutral": [
+          "Come on! I know you've got MORE in you! SHOW ME!",
+          "Is this REALLY your best? I don't think so. DIG DEEPER!",
+          "Time to turn it up! NO MORE COASTING!"
+        ],
+        "concerned": [
+          "What happened to you?! Where's that FIRE?!",
+          "This is NOT acceptable! Get it together RIGHT NOW!",
+          "You're SLIPPING! Time to WAKE UP!"
+        ],
+        "angry": [
+          "ARE YOU KIDDING ME?! THIS IS PATHETIC!",
+          "UNACCEPTABLE! You're better than this! PROVE IT!",
+          "ENOUGH! Either COMMIT or QUIT! Which is it?!"
+        ]
+      }
+    },
     "personalities": {
       "execution": {
         "nickname": "I keep you moving. Every day.",
@@ -303,7 +440,8 @@
     "saveChanges": "Save Changes",
     "saving": "Saving...",
     "phoneSaved": "Phone number saved successfully",
-    "phoneSaveError": "Failed to save phone number"
+    "phoneSaveError": "Failed to save phone number",
+    "phoneReadOnly": "Phone number cannot be changed"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -312,7 +450,8 @@
     "profile": "Profile",
     "signOut": "Sign out",
     "createGoal": "Create Goal",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "back": "Back"
   },
   "editGoal": {
     "title": "Edit Goal",
@@ -343,7 +482,15 @@
     "taskPlaceholder": "What do you need to do?",
     "addingTask": "Adding Task...",
     "noTasks": "No tasks yet. Add your first task!",
-    "save": "Save"
+    "save": "Save",
+    "saving": "Saving...",
+    "pickDate": "Pick a date",
+    "statusLabel": "Status",
+    "statusOptions": {
+      "todo": "To Do",
+      "in_progress": "In Progress",
+      "done": "Done"
+    }
   },
   "calendar": {
     "taskCalendar": "Task Calendar",

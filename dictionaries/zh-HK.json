@@ -6,7 +6,17 @@
         "getStarted": "即刻開始",
         "features": "功能特色",
         "howItWorks": "點樣運作",
-        "pricing": "收費計劃"
+        "pricing": "收費計劃",
+        "cancel": "取消",
+        "back": "返回",
+        "done": "完成",
+        "save": "儲存",
+        "delete": "刪除",
+        "edit": "編輯",
+        "error": "發生錯誤",
+        "tryAgain": "重試",
+        "allCaughtUp": "全部完成！",
+        "upgradePlus": "升級到Plus"
     },
     "hero": {
         "badge": "AI驅動嘅問責老細",
@@ -74,6 +84,15 @@
             "description": "建立目標以開始每日問責。",
             "cta": "建立目標"
         },
+        "performanceReport": "績效報告畀",
+        "bossFeedback": "老細回饋",
+        "overdueTasks": "逾期任務",
+        "overdueTasksDesc": "過去幾日未完成嘅任務",
+        "todaysTasks": "今日任務",
+        "todaysTasksDesc": "今日排程嘅待完成任務",
+        "outstandingTasks": "今日未完成任務",
+        "outstanding": "待處理",
+        "noOutstandingTasks": "冇逾期或待處理嘅任務",
         "activeGoal": "進行中嘅目標",
         "inProgress": "進行中",
         "todaysTask": "今日任務",
@@ -312,7 +331,8 @@
         "profile": "個人資料",
         "signOut": "登出",
         "createGoal": "建立目標",
-        "loading": "載入中..."
+        "loading": "載入中...",
+        "back": "返回"
     },
     "editGoal": {
         "title": "編輯目標",

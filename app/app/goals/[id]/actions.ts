@@ -6,6 +6,7 @@ import { getUser } from '@/lib/supabase/get-session';
 import { updateGoal, updateTask, deleteTask, getGoalById, getTasksForGoal } from '@/lib/supabase/queries';
 import { logError, getErrorMessage } from '@/lib/utils/logger';
 import { createClient } from '@/lib/supabase/server';
+import type { ActionState } from '@/lib/auth/middleware';
 
 export async function getGoalWithTasks(goalId: string) {
   const user = await getUser();
@@ -94,9 +95,9 @@ export async function updateGoalIntensityAction(
 }
 
 export async function createTaskAction(
-  prevState: any,
+  prevState: ActionState | null,
   formData: FormData
-): Promise<{ error?: string } | null> {
+): Promise<ActionState | null> {
   try {
     const user = await getUser();
     if (!user) {
@@ -145,9 +146,9 @@ export async function createTaskAction(
 }
 
 export async function updateTaskAction(
-  prevState: any,
+  prevState: ActionState | null,
   formData: FormData
-): Promise<{ error?: string } | null> {
+): Promise<ActionState | null> {
   try {
     const user = await getUser();
     if (!user) {
@@ -244,9 +245,9 @@ export async function updateTaskStatusAction(
 }
 
 export async function deleteTaskAction(
-  prevState: any,
+  prevState: ActionState | null,
   formData: FormData
-): Promise<{ error?: string } | null> {
+): Promise<ActionState | null> {
   try {
     const user = await getUser();
     if (!user) {

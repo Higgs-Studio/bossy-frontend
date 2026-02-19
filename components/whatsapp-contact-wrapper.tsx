@@ -1,30 +1,17 @@
 'use client';
 
 import { WhatsAppContact } from './whatsapp-contact';
-import { useEffect, useState } from 'react';
-import { getUserPhoneAction } from '@/app/app/profile/actions';
+import { useWhatsAppContact } from '@/lib/hooks/use-whatsapp-contact';
 
 interface WhatsAppContactWrapperProps {
   closable?: boolean;
   userPhone?: string | null;
 }
 
-export function WhatsAppContactWrapper({ closable = false, userPhone }: WhatsAppContactWrapperProps) {
-  const [phone, setPhone] = useState<string | null>(userPhone || null);
-  const [loading, setLoading] = useState(!userPhone);
+export function WhatsAppContactWrapper({ closable = false, userPhone: initialPhone }: WhatsAppContactWrapperProps) {
+  const { userPhone, loading } = useWhatsAppContact(initialPhone);
 
-  useEffect(() => {
-    if (!userPhone) {
-      getUserPhoneAction().then((result) => {
-        setPhone(result);
-        setLoading(false);
-      });
-    }
-  }, [userPhone]);
+  if (loading) return null;
 
-  if (loading) {
-    return null; // Don't show anything while loading
-  }
-
-  return <WhatsAppContact userPhone={phone} closable={closable} />;
+  return <WhatsAppContact userPhone={userPhone} closable={closable} />;
 }

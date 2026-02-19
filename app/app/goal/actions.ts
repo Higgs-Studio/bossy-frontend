@@ -11,11 +11,12 @@ import {
 } from '@/lib/supabase/queries';
 import { canCreateGoal, getUserPlan, getActiveGoalsCount } from '@/lib/subscriptions/service';
 import { logError, getErrorMessage } from '@/lib/utils/logger';
+import type { ActionState } from '@/lib/auth/middleware';
 
 export async function createGoalAction(
-  prevState: any,
+  prevState: ActionState | null,
   formData: FormData
-): Promise<{ error?: string } | null> {
+): Promise<ActionState | null> {
   const user = await getUser();
   if (!user) {
     redirect('/sign-in');
@@ -83,9 +84,9 @@ export async function createGoalAction(
 }
 
 export async function updateGoalAction(
-  prevState: any,
+  prevState: ActionState | null,
   formData: FormData
-): Promise<{ error?: string } | null> {
+): Promise<ActionState | null> {
   const user = await getUser();
   if (!user) {
     redirect('/sign-in');
@@ -146,9 +147,9 @@ export async function updateGoalAction(
 }
 
 export async function deleteGoalAction(
-  prevState: any,
+  prevState: ActionState | null,
   formData: FormData
-): Promise<{ error?: string } | null> {
+): Promise<ActionState | null> {
   const user = await getUser();
   if (!user) {
     redirect('/sign-in');

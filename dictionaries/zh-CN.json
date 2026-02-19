@@ -6,7 +6,17 @@
     "getStarted": "立即开始",
     "features": "功能特色",
     "howItWorks": "运作方式",
-    "pricing": "价格方案"
+    "pricing": "价格方案",
+    "cancel": "取消",
+    "back": "返回",
+    "done": "完成",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "error": "出现错误",
+    "tryAgain": "重试",
+    "allCaughtUp": "全部完成！",
+    "upgradePlus": "升级到Plus"
   },
   "hero": {
     "badge": "AI驱动的问责老板",
@@ -74,6 +84,15 @@
       "description": "建立目标以开始每日问责。",
       "cta": "建立目标"
     },
+    "performanceReport": "绩效报告给",
+    "bossFeedback": "老板反馈",
+    "overdueTasks": "逾期任务",
+    "overdueTasksDesc": "过去几天尚未完成的任务",
+    "todaysTasks": "今日任务",
+    "todaysTasksDesc": "今天安排的待完成任务",
+    "outstandingTasks": "今日未完成任务",
+    "outstanding": "待处理",
+    "noOutstandingTasks": "没有逾期或待处理的任务",
     "activeGoal": "进行中的目标",
     "inProgress": "进行中",
     "todaysTask": "今日任务",
@@ -312,7 +331,8 @@
     "profile": "个人资料",
     "signOut": "登出",
     "createGoal": "建立目标",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "back": "返回"
   },
   "editGoal": {
     "title": "编辑目标",

@@ -515,7 +515,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor={`edit-status-${task.id}`}>{t.tasks?.status || 'Status'}</Label>
+                          <Label htmlFor={`edit-status-${task.id}`}>{t.tasks?.statusLabel || 'Status'}</Label>
                           <div className="flex gap-2">
                             <button
                               type="button"

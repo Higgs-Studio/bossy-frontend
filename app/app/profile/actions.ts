@@ -3,8 +3,8 @@
 import { redirect } from 'next/navigation';
 import { customerPortalAction } from '@/lib/payments/actions';
 import { getUser } from '@/lib/supabase/get-session';
-import { getTeamForUser } from '@/lib/db/queries';
 import { getUserPreferences, setUserPhone, getUserPhone } from '@/lib/supabase/queries';
+import { logError } from '@/lib/utils/logger';
 import { getUserSubscription } from '@/lib/subscriptions/queries';
 
 export { customerPortalAction as manageSubscriptionAction };
@@ -52,7 +52,7 @@ export async function getUserPhoneAction(): Promise<string | null> {
     const phone = await getUserPhone(user.id);
     return phone;
   } catch (error) {
-    console.error('Error fetching phone number:', error);
+    logError('Error fetching phone number', error);
     return null;
   }
 }
