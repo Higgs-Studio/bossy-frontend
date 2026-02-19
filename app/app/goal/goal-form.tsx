@@ -6,21 +6,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Calendar } from '@/components/ui/calendar';
 import { createGoalAction } from './actions';
-import { Loader2, Target, Calendar as CalendarIcon } from 'lucide-react';
+import { Loader2, Target } from 'lucide-react';
 import { format, addDays } from 'date-fns';
-import { cn } from '@/lib/utils';
 import { useTranslation } from '@/contexts/translation-context';
 
 export function GoalForm() {
   const { t } = useTranslation();
   const [state, formAction, isPending] = useActionState(createGoalAction, null);
   const [intensity, setIntensity] = useState('medium');
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 30));
-  const [showStartCalendar, setShowStartCalendar] = useState(false);
-  const [showEndCalendar, setShowEndCalendar] = useState(false);
+  const [startDate, setStartDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
+  const [endDate, setEndDate] = useState<string>(format(addDays(new Date(), 30), 'yyyy-MM-dd'));
 
   return (
     <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
@@ -34,8 +30,6 @@ export function GoalForm() {
         <form action={formAction} className="space-y-8">
           {/* Hidden inputs to sync form values */}
           <input type="hidden" name="intensity" value={intensity} />
-          <input type="hidden" name="startDate" value={startDate.toISOString().split('T')[0]} />
-          <input type="hidden" name="endDate" value={endDate.toISOString().split('T')[0]} />
           
           <div className="space-y-2">
             <Label htmlFor="title" className="text-base font-semibold">{t.goal.title}</Label>
@@ -59,95 +53,39 @@ export function GoalForm() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
               {/* Start Date Picker */}
               <div className="space-y-2">
-                <Label htmlFor="start-date-btn" className="text-sm font-medium">{t.goal.startDate}</Label>
-                <Button
-                  id="start-date-btn"
-                  type="button"
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !startDate && "text-muted-foreground"
-                  )}
-                  onClick={() => {
-                    setShowStartCalendar(!showStartCalendar);
-                    setShowEndCalendar(false);
+                <Label htmlFor="start-date" className="text-sm font-medium">{t.goal.startDate}</Label>
+                <Input
+                  id="start-date"
+                  name="startDate"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => {
+                    const newStartDate = e.target.value;
+                    setStartDate(newStartDate);
+                    if (endDate < newStartDate) {
+                      const start = new Date(newStartDate);
+                      start.setDate(start.getDate() + 1);
+                      setEndDate(format(start, 'yyyy-MM-dd'));
+                    }
                   }}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {startDate ? format(startDate, 'PPP') : <span>{t.editGoal.pickDate}</span>}
-                </Button>
-                {showStartCalendar && (
-                  <>
-                    <div 
-                      className="fixed inset-0 z-40" 
-                      onClick={() => setShowStartCalendar(false)}
-                    />
-                    <div className="relative z-50">
-                      <div className="absolute top-0 left-0 bg-background border border-border rounded-lg shadow-xl p-3 mt-1">
-                        <Calendar
-                          mode="single"
-                          selected={startDate}
-                          onSelect={(date) => {
-                            if (date) {
-                              setStartDate(date);
-                              // Adjust end date if it's before new start date
-                              if (endDate < date) {
-                                setEndDate(addDays(date, 1));
-                              }
-                            }
-                            setShowStartCalendar(false);
-                          }}
-                          initialFocus
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
+                  className="h-11"
+                  required
+                />
               </div>
 
               {/* End Date Picker */}
               <div className="space-y-2">
-                <Label htmlFor="end-date-btn" className="text-sm font-medium">{t.editGoal.endDate}</Label>
-                <Button
-                  id="end-date-btn"
-                  type="button"
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !endDate && "text-muted-foreground"
-                  )}
-                  onClick={() => {
-                    setShowEndCalendar(!showEndCalendar);
-                    setShowStartCalendar(false);
-                  }}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {endDate ? format(endDate, 'PPP') : <span>{t.editGoal.pickDate}</span>}
-                </Button>
-                {showEndCalendar && (
-                  <>
-                    <div 
-                      className="fixed inset-0 z-40" 
-                      onClick={() => setShowEndCalendar(false)}
-                    />
-                    <div className="relative z-50">
-                      <div className="absolute top-0 left-0 bg-background border border-border rounded-lg shadow-xl p-3 mt-1">
-                        <Calendar
-                          mode="single"
-                          selected={endDate}
-                          onSelect={(date) => {
-                            if (date) {
-                              setEndDate(date);
-                            }
-                            setShowEndCalendar(false);
-                          }}
-                          disabled={(date) => date < startDate}
-                          initialFocus
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
+                <Label htmlFor="end-date" className="text-sm font-medium">{t.editGoal.endDate}</Label>
+                <Input
+                  id="end-date"
+                  name="endDate"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  min={startDate}
+                  className="h-11"
+                  required
+                />
               </div>
             </div>
 
@@ -156,7 +94,7 @@ export function GoalForm() {
               <div className="mt-3 p-3 bg-background rounded-lg border border-border">
                 <p className="text-sm text-muted-foreground">
                   {t.editGoal.duration}: <span className="font-semibold text-foreground">
-                    {Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))} {t.editGoal.days}
+                    {Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24))} {t.editGoal.days}
                   </span>
                 </p>
               </div>

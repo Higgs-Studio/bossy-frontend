@@ -7,10 +7,23 @@ import { validatedAction } from '@/lib/auth/middleware';
 import { logError } from '@/lib/utils/logger';
 
 // Phone number validation schema
-const sendOtpSchema = z.object({
-  // UI will translate these "error codes"
-  phone: z.string().regex(/^\+[1-9]\d{1,14}$/, 'invalidPhone')
-});
+const sendOtpSchema = z
+  .object({
+    // UI will translate these "error codes"
+    phone: z.string().regex(/^\+[1-9]\d{1,14}$/, 'invalidPhone'),
+    mode: z.string().optional(),
+    agreeToDisclaimer: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // When signing up, user must agree to disclaimer
+      if (data.mode === 'signup') {
+        return data.agreeToDisclaimer === 'true';
+      }
+      return true;
+    },
+    { message: 'disclaimerRequired', path: ['agreeToDisclaimer'] }
+  );
 
 export const sendOtp = validatedAction(sendOtpSchema, async (data, formData) => {
   const { phone } = data;

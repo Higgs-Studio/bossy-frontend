@@ -2,9 +2,10 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MessageCircle, AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react';
+import { MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/contexts/translation-context';
 
 interface WhatsAppContactProps {
   userPhone?: string | null;
@@ -18,6 +19,7 @@ const STORAGE_KEY = 'whatsapp-banner-collapsed';
 
 export function WhatsAppContact({ userPhone, closable = false }: WhatsAppContactProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [isCollapsed, setIsCollapsed] = useState(true); // Default to collapsed
 
   // Load collapsed state from localStorage
@@ -50,7 +52,7 @@ export function WhatsAppContact({ userPhone, closable = false }: WhatsAppContact
                 </div>
                 <div>
                   <p className="text-sm font-bold text-green-900 dark:text-green-100">
-                    💬 Don't wait, message your boss via WhatsApp now!
+                    💬 {t.whatsapp.banner.headline}
                   </p>
                 </div>
               </div>
@@ -69,7 +71,7 @@ export function WhatsAppContact({ userPhone, closable = false }: WhatsAppContact
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                   <div className="flex-1">
                     <p className="text-xs text-green-700 dark:text-green-300 mb-2">
-                      Your accountability partner is just a message away
+                      {t.whatsapp.banner.hasPhoneDescription}
                     </p>
                     <p className="text-lg font-bold text-green-900 dark:text-green-100">
                       {WHATSAPP_NUMBER_DISPLAY}
@@ -87,7 +89,7 @@ export function WhatsAppContact({ userPhone, closable = false }: WhatsAppContact
                       className="flex items-center gap-2"
                     >
                       <MessageCircle className="h-4 w-4" />
-                      Chat Now
+                      {t.whatsapp.banner.chatNow}
                     </a>
                   </Button>
                 </div>
@@ -109,7 +111,7 @@ export function WhatsAppContact({ userPhone, closable = false }: WhatsAppContact
                 </div>
                 <div>
                   <p className="text-sm font-bold text-orange-900 dark:text-orange-100">
-                    💬 Don't wait, message your boss via WhatsApp now!
+                    💬 {t.whatsapp.banner.headline}
                   </p>
                 </div>
               </div>
@@ -127,7 +129,7 @@ export function WhatsAppContact({ userPhone, closable = false }: WhatsAppContact
               <div className="mt-4 pt-4 border-t border-orange-200 dark:border-orange-700">
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                   <p className="text-xs text-orange-700 dark:text-orange-300">
-                    🔒 Add your phone number to unlock direct access to your accountability partner
+                    🔒 {t.whatsapp.banner.noPhoneDescription}
                   </p>
                   <Button
                     onClick={() => router.push('/app/profile')}
@@ -135,7 +137,7 @@ export function WhatsAppContact({ userPhone, closable = false }: WhatsAppContact
                     size="sm"
                     className="border-orange-500 text-orange-700 hover:bg-orange-100 dark:text-orange-300 dark:hover:bg-orange-950/50"
                   >
-                    Unlock Access
+                    {t.whatsapp.banner.unlockAccess}
                   </Button>
                 </div>
               </div>

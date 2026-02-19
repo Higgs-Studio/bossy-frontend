@@ -5,12 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Calendar } from '@/components/ui/calendar';
-import { Plus, Edit2, Trash2, Check, X, Loader2, ListTodo, Calendar as CalendarIcon, Circle, Clock, CheckCircle2, XCircle, ChevronDown } from 'lucide-react';
+import { Plus, Edit2, Trash2, Check, X, Loader2, ListTodo, Circle, Clock, CheckCircle2, XCircle, ChevronDown } from 'lucide-react';
 import { createTaskAction, updateTaskAction, deleteTaskAction, bulkDeleteTasksAction, updateTaskStatusAction } from './actions';
 import type { DailyTask } from '@/lib/supabase/queries';
 import { useTranslation } from '@/contexts/translation-context';
-import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { formatPluralTemplate, formatTemplate } from '@/lib/i18n/format';
 import {
@@ -37,9 +35,8 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editText, setEditText] = useState('');
-  const [editDate, setEditDate] = useState<Date>(new Date());
+  const [editDate, setEditDate] = useState<string>('');
   const [editStatus, setEditStatus] = useState<'todo' | 'in_progress' | 'done'>('todo');
-  const [showEditCalendar, setShowEditCalendar] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(new Set());
   const [optimisticTasks, setOptimisticTasks] = useOptimistic<DailyTask[]>(initialTasks);
   const [isPending, startTransition] = useTransition();
@@ -49,8 +46,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
     message: ''
   });
 
-  const [addTaskDate, setAddTaskDate] = useState<Date>(new Date());
-  const [showAddTaskCalendar, setShowAddTaskCalendar] = useState(false);
+  const [addTaskDate, setAddTaskDate] = useState<string>(startDate);
 
   const showNotification = (message: string) => {
     setShowSuccessMessage({ show: true, message });
@@ -62,6 +58,12 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
   // Track if create was just initiated to show notification on success
   const [wasCreating, setWasCreating] = useState(false);
   
+  useEffect(() => {
+    if (showAddForm) {
+      setAddTaskDate(startDate);
+    }
+  }, [showAddForm, startDate]);
+
   useEffect(() => {
     if (isCreatePending) {
       setWasCreating(true);
@@ -95,7 +97,6 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
       showNotification(t.notifications.tasks.updated);
       setEditingTaskId(null);
       setEditText('');
-      setShowEditCalendar(false);
       setWasUpdating(false);
       onTasksChange?.();
     }
@@ -126,14 +127,13 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
     // Set up edit mode
     setEditingTaskId(task.id);
     setEditText(task.task_text);
-    setEditDate(new Date(task.task_date));
+    setEditDate(task.task_date);
     setEditStatus(task.status || 'todo');
   };
 
   const handleCancelEdit = () => {
     setEditingTaskId(null);
     setEditText('');
-    setShowEditCalendar(false);
   };
 
   const handleToggleTask = (taskId: string) => {
@@ -293,7 +293,6 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                 if (!showAddForm) {
                   setEditingTaskId(null);
                   setEditText('');
-                  setShowEditCalendar(false);
                 }
                 setShowAddForm(!showAddForm);
               }}
@@ -319,55 +318,20 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
         {showAddForm && (
           <form action={createFormAction} className="p-4 bg-muted/50 rounded-lg border border-border space-y-4">
             <input type="hidden" name="goalId" value={goalId} />
-            <input type="hidden" name="taskDate" value={addTaskDate.toISOString().split('T')[0]} />
             
             <div className="space-y-2">
-              <Label htmlFor="task-date-btn">{t.tasks.taskDate}</Label>
-              <Button
-                id="task-date-btn"
-                type="button"
-                variant="outline"
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !addTaskDate && "text-muted-foreground"
-                )}
-                onClick={() => {
-                  setShowAddTaskCalendar(!showAddTaskCalendar);
-                }}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {addTaskDate ? format(addTaskDate, 'PPP') : <span>{t.tasks.pickDate}</span>}
-              </Button>
-              {showAddTaskCalendar && (
-                <>
-                  <div 
-                    className="fixed inset-0 z-40" 
-                    onClick={() => setShowAddTaskCalendar(false)}
-                  />
-                  <div className="relative">
-                    <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
-                      <Calendar
-                        mode="single"
-                        selected={addTaskDate}
-                        onSelect={(date) => {
-                          if (date) {
-                            setAddTaskDate(date);
-                          }
-                          setShowAddTaskCalendar(false);
-                        }}
-                        disabled={(date) => {
-                          const start = new Date(startDate);
-                          const end = new Date(endDate);
-                          start.setHours(0, 0, 0, 0);
-                          end.setHours(23, 59, 59, 999);
-                          return date < start || date > end;
-                        }}
-                        initialFocus
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
+              <Label htmlFor="task-date">{t.tasks.taskDate}</Label>
+              <Input
+                id="task-date"
+                name="taskDate"
+                type="date"
+                value={addTaskDate}
+                onChange={(e) => setAddTaskDate(e.target.value)}
+                min={startDate}
+                max={endDate}
+                className="h-11"
+                required
+              />
             </div>
             
             <div className="space-y-2">
@@ -442,7 +406,6 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                     <form action={updateFormAction} className="space-y-3 w-full p-4 bg-muted/30 rounded-lg border border-border">
                       <input type="hidden" name="taskId" value={task.id} />
                       <input type="hidden" name="goalId" value={goalId} />
-                      <input type="hidden" name="taskDate" value={editDate.toISOString().split('T')[0]} />
                       <input type="hidden" name="taskStatus" value={editStatus} />
                       
                       <div className="space-y-3">
@@ -462,50 +425,18 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor={`edit-task-date-btn-${task.id}`}>{t.tasks.taskDate}</Label>
-                          <Button
-                            id={`edit-task-date-btn-${task.id}`}
-                            type="button"
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !editDate && "text-muted-foreground"
-                            )}
-                            onClick={() => setShowEditCalendar(!showEditCalendar)}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {editDate ? format(editDate, 'PPP') : <span>{t.tasks.pickDate}</span>}
-                          </Button>
-                          {showEditCalendar && (
-                            <>
-                              <div 
-                                className="fixed inset-0 z-40" 
-                                onClick={() => setShowEditCalendar(false)}
-                              />
-                              <div className="relative">
-                                <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-lg p-3 mt-1 left-0">
-                                  <Calendar
-                                    mode="single"
-                                    selected={editDate}
-                                    onSelect={(date) => {
-                                      if (date) {
-                                        setEditDate(date);
-                                      }
-                                      setShowEditCalendar(false);
-                                    }}
-                                    disabled={(date) => {
-                                      const start = new Date(startDate);
-                                      const end = new Date(endDate);
-                                      start.setHours(0, 0, 0, 0);
-                                      end.setHours(23, 59, 59, 999);
-                                      return date < start || date > end;
-                                    }}
-                                    initialFocus
-                                  />
-                                </div>
-                              </div>
-                            </>
-                          )}
+                          <Label htmlFor={`edit-task-date-${task.id}`}>{t.tasks.taskDate}</Label>
+                          <Input
+                            id={`edit-task-date-${task.id}`}
+                            name="taskDate"
+                            type="date"
+                            value={editDate}
+                            onChange={(e) => setEditDate(e.target.value)}
+                            min={startDate}
+                            max={endDate}
+                            className="h-11"
+                            required
+                          />
                         </div>
 
                         <div className="space-y-2">

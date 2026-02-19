@@ -69,6 +69,13 @@
         }
     },
     "whatsapp": {
+        "banner": {
+            "headline": "別等了，立即透過 WhatsApp 傳訊給你的老細！",
+            "hasPhoneDescription": "你的問責夥伴就在一則訊息之外",
+            "chatNow": "立即聊天",
+            "noPhoneDescription": "新增你的電話號碼以解鎖直接聯絡問責夥伴",
+            "unlockAccess": "解鎖存取"
+        },
         "nav": {
             "ariaLabel": "WhatsApp 聯絡",
             "button": "傳訊給老細",
@@ -222,6 +229,9 @@
         "verifyCode": "驗證驗證碼",
         "sendCode": "傳送驗證碼",
         "changePhone": "更改電話號碼",
+        "agreeToDisclaimerPrefix": "我同意",
+        "agreeToDisclaimerLink": "免責聲明",
+        "agreeToDisclaimerSuffix": "，並確認我不是歐盟/歐洲經濟區公民或加州居民",
         "errors": {
             "invalidPhone": "電話號碼必須包含國碼（例如：+1234567890）",
             "otpSixDigits": "驗證碼必須為 6 位數字",
@@ -229,7 +239,8 @@
             "invalidOtp": "驗證碼無效，請再試一次。",
             "sessionFailed": "建立登入狀態失敗，請再試一次。",
             "invalidEmailOrPassword": "電子郵件或密碼不正確，請再試一次。",
-            "signUpFailed": "建立使用者失敗，請再試一次。"
+            "signUpFailed": "建立使用者失敗，請再試一次。",
+            "disclaimerRequired": "您必須同意免責聲明才能建立帳號。"
         },
         "success": {
             "otpSent": "驗證碼已傳送到你的手機！",
@@ -608,6 +619,8 @@
         }
     },
     "pricing": {
+        "pageTitle": "簡單定價",
+        "pageSubtitle": "免費開始。當你需要更多問責力量時再升級。",
         "interval": {
             "month": "月",
             "year": "年",
@@ -746,6 +759,7 @@
     "legal": {
         "privacyPolicy": "隱私權政策",
         "termsOfService": "服務條款",
+        "disclaimer": "免責聲明",
         "privacy": "隱私",
         "terms": "條款"
     },
@@ -870,6 +884,30 @@
                     ],
                     "email": "legal@bossy.app",
                     "addressPlaceholder": "[你的公司地址]"
+                }
+            }
+        },
+        "disclaimer": {
+            "title": "註冊免責聲明",
+            "sections": {
+                "dataProtection": {
+                    "title": "1. 資料與隱私保護",
+                    "paragraphs": [
+                        "我們將盡力保護您在本系統中的資料與隱私。我們採取適當的安全措施，保護您的個人資訊免受未經授權的存取、遺失或濫用。"
+                    ]
+                },
+                "eligibility": {
+                    "title": "2. 資格聲明",
+                    "paragraphs": [
+                        "註冊使用Bossy即表示您聲明並確認：您不是歐盟（EU）或歐洲經濟區（EEA）的公民或居民，也不是美國加利福尼亞州的居民。",
+                        "本服務不適用於受GDPR（通用資料保護條例）或CCPA（加州消費者隱私法）管轄的用戶。若您為歐盟/歐洲經濟區公民或加州居民，請勿使用本服務。"
+                    ]
+                },
+                "acknowledgment": {
+                    "title": "3. 確認",
+                    "paragraphs": [
+                        "建立帳戶即表示您已閱讀、理解並同意本免責聲明。您確認您提供的關於資格的資訊準確無誤，並且您不會因對您的居住地或公民身份的錯誤陳述而產生的任何法律後果追究Bossy的責任。"
+                    ]
                 }
             }
         },
