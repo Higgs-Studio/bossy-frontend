@@ -10,11 +10,12 @@ import {
   createBossEvent,
 } from '@/lib/supabase/queries';
 import { logError } from '@/lib/utils/logger';
+import type { ActionState } from '@/lib/auth/middleware';
 
 export async function markTaskDoneAction(
-  prevState: any,
+  prevState: ActionState | null,
   formData: FormData
-): Promise<{ success?: string; error?: string } | null> {
+): Promise<ActionState | null> {
   const user = await getUser();
   if (!user) {
     redirect('/sign-in');
@@ -40,9 +41,9 @@ export async function markTaskDoneAction(
 }
 
 export async function abandonGoalAction(
-  prevState: any,
+  prevState: ActionState | null,
   formData: FormData
-): Promise<{ success?: string; error?: string } | null> {
+): Promise<ActionState | null> {
   const user = await getUser();
   if (!user) {
     redirect('/sign-in');
@@ -73,9 +74,9 @@ export async function abandonGoalAction(
 }
 
 export async function completeGoalAction(
-  prevState: any,
+  prevState: ActionState | null,
   formData: FormData
-): Promise<{ success?: string; error?: string } | null> {
+): Promise<ActionState | null> {
   const user = await getUser();
   if (!user) {
     redirect('/sign-in');

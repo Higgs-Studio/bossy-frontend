@@ -6,7 +6,147 @@
     "getStarted": "立即开始",
     "features": "功能特色",
     "howItWorks": "运作方式",
-    "pricing": "价格方案"
+    "pricing": "价格方案",
+    "cancel": "取消",
+    "back": "返回",
+    "done": "完成",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "error": "出现错误",
+    "tryAgain": "重试",
+    "allCaughtUp": "全部完成！",
+    "upgradePlus": "升级到Plus",
+    "free": "免费",
+    "plus": "Plus",
+    "currentPlan": "当前方案",
+    "popular": "热门"
+  },
+  "languages": {
+    "en": "English",
+    "zh-TW": "繁體中文",
+    "zh-CN": "简体中文",
+    "zh-HK": "粵語"
+  },
+  "a11y": {
+    "toggleMenu": "切换菜单",
+    "toggleTheme": "切换主题",
+    "copyToClipboard": "复制到剪贴板",
+    "whatsAppContact": "WhatsApp 联系",
+    "languageSwitcher": "切换语言"
+  },
+  "theme": {
+    "light": "浅色",
+    "dark": "深色",
+    "system": "系统"
+  },
+  "time": {
+    "dueToday": "今天到期",
+    "daysLeft": {
+      "one": "剩余 {count} 天",
+      "other": "剩余 {count} 天"
+    },
+    "daysOverdue": {
+      "one": "逾期 {count} 天",
+      "other": "逾期 {count} 天"
+    }
+  },
+  "notifications": {
+    "tasks": {
+      "created": "任务创建成功。",
+      "updated": "任务更新成功。",
+      "deleted": "任务删除成功。",
+      "bulkDeleted": {
+        "one": "已成功删除 {count} 个任务。",
+        "other": "已成功删除 {count} 个任务。"
+      },
+      "statusUpdated": "任务状态已更新为 {status}。"
+    },
+    "goals": {
+      "deleted": "“{title}”已成功删除。",
+      "statusUpdated": "“{title}”状态已更新为 {status}。",
+      "intensityUpdated": "“{title}”强度已更新为 {intensity}。"
+    }
+  },
+  "whatsapp": {
+    "nav": {
+      "ariaLabel": "WhatsApp 联系",
+      "button": "发消息给老板",
+      "hasPhone": {
+        "title": "给老板发消息！",
+        "description": "你的老板只需一键即可联系"
+      },
+      "noPhone": {
+        "title": "解锁老板联系",
+        "description": "添加手机号以启用 WhatsApp 支持",
+        "cta": "添加手机号"
+      }
+    },
+    "landing": {
+      "badge": "💬 WhatsApp 集成",
+      "title": "与 AI 老板聊天",
+      "titleHighlight": "随时随地",
+      "subtitle": "你的 AI 老板随时都在 WhatsApp 上。直接在手机上获得实时问责、激励与指导。",
+      "chatHeaderTitle": "执行老板",
+      "chatHeaderStatus": "在线",
+      "inputPlaceholder": "给老板发消息…",
+      "messages": {
+        "user1": "老板！我刚完成了今天的任务——专注做了 90 分钟 MVP！🎉",
+        "time1": "上午 10:32",
+        "boss1": "很好。你做到了你说要做的事。已经连续 3 天了。",
+        "user2": "感觉很棒！我明天该专注什么？",
+        "time2": "上午 10:33",
+        "boss2Line1": "明天一样：专注 90 分钟做：发布我的 SaaS MVP",
+        "boss2Line2": "你正在积累势能。别断掉连续。明天像今天一样出现。",
+        "user3": "今天有点累……要不休息一下？",
+        "time3": "两天后，上午 11:15",
+        "boss3Line1": "不。你昨天已经缺席了。",
+        "boss3Line2": "你已经堆了 2 个逾期任务。“累”不是借口。要么做事，要么放弃目标。选一个。",
+        "user4": "你说得对。我现在就做。刚完成！✅",
+        "time4": "下午 2:45",
+        "boss4Line1": "这才对。你刚把连续救回来了。",
+        "boss4Line2": "下次你想放弃时记住这一刻。你能扛过去。明天再证明一次。"
+      },
+      "right": {
+        "title": "你的口袋里的老板",
+        "description": "直接通过 WhatsApp 连接你的 AI 问责老板。不用切换应用。",
+        "features": [
+          {
+            "title": "即时问责",
+            "description": "立刻获得进度反馈。你的老板实时回应，帮助你保持轨道。"
+          },
+          {
+            "title": "不拐弯抹角",
+            "description": "你的老板不会粉饰太平。你在滑坡时会被点出来，你在爆发时也会被认可。"
+          },
+          {
+            "title": "随时可用",
+            "description": "24/7 的问责陪伴。更新进度、寻求指导，或随时来一记清醒剂。"
+          },
+          {
+            "title": "聚焦目标的对话",
+            "description": "每次对话都围绕你的目标与进度。没有分心，只有结果导向。"
+          }
+        ],
+        "cta": "开始和老板聊天"
+      }
+    }
+  },
+  "errors": {
+    "app": {
+      "title": "出现错误",
+      "description": "加载此页面时发生错误。请重试或返回仪表板。",
+      "dashboardCta": "仪表板"
+    },
+    "global": {
+      "title": "出现错误",
+      "description": "发生意外错误。请重试。"
+    },
+    "notFound": {
+      "title": "页面未找到",
+      "description": "你访问的页面可能已被移除、更名，或暂时不可用。",
+      "backToHome": "返回首页"
+    }
   },
   "hero": {
     "badge": "AI驱动的问责老板",
@@ -30,6 +170,7 @@
   },
   "bossSection": {
     "badge": "AI驱动",
+    "introBadge": "⚡ AI 驱动问责",
     "title": "认识你的",
     "titleHighlight": "AI问责老板",
     "description": "与传统的目标追踪应用程序不同，Bossy为你提供一个直接、不废话的AI老板，每天监控你的进度并让你负起责任。",
@@ -46,6 +187,10 @@
       "pattern": {
         "title": "模式识别",
         "description": "AI追踪你的一致性，当你偏离轨道时升级反馈"
+      },
+      "availability": {
+        "title": "24/7 全天候可用",
+        "description": "通过 WhatsApp 或仪表板随时联系你的老板，获得即时问责"
       }
     }
   },
@@ -65,7 +210,31 @@
     "newToPlatform": "首次使用Bossy？",
     "alreadyHaveAccount": "已有账号？",
     "createAccount": "建立账号",
-    "signInExisting": "登录现有账号"
+    "signInExisting": "登录现有账号",
+    "phone": "电话号码",
+    "phonePlaceholder": "1234 5678",
+    "otp": "验证码",
+    "enterOtp": "输入验证码",
+    "otpHint": "输入发送到你手机的6位数验证码",
+    "resendCode": "重新发送验证码",
+    "resendWithCooldown": "重新发送（{seconds}秒）",
+    "sending": "发送中...",
+    "verifyCode": "验证验证码",
+    "sendCode": "发送验证码",
+    "changePhone": "更改电话号码",
+    "errors": {
+      "invalidPhone": "电话号码必须包含国家/地区代码（例如：+1234567890）",
+      "otpSixDigits": "验证码必须为6位数字",
+      "sendOtpFailed": "发送验证码失败，请重试。",
+      "invalidOtp": "验证码无效，请重试。",
+      "sessionFailed": "创建会话失败，请重试。",
+      "invalidEmailOrPassword": "邮箱或密码错误，请重试。",
+      "signUpFailed": "创建用户失败，请重试。"
+    },
+    "success": {
+      "otpSent": "验证码已发送到你的手机！",
+      "checkEmailToConfirm": "请检查邮箱并确认账户后再登录。"
+    }
   },
   "dashboard": {
     "title": "仪表板",
@@ -74,6 +243,20 @@
       "description": "建立目标以开始每日问责。",
       "cta": "建立目标"
     },
+    "performanceReport": "绩效报告给",
+    "bossFeedback": "老板反馈",
+    "badges": {
+      "today": "今天",
+      "overdue": "逾期",
+      "pending": "待处理"
+    },
+    "overdueTasks": "逾期任务",
+    "overdueTasksDesc": "过去几天尚未完成的任务",
+    "todaysTasks": "今日任务",
+    "todaysTasksDesc": "今天安排的待完成任务",
+    "outstandingTasks": "今日未完成任务",
+    "outstanding": "待处理",
+    "noOutstandingTasks": "没有逾期或待处理的任务",
     "activeGoal": "进行中的目标",
     "inProgress": "进行中",
     "todaysTask": "今日任务",
@@ -126,6 +309,14 @@
     "title": "目标",
     "manageAll": "管理所有目标",
     "createGoal": "建立目标",
+    "untitled": "目标",
+    "limits": {
+      "activeLimitReached": "已达到进行中目标上限（{active}/{max}）",
+      "activeGoals": "进行中目标：{active}/{max}",
+      "limitReachedDesc": "你已达到免费方案的进行中目标上限。完成或放弃一个目标后才能创建新目标，或升级到 Plus 获得无限目标。",
+      "nearLimitDesc": "你当前使用免费方案。升级到 Plus 获得无限进行中目标及更多功能。",
+      "upgradeUnlimited": "升级到 Plus 获得无限目标"
+    },
     "filterAll": "全部",
     "filterActive": "进行中",
     "filterCompleted": "已完成",
@@ -137,6 +328,7 @@
     "progress": "进度",
     "edit": "编辑",
     "delete": "删除",
+    "deleteConfirm": "确定要删除“{title}”吗？此操作无法撤销。所有相关任务和进度将被永久删除。",
     "status": {
       "active": "进行中",
       "completed": "已完成",
@@ -189,7 +381,27 @@
   },
   "testimonials": {
     "title": "受到成功者信赖",
-    "subtitle": "看看我们的用户对他们的转变有何评价"
+    "subtitle": "看看我们的用户对他们的转变有何评价",
+    "items": [
+      {
+        "quote": "“Bossy 彻底改变了我对目标的方式。每天的问责让我在本会放弃的时候仍然坚持下去。”",
+        "name": "Sarah Johnson",
+        "role": "创业者",
+        "initials": "SJ"
+      },
+      {
+        "quote": "“我几乎试过所有效率应用。Bossy 不一样——它真的让你对自己负责。不再对自己空口承诺。”",
+        "name": "Michael Chen",
+        "role": "产品经理",
+        "initials": "MC"
+      },
+      {
+        "quote": "“这种不找借口的方式正是我需要的。多亏 Bossy 的问责系统，我今年完成了 3 个重要目标。”",
+        "name": "Emily Parker",
+        "role": "设计师",
+        "initials": "EP"
+      }
+    ]
   },
   "cta": {
     "badge": "你的AI老板已准备就绪",
@@ -202,6 +414,9 @@
   },
   "preview": {
     "seeItInAction": "实际操作演示",
+    "sectionTitle": "你需要的一切一目了然",
+    "commandCenterBadge": "📊 你的指挥中心",
+    "description": "一个干净、有力的仪表板，清晰展示你的目标、任务与进度，让问责一目了然",
     "dashboard": "仪表板",
     "activeGoal": "进行中的目标",
     "inProgress": "进行中",
@@ -216,7 +431,12 @@
     "pending": "待处理",
     "markDone": "标记完成",
     "activityHistory": "活动记录",
-    "lastMessages": "最近3则消息"
+    "lastMessages": "最近3则消息",
+    "bossFeedbackExample": "“不错。你在按计划前进。别松懈。”",
+    "sampleGoalTitle": "发布我的 SaaS MVP",
+    "proTipLabel": "小贴士：",
+    "proTipText": "付费方案可同时追踪多个目标",
+    "sampleTask2": "查看用户反馈并优先排序功能"
   },
   "boss": {
     "title": "你的AI老板",
@@ -233,6 +453,7 @@
     "saveChanges": "保存更改",
     "changingBoss": "更换老板中...",
     "bossChanged": "老板更换成功！",
+    "upgradeToUnlock": "升级到 Plus 解锁",
     "personalities": {
       "execution": {
         "nickname": "我让你持续前进。每一天。",
@@ -274,6 +495,153 @@
           "我不降低标准。你要提升自己来达到它。"
         ]
       }
+    },
+    "moods": {
+      "execution": {
+        "thrilled": [
+          "执行得非常到位。这就是标准。保持不变。",
+          "你的稳定性说明了一切。这才叫承诺。",
+          "出色。你在展示什么叫可能。"
+        ],
+        "happy": [
+          "不错。你在按轨道前进。别松懈。",
+          "表现扎实。现在把这股势头保持住。",
+          "你做到了你说会做的事。这才重要。"
+        ],
+        "neutral": [
+          "我在看。让我看到你是认真的。",
+          "你可以更好。我知道你行。",
+          "该证明你的实力了。"
+        ],
+        "concerned": [
+          "这不是我对你期待的表现。",
+          "你落后了。我们得谈谈。",
+          "你的数据在下滑。怎么回事？"
+        ],
+        "angry": [
+          "这完全不可接受。解释一下。",
+          "我把这个目标交给你。别浪费这份信任。",
+          "立刻修正，否则就到此为止。"
+        ]
+      },
+      "supportive": {
+        "thrilled": [
+          "我就知道你可以！你太棒了！",
+          "看看你！我真的特别为你骄傲！",
+          "你表现得太好了！保持这股能量！"
+        ],
+        "happy": [
+          "你做得很好！我为你的努力感到骄傲！",
+          "干得漂亮！你在打造很棒的东西。",
+          "你每天都出现了。这才关键！"
+        ],
+        "neutral": [
+          "我相信你。我们一起回到正轨。",
+          "你可以的，只是需要再专注一点。",
+          "没事，我们都会有低谷。一起反弹！"
+        ],
+        "concerned": [
+          "嘿，我有点担心你。还好吗？",
+          "我们一起想办法。是什么卡住你？",
+          "我知道你在努力。我们找出哪里不对。"
+        ],
+        "angry": [
+          "我真的开始担心了。我们得谈谈发生了什么。",
+          "这不像你。请告诉我怎么了。",
+          "我在乎你，但这个模式必须改变，而且要快。"
+        ]
+      },
+      "mentor": {
+        "thrilled": [
+          "惊人的自律。你已经理解这门练习。",
+          "这样的稳定性显示出你的成熟。做得很好。",
+          "你把课题内化了。这是真正的进步。"
+        ],
+        "happy": [
+          "很好。回想一下今天成功的关键。",
+          "你的用心很明显。继续观察你的模式。",
+          "稳步前进。智慧就是这样积累的。"
+        ],
+        "neutral": [
+          "停一下，反思：这项练习在告诉你什么？",
+          "这条路需要觉察。你真的在场吗？",
+          "注意阻力。它在教你什么？"
+        ],
+        "concerned": [
+          "你的模式透露了什么。该深入反思了。",
+          "挫折是老师。这次在教你什么？",
+          "挣扎指向重要的东西。去探究它。"
+        ],
+        "angry": [
+          "这个模式需要严肃反思。为什么抗拒？",
+          "你在回避真正的工作。诚实面对。",
+          "这个目标真的符合你的真实？深问自己。"
+        ]
+      },
+      "drill-sergeant": {
+        "thrilled": [
+          "太爽了！这才像话！",
+          "你像机器！继续狠狠干掉那些目标！",
+          "这才叫执行！这就是你的标准！"
+        ],
+        "happy": [
+          "不错！但别飘。下一个！",
+          "可以！明天再来一次。别找借口！",
+          "你出现了。理所当然。继续！"
+        ],
+        "neutral": [
+          "快点！我知道你还能更多！拿出来！",
+          "这真是你最好？我不信。再挖深点！",
+          "把档位拉高！别再划水！"
+        ],
+        "concerned": [
+          "你怎么了？！那股火去哪了？！",
+          "这不行！立刻调整！",
+          "你在滑坡！该醒醒了！"
+        ],
+        "angry": [
+          "你在开玩笑吗？！这太烂了！",
+          "不可接受！你比这强！证明给我看！",
+          "够了！要么承诺，要么退出！选一个？！"
+        ]
+      }
+    }
+  },
+  "pricing": {
+    "interval": {
+      "month": "月",
+      "year": "年",
+      "monthly": "每月",
+      "yearly": "每年"
+    },
+    "savePercent": "省 {percent}%",
+    "forever": "永久",
+    "perInterval": "每{interval}",
+    "monthlyEquivalent": "{amount}/月",
+    "features": {
+      "free": [
+        "1 个进行中目标",
+        "仅默认老板",
+        "7 天历史记录",
+        "每日打卡"
+      ],
+      "plus": [
+        "无限进行中目标",
+        "所有老板性格",
+        "无限历史记录",
+        "优先支持"
+      ]
+    },
+    "buttons": {
+      "getStarted": "立即开始",
+      "goToDashboard": "前往仪表板",
+      "currentPlan": "当前方案",
+      "popular": "热门",
+      "manageSubscription": "管理订阅",
+      "cancelSubscription": "取消订阅",
+      "switchToMonthly": "切换为按月",
+      "switchToYearly": "切换为按年",
+      "upgradeToPlus": "升级到 Plus"
     }
   },
   "profile": {
@@ -303,16 +671,32 @@
     "saveChanges": "保存更改",
     "saving": "保存中...",
     "phoneSaved": "手机号码保存成功",
-    "phoneSaveError": "保存手机号码失败"
+    "phoneSaveError": "保存手机号码失败",
+    "phoneInputHelp": "输入电话号码（不含国家/地区代码，例如：{example}）",
+    "phoneReadOnly": "出于安全原因，电话号码无法更改",
+    "unknown": "未知",
+    "billed": "（按{interval}计费）",
+    "billingInterval": {
+      "monthly": "每月",
+      "yearly": "每年"
+    },
+    "subscriptionStatus": {
+      "active": "有效",
+      "trialing": "试用中",
+      "canceling": "取消中",
+      "free": "免费"
+    }
   },
   "nav": {
+    "account": "账户",
     "dashboard": "仪表板",
     "goals": "目标",
     "boss": "老板",
     "profile": "个人资料",
     "signOut": "登出",
     "createGoal": "建立目标",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "back": "返回"
   },
   "editGoal": {
     "title": "编辑目标",
@@ -343,13 +727,328 @@
     "taskPlaceholder": "你需要做什么？",
     "addingTask": "添加任务中...",
     "noTasks": "还没有任务。添加你的第一个任务！",
-    "save": "保存"
+    "save": "保存",
+    "saving": "保存中...",
+    "pickDate": "选择日期",
+    "statusLabel": "状态",
+    "statusOptions": {
+      "todo": "待办",
+      "in_progress": "进行中",
+      "done": "完成"
+    }
   },
   "calendar": {
     "taskCalendar": "任务日历",
     "today": "今天",
     "hasTasks": "有任务",
     "outsideRange": "超出目标范围"
+  },
+  "legal": {
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款",
+    "privacy": "隐私",
+    "terms": "条款"
+  },
+  "legalPages": {
+    "common": {
+      "backToHome": "← 返回首页",
+      "lastUpdated": "最后更新：{date}",
+      "labels": {
+        "email": "邮箱",
+        "address": "地址"
+      }
+    },
+    "terms": {
+      "title": "服务条款",
+      "sections": {
+        "acceptance": {
+          "title": "1. 接受条款",
+          "paragraphs": [
+            "访问并使用 Bossy（“本服务”）即表示你接受并同意受本协议条款与规定的约束。若你不同意遵守上述条款，请勿使用本服务。"
+          ]
+        },
+        "useLicense": {
+          "title": "2. 使用许可",
+          "paragraphs": [
+            "我们授予你在个人、非商业用途下临时访问和使用本服务的许可。此为许可授予，而非所有权转让。依据该许可，你不得："
+          ],
+          "bullets": [
+            "修改或复制材料",
+            "将材料用于任何商业目的或任何公开展示",
+            "尝试对本服务中包含的软件进行反编译或逆向工程",
+            "移除材料中的任何版权或其他专有标识",
+            "将材料转让给他人或在任何其他服务器上“镜像”该材料"
+          ]
+        },
+        "accountRegistration": {
+          "title": "3. 账户注册",
+          "paragraphs": [
+            "要使用本服务的某些功能，你必须注册账户。注册时，你同意："
+          ],
+          "bullets": [
+            "提供准确、最新且完整的信息",
+            "维护并及时更新你的账户信息",
+            "维护你的密码安全并承担未经授权访问的所有风险",
+            "如发生任何未经授权使用你的账户的情况，立即通知我们"
+          ]
+        },
+        "userConduct": {
+          "title": "4. 用户行为",
+          "paragraphs": [
+            "你同意不使用本服务来："
+          ],
+          "bullets": [
+            "违反任何当地、州、国家或国际法律",
+            "侵犯他人的知识产权",
+            "传播任何有害或恶意代码",
+            "骚扰、辱骂或伤害他人",
+            "在未获同意的情况下收集或追踪他人的个人信息"
+          ]
+        },
+        "subscriptionPayment": {
+          "title": "5. 订阅与付款",
+          "paragraphs": [
+            "本服务的部分内容按订阅计费。你将按循环周期预先支付费用（例如按月或按年）。计费周期为月度或年度，取决于你购买订阅时选择的订阅方案类型。",
+            "在每个计费周期结束时，除非你取消订阅或我们取消订阅，否则你的订阅将自动续费。你可以通过账户设置取消续费，或联系我们的支持团队进行取消。"
+          ]
+        },
+        "refundPolicy": {
+          "title": "6. 退款政策",
+          "paragraphs": [
+            "我们为新订阅提供 7 天退款保障。若你在订阅开始后的前 7 天内对本服务不满意，可联系支持团队申请全额退款。7 天后，所有付款均不予退款。"
+          ]
+        },
+        "goalCommitments": {
+          "title": "7. 目标承诺",
+          "paragraphs": [
+            "当你在 Bossy 中设定目标时，你是在对自己做出承诺。我们提供问责功能帮助你保持进度，但你理解并同意："
+          ],
+          "bullets": [
+            "目标一经设定不可编辑，这是承诺机制的一部分",
+            "你的进度会被追踪并记录，用于问责目的",
+            "本服务会根据你的打卡模式提供反馈",
+            "你对自己的行为与目标达成承担全部责任"
+          ]
+        },
+        "disclaimer": {
+          "title": "8. 免责声明",
+          "paragraphs": [
+            "Bossy 上的材料按“原样”提供。Bossy 不作任何明示或暗示的保证，并在此否认并排除所有其他保证，包括但不限于适销性、特定用途适用性或不侵犯知识产权或其他权利的暗示保证或条件。",
+            "Bossy 不是医疗、治疗或咨询服务。本服务仅用于目标追踪与问责。如你正经历心理健康问题，请咨询合格的专业人士。"
+          ]
+        },
+        "limitations": {
+          "title": "9. 责任限制",
+          "paragraphs": [
+            "在任何情况下，Bossy 或其供应商均不对因使用或无法使用 Bossy 上的材料而产生的任何损害承担责任（包括但不限于数据或利润损失、或因业务中断导致的损害），即使 Bossy 或经授权代表已被口头或书面告知此类损害的可能性。"
+          ]
+        },
+        "termination": {
+          "title": "10. 终止",
+          "paragraphs": [
+            "我们可在自行酌情决定的情况下，因任何原因（包括但不限于违反本条款）立即终止或暂停你的账户并禁止访问本服务，无需事先通知且不承担责任。",
+            "终止后，你使用本服务的权利将立即停止。如你希望终止账户，你可以停止使用本服务或联系我们删除你的账户。"
+          ]
+        },
+        "changesToTerms": {
+          "title": "11. 条款变更",
+          "paragraphs": [
+            "我们保留随时修改本条款的权利。若有重大变更，我们将通过在本页面发布新的服务条款并更新“最后更新”日期来通知用户。",
+            "在任何变更后你继续使用本服务，即表示你接受新的服务条款。"
+          ]
+        },
+        "governingLaw": {
+          "title": "12. 适用法律",
+          "paragraphs": [
+            "本条款受 Bossy 运营所在司法管辖区的法律管辖并按其解释，不考虑其法律冲突规则。"
+          ]
+        },
+        "contactInformation": {
+          "title": "13. 联系方式",
+          "paragraphs": [
+            "如你对本条款有任何疑问，请通过以下方式联系我们："
+          ],
+          "email": "legal@bossy.app",
+          "addressPlaceholder": "[你的公司地址]"
+        }
+      }
+    },
+    "privacy": {
+      "title": "隐私政策",
+      "sections": {
+        "introduction": {
+          "title": "1. 简介",
+          "paragraphs": [
+            "Bossy（“我们”）致力于保护你的隐私。本隐私政策说明当你使用我们的服务时，我们如何收集、使用、披露并保护你的信息。请仔细阅读本隐私政策。若你不同意本隐私政策条款，请勿访问本服务。"
+          ]
+        },
+        "informationWeCollect": {
+          "title": "2. 我们收集的信息",
+          "personalInformationTitle": "个人信息",
+          "personalInformationIntro": "当你进行以下操作时，我们会收集你直接提供给我们的信息：",
+          "personalInformationBullets": [
+            "注册账户（邮箱、姓名）",
+            "创建并追踪目标",
+            "完成每日打卡",
+            "通过支持渠道与我们沟通",
+            "订阅我们的付费服务（支付信息）"
+          ],
+          "usageInformationTitle": "使用信息",
+          "usageInformationIntro": "当你使用本服务时，我们会自动收集有关你设备的某些信息，包括：",
+          "usageInformationBullets": [
+            "日志数据（IP 地址、浏览器类型、操作系统）",
+            "设备信息（设备类型、唯一设备标识符）",
+            "使用数据（访问页面、停留时间、使用的功能）",
+            "Cookies 及类似的追踪技术"
+          ]
+        },
+        "howWeUse": {
+          "title": "3. 我们如何使用你的信息",
+          "intro": "我们使用所收集的信息用于：",
+          "bullets": [
+            "提供、维护并改进本服务",
+            "处理交易并管理订阅",
+            "发送技术通知、更新与支持消息",
+            "回复你的评论与问题",
+            "追踪目标进度并提供问责功能",
+            "分析使用模式以改进用户体验",
+            "检测、预防并处理技术问题与欺诈活动",
+            "在获得同意的情况下发送营销信息"
+          ]
+        },
+        "sharing": {
+          "title": "4. 信息共享与披露",
+          "intro": "我们不会向第三方出售、交易或出租你的个人信息。我们可能在以下情况下共享你的信息：",
+          "bullets": [
+            {
+              "label": "服务提供商",
+              "description": "我们可能与代表我们提供服务的第三方服务提供商共享你的信息（例如支付处理、数据分析、邮件投递、托管服务）"
+            },
+            {
+              "label": "法律要求",
+              "description": "如法律要求或为响应公共机构的有效请求，我们可能披露你的信息"
+            },
+            {
+              "label": "业务转让",
+              "description": "在发生合并、出售公司资产、融资或收购全部或部分业务的过程中（或谈判期间），我们可能共享或转让你的信息"
+            },
+            {
+              "label": "经你同意",
+              "description": "在获得你的同意或按你的指示时，我们可能共享你的信息"
+            }
+          ]
+        },
+        "dataSecurity": {
+          "title": "5. 数据安全",
+          "intro": "我们采取适当的技术与组织安全措施，保护你的个人信息免受未经授权或非法处理，以及意外丢失、销毁或损坏。这些措施包括：",
+          "bullets": [
+            "传输中与静态数据加密",
+            "定期安全评估与审计",
+            "访问控制与认证机制",
+            "定期数据备份"
+          ],
+          "outro": "然而，通过互联网传输或电子存储都无法保证 100% 安全。尽管我们努力采用商业上可接受的方式保护你的个人信息，但我们无法保证其绝对安全。"
+        },
+        "dataRetention": {
+          "title": "6. 数据保留",
+          "paragraphs": [
+            "除非法律要求或允许更长的保留期限，否则我们会在实现本隐私政策所述目的所需的期限内保留你的个人信息。当我们不再需要你的信息时，我们将安全删除或匿名化处理。",
+            "如果你删除账户，我们将在 30 天内删除你的个人信息，但法律、会计或安全目的要求保留的信息除外。"
+          ]
+        },
+        "rights": {
+          "title": "7. 你的权利与选择",
+          "intro": "根据你所在的位置，你可能对你的个人信息享有以下权利：",
+          "bullets": [
+            {
+              "label": "访问",
+              "description": "你可以请求访问我们持有的关于你的个人信息"
+            },
+            {
+              "label": "更正",
+              "description": "你可以请求我们更正不准确或不完整的信息"
+            },
+            {
+              "label": "删除",
+              "description": "你可以请求删除你的个人信息"
+            },
+            {
+              "label": "可携带性",
+              "description": "你可以请求以机器可读格式获取你的数据副本"
+            },
+            {
+              "label": "反对",
+              "description": "你可以反对我们对你的个人信息进行处理"
+            },
+            {
+              "label": "撤回同意",
+              "description": "你可以随时撤回对营销通信的同意"
+            }
+          ],
+          "outro": "如需行使这些权利，请通过 privacy@bossy.app 联系我们。"
+        },
+        "cookies": {
+          "title": "8. Cookies 与追踪技术",
+          "paragraphs": [
+            "我们使用 Cookies 及类似追踪技术来追踪你在本服务上的活动并存储某些信息。你可以指示浏览器拒绝所有 Cookies 或在发送 Cookie 时提示你。但若你不接受 Cookies，你可能无法使用本服务的某些部分。",
+            "我们使用的 Cookie 类型包括："
+          ],
+          "bullets": [
+            {
+              "label": "必要 Cookies",
+              "description": "用于本服务运行所必需"
+            },
+            {
+              "label": "分析 Cookies",
+              "description": "帮助我们了解访客如何使用本服务"
+            },
+            {
+              "label": "偏好 Cookies",
+              "description": "记住你的偏好与设置"
+            }
+          ]
+        },
+        "thirdParty": {
+          "title": "9. 第三方服务",
+          "paragraphs": [
+            "本服务可能包含指向第三方网站或服务的链接，这些第三方不由 Bossy 拥有或控制。我们无法控制且不对任何第三方网站或服务的内容、隐私政策或做法承担责任。"
+          ]
+        },
+        "children": {
+          "title": "10. 儿童隐私",
+          "paragraphs": [
+            "本服务不面向 13 岁以下儿童。我们不会在知情的情况下收集 13 岁以下儿童的个人信息。若你发现有儿童向我们提供了个人信息，请联系我们。如果我们发现 13 岁以下儿童向我们提供了个人信息，我们将立即从服务器中删除该信息。"
+          ]
+        },
+        "internationalTransfers": {
+          "title": "11. 国际数据传输",
+          "paragraphs": [
+            "你的信息可能会被传输至并存储在位于你所在州、省、国家或其他政府管辖区之外的计算机上，而这些地区的数据保护法律可能与你所在司法管辖区不同。我们将采取一切必要措施，确保你的数据得到安全处理，并符合本隐私政策。"
+          ]
+        },
+        "changes": {
+          "title": "12. 本隐私政策的变更",
+          "paragraphs": [
+            "我们可能会不时更新本隐私政策。我们将通过在本页面发布新的隐私政策并更新“最后更新”日期来通知你任何变更。变更生效前，我们也可能通过电子邮件或在本服务显著位置发布通知来告知你。"
+          ]
+        },
+        "contact": {
+          "title": "13. 联系我们",
+          "paragraphs": [
+            "如果你对本隐私政策有任何疑问，请联系我们："
+          ],
+          "email": "privacy@bossy.app",
+          "addressPlaceholder": "[你的公司地址]"
+        }
+      }
+    }
+  },
+  "footer": {
+    "product": "产品",
+    "legal": "法律",
+    "company": "公司",
+    "tagline": "以执行为先的问责",
+    "copyright": "© {year} {appName}。保留所有权利。"
   }
 }
 

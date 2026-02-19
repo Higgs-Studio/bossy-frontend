@@ -6,7 +6,147 @@
         "getStarted": "即刻開始",
         "features": "功能特色",
         "howItWorks": "點樣運作",
-        "pricing": "收費計劃"
+        "pricing": "收費計劃",
+        "cancel": "取消",
+        "back": "返回",
+        "done": "完成",
+        "save": "儲存",
+        "delete": "刪除",
+        "edit": "編輯",
+        "error": "發生錯誤",
+        "tryAgain": "重試",
+        "allCaughtUp": "全部完成！",
+        "upgradePlus": "升級到Plus",
+        "free": "免費",
+        "plus": "Plus",
+        "currentPlan": "目前計劃",
+        "popular": "熱門"
+    },
+    "languages": {
+        "en": "English",
+        "zh-TW": "繁體中文",
+        "zh-CN": "简体中文",
+        "zh-HK": "粵語"
+    },
+    "a11y": {
+        "toggleMenu": "切換選單",
+        "toggleTheme": "切換主題",
+        "copyToClipboard": "複製到剪貼簿",
+        "whatsAppContact": "WhatsApp 聯絡",
+        "languageSwitcher": "切換語言"
+    },
+    "theme": {
+        "light": "淺色",
+        "dark": "深色",
+        "system": "系統"
+    },
+    "time": {
+        "dueToday": "今日到期",
+        "daysLeft": {
+            "one": "剩餘 {count} 日",
+            "other": "剩餘 {count} 日"
+        },
+        "daysOverdue": {
+            "one": "逾期 {count} 日",
+            "other": "逾期 {count} 日"
+        }
+    },
+    "notifications": {
+        "tasks": {
+            "created": "任務已成功建立。",
+            "updated": "任務已成功更新。",
+            "deleted": "任務已成功刪除。",
+            "bulkDeleted": {
+                "one": "已成功刪除 {count} 個任務。",
+                "other": "已成功刪除 {count} 個任務。"
+            },
+            "statusUpdated": "任務狀態已更新為 {status}。"
+        },
+        "goals": {
+            "deleted": "「{title}」已成功刪除。",
+            "statusUpdated": "「{title}」狀態已更新為 {status}。",
+            "intensityUpdated": "「{title}」強度已更新為 {intensity}。"
+        }
+    },
+    "whatsapp": {
+        "nav": {
+            "ariaLabel": "WhatsApp 聯絡",
+            "button": "Message 老細",
+            "hasPhone": {
+                "title": "Message 你老細！",
+                "description": "一撳就搵到你老細"
+            },
+            "noPhone": {
+                "title": "解鎖老細聯絡",
+                "description": "加你電話先可以用 WhatsApp 支援",
+                "cta": "加電話"
+            }
+        },
+        "landing": {
+            "badge": "💬 WhatsApp 整合",
+            "title": "同你嘅 AI 老細傾偈",
+            "titleHighlight": "隨時隨地",
+            "subtitle": "你嘅 AI 老細隨時都喺 WhatsApp。喺手機即刻拎到即時問責、動力同指引。",
+            "chatHeaderTitle": "執行老細",
+            "chatHeaderStatus": "而家在線",
+            "inputPlaceholder": "Message 老細...",
+            "messages": {
+                "user1": "老細！我啱啱搞掂今日嘅任務——專注做咗 90 分鐘 MVP！🎉",
+                "time1": "10:32 AM",
+                "boss1": "好。你做咗你話會做嘅嘢。依家已經連續 3 日。",
+                "user2": "感覺好正！我聽日應該專注咩？",
+                "time2": "10:33 AM",
+                "boss2Line1": "聽日一樣：專注 90 分鐘做：發布我嘅 SaaS MVP",
+                "boss2Line2": "你喺度建立勢。唔好斷 streak。聽日好似今日咁出現。",
+                "user3": "我今日有啲攰……不如休息下？",
+                "time3": "兩日後，11:15 AM",
+                "boss3Line1": "唔得。你昨日已經 miss 咗。",
+                "boss3Line2": "你已經積咗 2 個逾期任務。「攰」唔係藉口。要嘛做嘢，要嘛放棄目標。揀一個。",
+                "user4": "你講得啱。我而家就做。啱啱搞掂！✅",
+                "time4": "2:45 PM",
+                "boss4Line1": "咁先啱。你啱啱救返你個 streak。",
+                "boss4Line2": "下次你想放棄就記住呢一刻。你做得到。聽日再證明一次。"
+            },
+            "right": {
+                "title": "老細喺你口袋",
+                "description": "直接用 WhatsApp 連結你嘅 AI 問責老細。唔使切 App。",
+                "features": [
+                    {
+                        "title": "即時問責",
+                        "description": "即刻拎到進度反饋。你老細會即時回應，幫你 keep 住條路。"
+                    },
+                    {
+                        "title": "唔兜圈",
+                        "description": "你老細唔會氹你。你鬆懈就會畀你知；你爆發就會畀人認可。"
+                    },
+                    {
+                        "title": "隨時可用",
+                        "description": "24/7 問責陪住你。更新進度、問路，或者隨時拎返個 reality check。"
+                    },
+                    {
+                        "title": "目標導向對話",
+                        "description": "每次對話都係關於你嘅目標同進度。冇分心，只有結果。"
+                    }
+                ],
+                "cta": "開始同老細傾偈"
+            }
+        }
+    },
+    "errors": {
+        "app": {
+            "title": "發生錯誤",
+            "description": "載入呢頁時出錯。請重試或者返去控制面板。",
+            "dashboardCta": "控制面板"
+        },
+        "global": {
+            "title": "發生錯誤",
+            "description": "發生意外錯誤。請重試。"
+        },
+        "notFound": {
+            "title": "搵唔到頁面",
+            "description": "你想搵嘅頁面可能已移除、更名，或者暫時無法使用。",
+            "backToHome": "返回首頁"
+        }
     },
     "hero": {
         "badge": "AI驅動嘅問責老細",
@@ -30,6 +170,7 @@
     },
     "bossSection": {
         "badge": "AI驅動",
+        "introBadge": "⚡ AI 驅動問責",
         "title": "認識你嘅",
         "titleHighlight": "AI問責老細",
         "description": "同傳統嘅目標追蹤應用程式唔同，Bossy為你提供一個直接、唔廢話嘅AI老細，每日監控你嘅進度並要你負責任。",
@@ -46,6 +187,10 @@
             "pattern": {
                 "title": "模式識別",
                 "description": "AI追蹤你嘅一致性，當你偏離軌道時會升級反饋"
+            },
+            "availability": {
+                "title": "24/7 隨時可用",
+                "description": "透過 WhatsApp 或控制面板隨時搵你老細，即刻有問責"
             }
         }
     },
@@ -65,7 +210,31 @@
         "newToPlatform": "第一次用Bossy？",
         "alreadyHaveAccount": "已經有帳號？",
         "createAccount": "建立帳號",
-        "signInExisting": "登入現有帳號"
+        "signInExisting": "登入現有帳號",
+        "phone": "電話號碼",
+        "phonePlaceholder": "1234 5678",
+        "otp": "驗證碼",
+        "enterOtp": "輸入驗證碼",
+        "otpHint": "輸入發送到你手機嘅6位數驗證碼",
+        "resendCode": "重新發送驗證碼",
+        "resendWithCooldown": "重新發送（{seconds}秒）",
+        "sending": "發送緊...",
+        "verifyCode": "驗證驗證碼",
+        "sendCode": "發送驗證碼",
+        "changePhone": "更改電話號碼",
+        "errors": {
+            "invalidPhone": "電話號碼必須包含國碼（例如：+1234567890）",
+            "otpSixDigits": "驗證碼必須係 6 位數字",
+            "sendOtpFailed": "發送驗證碼失敗，請再試。",
+            "invalidOtp": "驗證碼無效，請再試。",
+            "sessionFailed": "建立登入狀態失敗，請再試。",
+            "invalidEmailOrPassword": "電郵或密碼錯誤，請再試。",
+            "signUpFailed": "建立用戶失敗，請再試。"
+        },
+        "success": {
+            "otpSent": "驗證碼已發送到你手機！",
+            "checkEmailToConfirm": "請到電郵確認帳戶後先登入。"
+        }
     },
     "dashboard": {
         "title": "控制面板",
@@ -74,6 +243,20 @@
             "description": "建立目標以開始每日問責。",
             "cta": "建立目標"
         },
+        "performanceReport": "績效報告畀",
+        "bossFeedback": "老細回饋",
+        "badges": {
+            "today": "今日",
+            "overdue": "逾期",
+            "pending": "待處理"
+        },
+        "overdueTasks": "逾期任務",
+        "overdueTasksDesc": "過去幾日未完成嘅任務",
+        "todaysTasks": "今日任務",
+        "todaysTasksDesc": "今日排程嘅待完成任務",
+        "outstandingTasks": "今日未完成任務",
+        "outstanding": "待處理",
+        "noOutstandingTasks": "冇逾期或待處理嘅任務",
         "activeGoal": "進行中嘅目標",
         "inProgress": "進行中",
         "todaysTask": "今日任務",
@@ -126,6 +309,14 @@
         "title": "目標",
         "manageAll": "管理晒所有目標",
         "createGoal": "建立目標",
+        "untitled": "目標",
+        "limits": {
+            "activeLimitReached": "進行中目標已達上限（{active}/{max}）",
+            "activeGoals": "進行中目標：{active}/{max}",
+            "limitReachedDesc": "你已達免費方案嘅進行中目標上限。完成或放棄一個目標先可以再建立新目標，或者升級到 Plus 去到不限目標。",
+            "nearLimitDesc": "你而家用緊免費方案。升級到 Plus 可以有不限進行中目標同更多功能。",
+            "upgradeUnlimited": "升級到 Plus 去到不限目標"
+        },
         "filterAll": "全部",
         "filterActive": "進行中",
         "filterCompleted": "已完成",
@@ -137,6 +328,7 @@
         "progress": "進度",
         "edit": "編輯",
         "delete": "刪除",
+        "deleteConfirm": "你確定要刪除「{title}」嗎？呢個操作冇得復原。所有相關任務同進度會永久刪除。",
         "status": {
             "active": "進行中",
             "completed": "已完成",
@@ -189,7 +381,27 @@
     },
     "testimonials": {
         "title": "受到成功者信賴",
-        "subtitle": "睇下我哋嘅用戶點講佢哋嘅轉變"
+        "subtitle": "睇下我哋嘅用戶點講佢哋嘅轉變",
+        "items": [
+            {
+                "quote": "「Bossy 徹底改變咗我做目標嘅方式。每日嘅問責令我喺原本會放棄嗰陣都繼續撐落去。」",
+                "name": "Sarah Johnson",
+                "role": "創業家",
+                "initials": "SJ"
+            },
+            {
+                "quote": "「我幾乎試過晒所有生產力 App。Bossy 唔同——佢真係令你對自己負責。唔再對自己空口承諾。」",
+                "name": "Michael Chen",
+                "role": "產品經理",
+                "initials": "MC"
+            },
+            {
+                "quote": "「呢種唔畀自己搵藉口嘅方式正正係我需要嘅。多得 Bossy 嘅問責系統，我今年完成咗 3 個重要目標。」",
+                "name": "Emily Parker",
+                "role": "設計師",
+                "initials": "EP"
+            }
+        ]
     },
     "cta": {
         "badge": "你嘅AI老細準備好喇",
@@ -202,6 +414,9 @@
     },
     "preview": {
         "seeItInAction": "實際操作示範",
+        "sectionTitle": "你需要嘅一切一眼睇晒",
+        "commandCenterBadge": "📊 你嘅指揮中心",
+        "description": "乾淨又夠力嘅控制面板，清楚睇到你嘅目標、任務同進度，問責一目了然",
         "dashboard": "控制面板",
         "activeGoal": "進行中嘅目標",
         "inProgress": "進行中",
@@ -216,7 +431,12 @@
         "pending": "待處理",
         "markDone": "標記完成",
         "activityHistory": "活動記錄",
-        "lastMessages": "最近3條訊息"
+        "lastMessages": "最近3條訊息",
+        "bossFeedbackExample": "「好。你喺度跟住計劃。唔好鬆。」",
+        "sampleGoalTitle": "發布我嘅 SaaS MVP",
+        "proTipLabel": "貼士：",
+        "proTipText": "付費計劃可以同時追蹤多個目標",
+        "sampleTask2": "睇用戶反饋同排功能優先次序"
     },
     "boss": {
         "title": "你嘅AI老細",
@@ -233,6 +453,7 @@
         "saveChanges": "儲存更改",
         "changingBoss": "換緊老細...",
         "bossChanged": "老細換咗喇！",
+        "upgradeToUnlock": "升級到 Plus 解鎖",
         "personalities": {
             "execution": {
                 "nickname": "我令你持續前進。每一日。",
@@ -274,6 +495,153 @@
                     "我唔降低標準。你要提升自己嚟達到佢。"
                 ]
             }
+        },
+        "moods": {
+            "execution": {
+                "thrilled": [
+                    "執行得好靚。呢個就係標準。照住做。",
+                    "你嘅穩定性講晒一切。呢個就係承諾。",
+                    "好勁。你示範緊咩叫可能。"
+                ],
+                "happy": [
+                    "好。你喺軌道上。唔好鬆。",
+                    "表現紮實。依家維持住呢股勢。",
+                    "你做到你講過會做嘅嘢。呢個先最重要。"
+                ],
+                "neutral": [
+                    "我睇緊。畀我見到你係認真嘅。",
+                    "你可以更好。我知你得。",
+                    "係時候證明你嘅實力。"
+                ],
+                "concerned": [
+                    "呢個唔係我對你嘅期望。",
+                    "你落後咗。我哋要傾下。",
+                    "你啲數字跌緊。咩事？"
+                ],
+                "angry": [
+                    "呢個完全唔接受。解釋下。",
+                    "我信你先交畀你呢個目標。唔好浪費呢份信任。",
+                    "即刻修正，唔係就到呢度為止。"
+                ]
+            },
+            "supportive": {
+                "thrilled": [
+                    "我就知你得！你真係好勁！",
+                    "睇下你！我真係超級為你自豪！",
+                    "你做得太好喇！保持住呢股能量！"
+                ],
+                "happy": [
+                    "你做得好好！我好為你嘅努力自豪！",
+                    "做得靚！你建緊好正嘅嘢。",
+                    "你日日都有出現。呢個先係關鍵！"
+                ],
+                "neutral": [
+                    "我信你。我哋一齊返返去正軌。",
+                    "你得嘅，只係要再聚焦少少。",
+                    "冇事，我哋都會有低潮。一齊反彈！"
+                ],
+                "concerned": [
+                    "喂，我有啲擔心你。仲好嗎？",
+                    "我哋一齊諗辦法。係咩卡住你？",
+                    "我知你有努力。我哋搵出邊度唔順。"
+                ],
+                "angry": [
+                    "我真係開始擔心。我哋要傾下發生咩事。",
+                    "呢個唔似你。同我講下點解。",
+                    "我在乎你，但呢個模式要改，而且要快。"
+                ]
+            },
+            "mentor": {
+                "thrilled": [
+                    "好驚人嘅自律。你掌握到呢個練習。",
+                    "呢種穩定性顯示你成熟咗。做得好。",
+                    "你內化咗個課題。呢個先係真正進步。"
+                ],
+                "happy": [
+                    "幾好。諗下今日成功嘅關鍵係乜。",
+                    "你嘅用心好明顯。繼續觀察你嘅模式。",
+                    "穩步前進。智慧就係咁累積。"
+                ],
+                "neutral": [
+                    "停一停，反思：呢個練習想話畀你知乜？",
+                    "呢條路要有覺察。你真係喺度嗎？",
+                    "留意阻力。佢想教你乜？"
+                ],
+                "concerned": [
+                    "你嘅模式透露咗啲嘢。係時候深入反思。",
+                    "挫折係老師。今次教緊你乜？",
+                    "掙扎指向重要嘅嘢。去探究佢。"
+                ],
+                "angry": [
+                    "呢個模式需要嚴肅反思。點解抗拒？",
+                    "你喺逃避真正嘅工作。誠實面對。",
+                    "呢個目標真係同你嘅真實一致？深問自己。"
+                ]
+            },
+            "drill-sergeant": {
+                "thrilled": [
+                    "正呀！就係咁！",
+                    "你係部機！繼續打爆啲目標！",
+                    "呢個先叫執行！呢個就係你嘅標準！"
+                ],
+                "happy": [
+                    "唔錯！但唔好自滿。下一個！",
+                    "得！聽日再嚟一次。唔好搵藉口！",
+                    "你出現咗。應該嘅。繼續！"
+                ],
+                "neutral": [
+                    "快啲！我知你仲有更多！拎出嚟！",
+                    "呢個真係你最好？我唔信。再挖深啲！",
+                    "升檔！唔好再hea！"
+                ],
+                "concerned": [
+                    "你點呀？！嗰團火去咗邊？！",
+                    "唔得！即刻收心！",
+                    "你滑緊坡！醒下啦！"
+                ],
+                "angry": [
+                    "你玩緊我呀？！呢個太廢！",
+                    "唔接受！你比呢個更強！證明畀我睇！",
+                    "夠喇！要嘛承諾，要嘛退出！揀一個？！"
+                ]
+            }
+        }
+    },
+    "pricing": {
+        "interval": {
+            "month": "月",
+            "year": "年",
+            "monthly": "每月",
+            "yearly": "每年"
+        },
+        "savePercent": "慳 {percent}%",
+        "forever": "永久",
+        "perInterval": "每{interval}",
+        "monthlyEquivalent": "{amount}/月",
+        "features": {
+            "free": [
+                "1 個進行中目標",
+                "只得預設老細",
+                "7 日歷史",
+                "每日 check-in"
+            ],
+            "plus": [
+                "不限進行中目標",
+                "全部老細性格",
+                "不限歷史",
+                "優先支援"
+            ]
+        },
+        "buttons": {
+            "getStarted": "即刻開始",
+            "goToDashboard": "去控制面板",
+            "currentPlan": "目前計劃",
+            "popular": "熱門",
+            "manageSubscription": "管理訂閱",
+            "cancelSubscription": "取消訂閱",
+            "switchToMonthly": "轉做每月",
+            "switchToYearly": "轉做每年",
+            "upgradeToPlus": "升級到 Plus"
         }
     },
     "profile": {
@@ -303,16 +671,32 @@
         "saveChanges": "儲存變更",
         "saving": "儲存緊...",
         "phoneSaved": "手機號碼儲存成功",
-        "phoneSaveError": "儲存手機號碼失敗"
+        "phoneSaveError": "儲存手機號碼失敗",
+        "phoneInputHelp": "輸入電話號碼（唔使國碼，例如：{example}）",
+        "phoneReadOnly": "基於安全原因，手機號碼無法更改",
+        "unknown": "未知",
+        "billed": "（按{interval}收費）",
+        "billingInterval": {
+            "monthly": "每月",
+            "yearly": "每年"
+        },
+        "subscriptionStatus": {
+            "active": "有效",
+            "trialing": "試用中",
+            "canceling": "取消中",
+            "free": "免費"
+        }
     },
     "nav": {
+        "account": "帳戶",
         "dashboard": "控制面板",
         "goals": "目標",
         "boss": "老細",
         "profile": "個人資料",
         "signOut": "登出",
         "createGoal": "建立目標",
-        "loading": "載入中..."
+        "loading": "載入中...",
+        "back": "返回"
     },
     "editGoal": {
         "title": "編輯目標",
@@ -343,12 +727,327 @@
         "taskPlaceholder": "你需要做咩？",
         "addingTask": "新增任務中...",
         "noTasks": "未有任務。新增你嘅第一個任務！",
-        "save": "儲存"
+        "save": "儲存",
+        "saving": "儲存中...",
+        "pickDate": "揀日期",
+        "statusLabel": "狀態",
+        "statusOptions": {
+            "todo": "待辦",
+            "in_progress": "進行中",
+            "done": "完成"
+        }
     },
     "calendar": {
         "taskCalendar": "任務日曆",
         "today": "今日",
         "hasTasks": "有任務",
         "outsideRange": "超出目標範圍"
+    },
+    "legal": {
+        "privacyPolicy": "私隱政策",
+        "termsOfService": "服務條款",
+        "privacy": "私隱",
+        "terms": "條款"
+    },
+    "legalPages": {
+        "common": {
+            "backToHome": "← 返回首頁",
+            "lastUpdated": "最後更新：{date}",
+            "labels": {
+                "email": "電郵",
+                "address": "地址"
+            }
+        },
+        "terms": {
+            "title": "服務條款",
+            "sections": {
+                "acceptance": {
+                    "title": "1. 接受條款",
+                    "paragraphs": [
+                        "你一經存取同使用 Bossy（「本服務」），即表示你接受並同意受本協議條款同規定約束。如果你唔同意，請唔好使用本服務。"
+                    ]
+                },
+                "useLicense": {
+                    "title": "2. 使用授權",
+                    "paragraphs": [
+                        "我哋授予你喺個人、非商業用途下暫時存取同使用本服務嘅授權。呢個係授權，唔係所有權轉讓。根據呢個授權，你唔可以："
+                    ],
+                    "bullets": [
+                        "修改或複製資料",
+                        "將資料用於任何商業目的或任何公開展示",
+                        "嘗試對本服務入面嘅軟體做反編譯或逆向工程",
+                        "移除任何版權或其他專有標示",
+                        "將資料轉畀其他人，或喺其他伺服器上「鏡像」該資料"
+                    ]
+                },
+                "accountRegistration": {
+                    "title": "3. 帳戶註冊",
+                    "paragraphs": [
+                        "要用本服務某啲功能，你需要註冊帳戶。註冊時，你同意："
+                    ],
+                    "bullets": [
+                        "提供準確、最新同完整嘅資料",
+                        "維持並及時更新你嘅帳戶資料",
+                        "保護你嘅密碼安全，並承擔未經授權存取嘅風險",
+                        "一旦發現帳戶被未經授權使用，立即通知我哋"
+                    ]
+                },
+                "userConduct": {
+                    "title": "4. 用戶行為",
+                    "paragraphs": [
+                        "你同意唔會用本服務去："
+                    ],
+                    "bullets": [
+                        "違反任何本地、州、國家或國際法律",
+                        "侵犯他人知識產權",
+                        "傳送任何有害或惡意程式碼",
+                        "騷擾、辱罵或傷害他人",
+                        "未經同意收集或追蹤他人嘅個人資料"
+                    ]
+                },
+                "subscriptionPayment": {
+                    "title": "5. 訂閱同付款",
+                    "paragraphs": [
+                        "本服務部分內容以訂閱形式收費。你會按週期預先付款（例如每月或每年）。收費週期係按月或按年，視乎你購買訂閱時揀嘅方案。",
+                        "每個收費週期完結後，除非你取消或我哋取消，否則訂閱會自動續費。你可以喺帳戶設定取消續費，或者聯絡我哋支援團隊取消。"
+                    ]
+                },
+                "refundPolicy": {
+                    "title": "6. 退款政策",
+                    "paragraphs": [
+                        "新訂閱有 7 日退款保證。如果你喺訂閱頭 7 日內對服務唔滿意，可以聯絡支援團隊申請全額退款。7 日後，所有付款概不退款。"
+                    ]
+                },
+                "goalCommitments": {
+                    "title": "7. 目標承諾",
+                    "paragraphs": [
+                        "當你喺 Bossy 設定目標，代表你對自己作出承諾。我哋提供問責功能幫你跟進，但你明白並同意："
+                    ],
+                    "bullets": [
+                        "目標一經設定就改唔到，呢個係承諾機制一部分",
+                        "你嘅進度會被追蹤同記錄，用作問責",
+                        "本服務會按你嘅打卡模式提供回饋",
+                        "你要為自己嘅行動同目標達成負全責"
+                    ]
+                },
+                "disclaimer": {
+                    "title": "8. 免責聲明",
+                    "paragraphs": [
+                        "Bossy 上嘅資料以「現況」提供。Bossy 唔作任何明示或默示保證，並否認所有其他保證，包括但不限於適銷性、特定用途適用性或不侵犯知識產權或其他權利嘅默示保證或條件。",
+                        "Bossy 唔係醫療、治療或輔導服務。本服務只用於目標追蹤同問責。如果你遇到心理健康問題，請諮詢合資格專業人士。"
+                    ]
+                },
+                "limitations": {
+                    "title": "9. 責任限制",
+                    "paragraphs": [
+                        "任何情況下，Bossy 或其供應商都唔會就因使用或無法使用 Bossy 上嘅資料而造成嘅任何損失負責（包括但不限於資料或利潤損失、或因業務中斷造成嘅損失），即使 Bossy 或授權代表已被告知可能出現該等損害。"
+                    ]
+                },
+                "termination": {
+                    "title": "10. 終止",
+                    "paragraphs": [
+                        "我哋可以按自行酌情，基於任何理由（包括但不限於違反本條款）即時終止或暫停你嘅帳戶並禁止存取本服務，毋須事先通知亦毋須承擔責任。",
+                        "終止後，你使用本服務嘅權利會即時停止。如果你想終止帳戶，你可以停止使用本服務，或者聯絡我哋刪除帳戶。"
+                    ]
+                },
+                "changesToTerms": {
+                    "title": "11. 條款變更",
+                    "paragraphs": [
+                        "我哋保留隨時修改本條款嘅權利。如有重大變更，我哋會喺本頁發布新條款並更新「最後更新」日期去通知用戶。",
+                        "你喺變更後繼續使用本服務，即表示你接受新條款。"
+                    ]
+                },
+                "governingLaw": {
+                    "title": "12. 適用法律",
+                    "paragraphs": [
+                        "本條款受 Bossy 營運所在地司法管轄區法律管轄並按其解釋，而不考慮其法律衝突規定。"
+                    ]
+                },
+                "contactInformation": {
+                    "title": "13. 聯絡資料",
+                    "paragraphs": [
+                        "如果你對本條款有任何疑問，請透過以下方式聯絡我哋："
+                    ],
+                    "email": "legal@bossy.app",
+                    "addressPlaceholder": "[你嘅公司地址]"
+                }
+            }
+        },
+        "privacy": {
+            "title": "私隱政策",
+            "sections": {
+                "introduction": {
+                    "title": "1. 簡介",
+                    "paragraphs": [
+                        "Bossy（「我哋」）致力保護你嘅私隱。本私隱政策解釋當你使用我哋服務時，我哋點樣收集、使用、披露同保障你嘅資料。請仔細閱讀本私隱政策；如果你唔同意，請唔好存取本服務。"
+                    ]
+                },
+                "informationWeCollect": {
+                    "title": "2. 我哋收集嘅資料",
+                    "personalInformationTitle": "個人資料",
+                    "personalInformationIntro": "當你做以下事情，我哋會收集你直接提供畀我哋嘅資料：",
+                    "personalInformationBullets": [
+                        "註冊帳戶（電郵、姓名）",
+                        "建立同追蹤目標",
+                        "完成每日打卡",
+                        "透過支援渠道同我哋聯絡",
+                        "訂閱付費服務（付款資料）"
+                    ],
+                    "usageInformationTitle": "使用資料",
+                    "usageInformationIntro": "當你使用本服務時，我哋會自動收集你裝置嘅部分資料，包括：",
+                    "usageInformationBullets": [
+                        "記錄資料（IP 地址、瀏覽器類型、作業系統）",
+                        "裝置資料（裝置類型、唯一裝置識別碼）",
+                        "使用資料（瀏覽頁面、停留時間、使用功能）",
+                        "Cookies 及類似追蹤技術"
+                    ]
+                },
+                "howWeUse": {
+                    "title": "3. 我哋點樣使用你嘅資料",
+                    "intro": "我哋會用收集到嘅資料去：",
+                    "bullets": [
+                        "提供、維持同改善本服務",
+                        "處理交易並管理訂閱",
+                        "發送技術通知、更新同支援訊息",
+                        "回覆你嘅意見同問題",
+                        "追蹤目標進度並提供問責功能",
+                        "分析使用模式以改善用戶體驗",
+                        "偵測、預防同處理技術問題同詐騙活動",
+                        "喺你同意下發送推廣訊息"
+                    ]
+                },
+                "sharing": {
+                    "title": "4. 資料共享同披露",
+                    "intro": "我哋唔會向第三方出售、交易或出租你嘅個人資料。我哋可能喺以下情況共享你嘅資料：",
+                    "bullets": [
+                        {
+                            "label": "服務提供商",
+                            "description": "我哋可能同代表我哋提供服務嘅第三方共享你嘅資料（例如付款處理、數據分析、電郵投遞、託管服務）"
+                        },
+                        {
+                            "label": "法律要求",
+                            "description": "如法律要求，或為回應公共機關嘅有效要求，我哋可能披露你嘅資料"
+                        },
+                        {
+                            "label": "業務轉讓",
+                            "description": "喺合併、出售公司資產、融資或收購全部或部分業務期間（或談判期間），我哋可能共享或轉讓你嘅資料"
+                        },
+                        {
+                            "label": "經你同意",
+                            "description": "喺你同意或按你指示下，我哋可能共享你嘅資料"
+                        }
+                    ]
+                },
+                "dataSecurity": {
+                    "title": "5. 數據安全",
+                    "intro": "我哋會採取合適嘅技術同組織安全措施，保護你嘅個人資料免受未經授權或非法處理，以及意外遺失、銷毀或損壞。措施包括：",
+                    "bullets": [
+                        "傳輸中同靜態數據加密",
+                        "定期安全評估同審計",
+                        "存取控制同認證機制",
+                        "定期備份"
+                    ],
+                    "outro": "不過，互聯網傳輸或電子儲存都唔可能 100% 安全。雖然我哋會盡力用商業上可接受嘅方法保護你嘅資料，但唔能夠保證絕對安全。"
+                },
+                "dataRetention": {
+                    "title": "6. 資料保留",
+                    "paragraphs": [
+                        "除非法律要求或容許更長保留期，否則我哋會喺達成本私隱政策所述目的所需期間內保留你嘅個人資料。當我哋唔再需要你嘅資料時，會安全刪除或匿名化。",
+                        "如果你刪除帳戶，我哋會喺 30 日內刪除你嘅個人資料，但法律、會計或安全需要保留嘅資料除外。"
+                    ]
+                },
+                "rights": {
+                    "title": "7. 你嘅權利同選擇",
+                    "intro": "視乎你所在地，你可能就你嘅個人資料享有以下權利：",
+                    "bullets": [
+                        {
+                            "label": "存取",
+                            "description": "你可以要求存取我哋持有關於你嘅個人資料"
+                        },
+                        {
+                            "label": "更正",
+                            "description": "你可以要求更正不準確或不完整嘅資料"
+                        },
+                        {
+                            "label": "刪除",
+                            "description": "你可以要求刪除你嘅個人資料"
+                        },
+                        {
+                            "label": "可攜性",
+                            "description": "你可以要求以機器可讀格式取得你嘅數據副本"
+                        },
+                        {
+                            "label": "反對",
+                            "description": "你可以反對我哋處理你嘅個人資料"
+                        },
+                        {
+                            "label": "撤回同意",
+                            "description": "你可以隨時撤回推廣訊息同意"
+                        }
+                    ],
+                    "outro": "如要行使以上權利，請透過 privacy@bossy.app 聯絡我哋。"
+                },
+                "cookies": {
+                    "title": "8. Cookies 同追蹤技術",
+                    "paragraphs": [
+                        "我哋會用 Cookies 同類似追蹤技術去追蹤你喺本服務嘅活動，同儲存某啲資料。你可以設定瀏覽器拒絕所有 Cookies 或提示你 Cookie 發送。不過，如果你唔接受 Cookies，你可能用唔到本服務部分功能。",
+                        "我哋使用嘅 Cookie 類型包括："
+                    ],
+                    "bullets": [
+                        {
+                            "label": "必要 Cookies",
+                            "description": "本服務運作所必需"
+                        },
+                        {
+                            "label": "分析 Cookies",
+                            "description": "幫我哋了解訪客點樣使用本服務"
+                        },
+                        {
+                            "label": "偏好 Cookies",
+                            "description": "記住你嘅偏好同設定"
+                        }
+                    ]
+                },
+                "thirdParty": {
+                    "title": "9. 第三方服務",
+                    "paragraphs": [
+                        "本服務可能包含連結到第三方網站或服務，並非由 Bossy 擁有或控制。我哋無法控制，亦唔會就任何第三方網站或服務嘅內容、私隱政策或做法負責。"
+                    ]
+                },
+                "children": {
+                    "title": "10. 兒童私隱",
+                    "paragraphs": [
+                        "本服務唔適用於 13 歲以下兒童。我哋唔會喺知情情況下收集 13 歲以下兒童嘅個人資料。如果你發現有兒童向我哋提供咗個人資料，請聯絡我哋。如果我哋發現 13 歲以下兒童提供咗個人資料，我哋會即刻從伺服器刪除。"
+                    ]
+                },
+                "internationalTransfers": {
+                    "title": "11. 國際數據傳輸",
+                    "paragraphs": [
+                        "你嘅資料可能會被傳輸同存放喺你所在州、省、國家或其他政府管轄區以外嘅電腦，而當地數據保護法律可能同你所在地唔同。我哋會採取必要措施，確保你嘅資料得到安全處理並符合本私隱政策。"
+                    ]
+                },
+                "changes": {
+                    "title": "12. 本私隱政策嘅變更",
+                    "paragraphs": [
+                        "我哋可能會不時更新本私隱政策。我哋會喺本頁發布新政策並更新「最後更新」日期去通知你任何變更。變更生效前，我哋亦可能透過電郵或喺本服務顯著位置發出通知。"
+                    ]
+                },
+                "contact": {
+                    "title": "13. 聯絡我哋",
+                    "paragraphs": [
+                        "如果你對本私隱政策有任何疑問，請聯絡我哋："
+                    ],
+                    "email": "privacy@bossy.app",
+                    "addressPlaceholder": "[你嘅公司地址]"
+                }
+            }
+        }
+    },
+    "footer": {
+        "product": "產品",
+        "legal": "法律",
+        "company": "公司",
+        "tagline": "以執行為先嘅問責",
+        "copyright": "© {year} {appName}。保留所有權利。"
     }
 }

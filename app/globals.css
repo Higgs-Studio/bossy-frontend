@@ -1,48 +1,33 @@
 @import "tailwindcss";
-/*
-  ---break---
-*/
-@custom-variant dark (&:is(.dark *));
-
 @import "tw-animate-css";
 
-@variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
-
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
-
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
-
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
-
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
-
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
-
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
-
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-
   --color-chart-1: hsl(var(--chart-1));
   --color-chart-2: hsl(var(--chart-2));
   --color-chart-3: hsl(var(--chart-3));
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
-
   --color-sidebar: hsl(var(--sidebar-background));
   --color-sidebar-foreground: hsl(var(--sidebar-foreground));
   --color-sidebar-primary: hsl(var(--sidebar-primary));
@@ -51,22 +36,18 @@
   --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
   --color-sidebar-border: hsl(var(--sidebar-border));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
-
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
   looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
 */
 @layer base {
-
   *,
   ::after,
   ::before,
@@ -81,36 +62,16 @@
     font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   }
 
-  /* Typography scale improvements */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: -0.02em;
   }
 
-  h1 {
-    font-size: 2.5rem;
-    line-height: 1.1;
-  }
-
-  h2 {
-    font-size: 2rem;
-    line-height: 1.2;
-  }
-
-  h3 {
-    font-size: 1.5rem;
-    line-height: 1.3;
-  }
-
-  p {
-    line-height: 1.6;
-  }
+  h1 { font-size: 2.5rem; line-height: 1.1; }
+  h2 { font-size: 2rem; line-height: 1.2; }
+  h3 { font-size: 1.5rem; line-height: 1.3; }
+  p  { line-height: 1.6; }
 }
 
 @layer base {
@@ -121,56 +82,48 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    /* Primary: Professional Slate with Indigo accent */
-    --primary: 99 102 241;
-    /* Indigo-500 #6366F1 */
+    --primary: 239 84% 67%;
     --primary-foreground: 0 0% 100%;
-    --accent: 99 102 241;
-    /* Indigo-500 */
-    --accent-foreground: 0 0% 100%;
-    /* Semantic colors */
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
-    /* Red #EF4444 */
     --destructive-foreground: 0 0% 100%;
     --success: 142 76% 36%;
-    /* Emerald #10B981 */
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
-    /* Amber #F59E0B */
     --warning-foreground: 0 0% 100%;
     --info: 217 91% 60%;
-    /* Blue #3B82F6 */
     --info-foreground: 0 0% 100%;
-    /* Refined neutrals - slate-based */
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 99 102 241;
-    /* Match primary for focus */
+    --ring: 239 84% 67%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --radius: 0.6rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 99 102 241;
+    --sidebar-primary: 239 84% 67%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 99 102 241;
+    --sidebar-ring: 239 84% 67%;
   }
 
   .dark {
-    /* Rich, deep backgrounds for better depth */
     --background: 222 47% 8%;
     --foreground: 210 40% 98%;
     --card: 222 47% 11%;
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
-    /* Primary: Vibrant indigo for dark mode */
     --primary: 239 84% 67%;
     --primary-foreground: 0 0% 100%;
     --secondary: 217 33% 17%;
@@ -179,7 +132,6 @@
     --muted-foreground: 215 20% 65%;
     --accent: 239 84% 67%;
     --accent-foreground: 0 0% 100%;
-    /* Semantic colors for dark mode - vibrant but readable */
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     --success: 142 71% 45%;
@@ -188,7 +140,6 @@
     --warning-foreground: 0 0% 100%;
     --info: 217 91% 65%;
     --info-foreground: 0 0% 100%;
-    /* Better borders and inputs with subtle contrast */
     --border: 217 33% 20%;
     --input: 217 33% 20%;
     --ring: 239 84% 67%;
@@ -197,7 +148,6 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    /* Sidebar with distinct but harmonious colors */
     --sidebar-background: 222 47% 6%;
     --sidebar-foreground: 240 5% 96%;
     --sidebar-primary: 239 84% 67%;
@@ -207,130 +157,7 @@
     --sidebar-border: 217 33% 20%;
     --sidebar-ring: 239 84% 67%;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-/*
-  ---break---
-*/
-
-:root {
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(240 10% 3.9%);
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(240 10% 3.9%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(240 10% 3.9%);
-  --primary: hsl(99 102 241);
-  /* Indigo accent */
-  --primary-foreground: hsl(0 0% 100%);
-  --accent: hsl(99 102 241);
-  --accent-foreground: hsl(0 0% 100%);
-  --secondary: hsl(240 4.8% 95.9%);
-  --secondary-foreground: hsl(240 5.9% 10%);
-  --muted: hsl(240 4.8% 95.9%);
-  --muted-foreground: hsl(240 3.8% 46.1%);
-  --accent: hsl(240 4.8% 95.9%);
-  --accent-foreground: hsl(240 5.9% 10%);
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(0 0% 98%);
-  --success: hsl(142 76% 36%);
-  --warning: hsl(38 92% 50%);
-  --info: hsl(217 91% 60%);
-  --border: hsl(240 5.9% 90%);
-  --input: hsl(240 5.9% 90%);
-  --ring: hsl(99 102 241);
-  --chart-1: hsl(12 76% 61%);
-  --chart-2: hsl(173 58% 39%);
-  --chart-3: hsl(197 37% 24%);
-  --chart-4: hsl(43 74% 66%);
-  --chart-5: hsl(27 87% 67%);
-  --radius: 0.6rem;
-}
-
-/*
-  ---break---
-*/
-
-.dark {
-  --background: hsl(222 47% 8%);
-  --foreground: hsl(210 40% 98%);
-  --card: hsl(222 47% 11%);
-  --card-foreground: hsl(210 40% 98%);
-  --popover: hsl(222 47% 11%);
-  --popover-foreground: hsl(210 40% 98%);
-  --primary: hsl(239 84% 67%);
-  --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(217 33% 17%);
-  --secondary-foreground: hsl(210 40% 98%);
-  --muted: hsl(217 33% 17%);
-  --muted-foreground: hsl(215 20% 65%);
-  --accent: hsl(239 84% 67%);
-  --accent-foreground: hsl(0 0% 100%);
-  --destructive: hsl(0 72% 51%);
-  --destructive-foreground: hsl(0 0% 100%);
-  --success: hsl(142 71% 45%);
-  --warning: hsl(38 92% 55%);
-  --info: hsl(217 91% 65%);
-  --border: hsl(217 33% 20%);
-  --input: hsl(217 33% 20%);
-  --ring: hsl(239 84% 67%);
-  --chart-1: hsl(220 70% 50%);
-  --chart-2: hsl(160 60% 45%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(340 75% 55%);
-}
-
-/*
-  ---break---
-*/
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-}
-
-/*
-  ---break---
-*/
-
-@layer base {
   * {
     @apply border-border outline-ring/50;
   }
@@ -355,12 +182,10 @@
   background-size: 20px 20px;
 }
 
-/* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
 }
 
-/* Enhanced focus styles */
 *:focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
@@ -371,7 +196,6 @@ html {
   outline-offset: 2px;
 }
 
-/* Improved selection - Enable text selection site-wide */
 * {
   user-select: text;
   -webkit-user-select: text;
@@ -379,7 +203,6 @@ html {
   -ms-user-select: text;
 }
 
-/* Except for buttons and interactive elements */
 button,
 input[type="button"],
 input[type="submit"],
@@ -409,7 +232,6 @@ input[type="reset"],
   color: hsl(var(--foreground));
 }
 
-/* Consistent spacing utilities */
 @layer utilities {
   .space-section {
     @apply py-16 lg:py-20;
@@ -418,10 +240,7 @@ input[type="reset"],
   .container-padding {
     @apply px-4 sm:px-6 lg:px-8;
   }
-}
 
-/* Smooth transitions for interactive elements */
-@layer utilities {
   .transition-smooth {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -431,7 +250,6 @@ input[type="reset"],
   }
 }
 
-/* Enhanced shadow system - consistent across all devices */
 @layer utilities {
   .shadow-card {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
@@ -490,18 +308,10 @@ input[type="reset"],
   }
 }
 
-/* Animation utilities */
 @layer utilities {
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .animate-fade-in {
@@ -509,15 +319,8 @@ input[type="reset"],
   }
 
   @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(-10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
   .animate-slide-in {
@@ -525,13 +328,10 @@ input[type="reset"],
   }
 }
 
-/* Improved button and link hover states */
-a,
-button {
+a, button {
   @apply transition-all duration-200;
 }
 
-/* Better form element styling */
 input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   opacity: 0.6;
@@ -551,7 +351,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
 
-/* Scrollbar styling for dark mode */
 .dark ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -571,17 +370,10 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   background: hsl(var(--muted-foreground) / 0.5);
 }
 
-/* Better dark mode gradient backgrounds */
-.dark .bg-gradient-to-br {
-  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
-}
-
-/* Improved placeholder text in dark mode */
 .dark ::placeholder {
   color: hsl(var(--muted-foreground) / 0.5);
 }
 
-/* Better disabled state in dark mode */
 .dark :disabled {
   opacity: 0.5;
   cursor: not-allowed;

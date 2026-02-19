@@ -4,10 +4,12 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { validatedAction } from '@/lib/auth/middleware';
+import { logError } from '@/lib/utils/logger';
 
 // Phone number validation schema
 const sendOtpSchema = z.object({
-  phone: z.string().regex(/^\+[1-9]\d{1,14}$/, 'Phone number must include country code (e.g., +1234567890)')
+  // UI will translate these "error codes"
+  phone: z.string().regex(/^\+[1-9]\d{1,14}$/, 'invalidPhone')
 });
 
 export const sendOtp = validatedAction(sendOtpSchema, async (data, formData) => {
@@ -20,13 +22,13 @@ export const sendOtp = validatedAction(sendOtpSchema, async (data, formData) => 
 
   if (error) {
     return {
-      error: error.message || 'Failed to send verification code. Please try again.',
+      errorCode: 'sendOtpFailed',
       phone
     };
   }
 
   return {
-    success: 'Verification code sent to your phone!',
+    successCode: 'otpSent',
     otpSent: true,
     phone
   };
@@ -35,7 +37,8 @@ export const sendOtp = validatedAction(sendOtpSchema, async (data, formData) => 
 // OTP verification schema
 const verifyOtpSchema = z.object({
   phone: z.string().regex(/^\+[1-9]\d{1,14}$/),
-  otp: z.string().length(6, 'Verification code must be 6 digits')
+  // UI will translate these "error codes"
+  otp: z.string().length(6, 'otpSixDigits')
 });
 
 export const verifyOtp = validatedAction(verifyOtpSchema, async (data, formData) => {
@@ -50,7 +53,7 @@ export const verifyOtp = validatedAction(verifyOtpSchema, async (data, formData)
 
   if (error) {
     return {
-      error: error.message || 'Invalid verification code. Please try again.',
+      errorCode: 'invalidOtp',
       phone,
       otp
     };
@@ -58,7 +61,7 @@ export const verifyOtp = validatedAction(verifyOtpSchema, async (data, formData)
 
   if (!verifyData.session || !verifyData.user) {
     return {
-      error: 'Failed to create session. Please try again.',
+      errorCode: 'sessionFailed',
       phone,
       otp
     };
@@ -89,13 +92,10 @@ export const verifyOtp = validatedAction(verifyOtpSchema, async (data, formData)
       });
 
     if (prefsError) {
-      console.error('Failed to create user preferences:', prefsError);
-      // Don't fail the authentication if preferences creation fails
-      // User can still use the app, preferences can be created later
+      logError('Failed to create user preferences', prefsError);
     }
   }
 
-  // Successfully authenticated
   const redirectTo = formData.get('redirect') as string | null;
   if (redirectTo === 'checkout') {
     redirect('/pricing');
@@ -121,7 +121,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 
   if (error) {
     return {
-      error: 'Invalid email or password. Please try again.',
+      errorCode: 'invalidEmailOrPassword',
       email,
       password
     };
@@ -177,7 +177,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 
   if (error) {
     return {
-      error: error.message || 'Failed to create user. Please try again.',
+      errorCode: 'signUpFailed',
       email,
       password
     };
@@ -209,8 +209,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
         });
 
       if (prefsError) {
-        console.error('Failed to create user preferences:', prefsError);
-        // Don't fail the authentication if preferences creation fails
+        logError('Failed to create user preferences', prefsError);
       }
     }
 
@@ -222,7 +221,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   } else {
     // Email confirmation required
     return {
-      success: 'Please check your email to confirm your account before signing in.',
+      successCode: 'checkEmailToConfirm',
       email,
       password: '' // Don't return password for security
     };

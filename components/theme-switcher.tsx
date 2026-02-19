@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/contexts/translation-context';
 
 interface ThemeSwitcherProps {
   size?: 'sm' | 'icon';
@@ -19,6 +20,7 @@ interface ThemeSwitcherProps {
 }
 
 export function ThemeSwitcher({ size = 'icon', className }: ThemeSwitcherProps) {
+  const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -31,7 +33,7 @@ export function ThemeSwitcher({ size = 'icon', className }: ThemeSwitcherProps) 
     return (
       <Button variant="ghost" size={size} className={cn('h-9 w-9', className)}>
         <Sun className="h-4 w-4" />
-        <span className="sr-only">Toggle theme</span>
+        <span className="sr-only">{t.a11y.toggleTheme}</span>
       </Button>
     );
   }
@@ -47,7 +49,7 @@ export function ThemeSwitcher({ size = 'icon', className }: ThemeSwitcherProps) 
           ) : (
             <Monitor className="h-4 w-4" />
           )}
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">{t.a11y.toggleTheme}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -56,21 +58,21 @@ export function ThemeSwitcher({ size = 'icon', className }: ThemeSwitcherProps) 
           className="cursor-pointer"
         >
           <Sun className="mr-2 h-4 w-4" />
-          <span>Light</span>
+          <span>{t.theme.light}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme('dark')}
           className="cursor-pointer"
         >
           <Moon className="mr-2 h-4 w-4" />
-          <span>Dark</span>
+          <span>{t.theme.dark}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme('system')}
           className="cursor-pointer"
         >
           <Monitor className="mr-2 h-4 w-4" />
-          <span>System</span>
+          <span>{t.theme.system}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

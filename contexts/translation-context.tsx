@@ -3,20 +3,22 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { Locale } from '@/i18n.config';
 import { logError } from '@/lib/utils/logger';
+import type en from '@/dictionaries/en.json';
+
+export type Translations = typeof en;
 
 type TranslationContextType = {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  t: any; // Translations object
+  t: Translations;
 };
 
 const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
 
-export function TranslationProvider({ children, initialTranslations }: { children: ReactNode; initialTranslations: any }) {
+export function TranslationProvider({ children, initialTranslations }: { children: ReactNode; initialTranslations: Translations }) {
   const [locale, setLocaleState] = useState<Locale>('en');
-  const [translations, setTranslations] = useState(initialTranslations);
+  const [translations, setTranslations] = useState<Translations>(initialTranslations);
 
-  // Load saved language preference on mount
   useEffect(() => {
     const saved = localStorage.getItem('preferred-language') as Locale;
     if (saved && (saved === 'en' || saved === 'zh-TW' || saved === 'zh-CN' || saved === 'zh-HK')) {
@@ -24,11 +26,14 @@ export function TranslationProvider({ children, initialTranslations }: { childre
     }
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   const setLocale = async (newLocale: Locale) => {
     setLocaleState(newLocale);
     localStorage.setItem('preferred-language', newLocale);
-    
-    // Load translations dynamically
+
     try {
       const dict = await import(`@/dictionaries/${newLocale}.json`);
       setTranslations(dict.default);
@@ -51,5 +56,3 @@ export function useTranslation() {
   }
   return context;
 }
-
-

@@ -27,7 +27,7 @@ export function GoalForm() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Target className="h-5 w-5 text-primary" />
-          {t.goal?.goalDetails || 'Goal Details'}
+          {t.goal.goalDetails}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -38,28 +38,28 @@ export function GoalForm() {
           <input type="hidden" name="endDate" value={endDate.toISOString().split('T')[0]} />
           
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-base font-semibold">{t.goal?.title || 'Goal Title'}</Label>
+            <Label htmlFor="title" className="text-base font-semibold">{t.goal.title}</Label>
             <Input
               id="title"
               name="title"
               type="text"
               required
               maxLength={200}
-              placeholder={t.goal?.titlePlaceholder || 'e.g., Build a SaaS product'}
+              placeholder={t.goal.titlePlaceholder}
             />
             <p className="text-sm text-muted-foreground mt-2">
-              {t.goal?.titleHelp || 'Be specific and concrete. This goal cannot be edited once created.'}
+              {t.goal.titleHelp}
             </p>
           </div>
 
           <div className="space-y-4 p-4 bg-muted/50 rounded-xl border border-border">
-            <Label className="text-base font-semibold">{t.goal?.timeHorizon || 'Goal Timeline'}</Label>
-            <p className="text-sm text-muted-foreground -mt-2">{t.goal?.timeHorizonHelp || 'Choose your start and end dates'}</p>
+            <Label className="text-base font-semibold">{t.goal.timeHorizon}</Label>
+            <p className="text-sm text-muted-foreground -mt-2">{t.goal.timeHorizonHelp}</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
               {/* Start Date Picker */}
               <div className="space-y-2">
-                <Label htmlFor="start-date-btn" className="text-sm font-medium">{t.goal?.startDate || 'Start Date'}</Label>
+                <Label htmlFor="start-date-btn" className="text-sm font-medium">{t.goal.startDate}</Label>
                 <Button
                   id="start-date-btn"
                   type="button"
@@ -74,7 +74,7 @@ export function GoalForm() {
                   }}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {startDate ? format(startDate, 'PPP') : <span>Pick a date</span>}
+                  {startDate ? format(startDate, 'PPP') : <span>{t.editGoal.pickDate}</span>}
                 </Button>
                 {showStartCalendar && (
                   <>
@@ -107,7 +107,7 @@ export function GoalForm() {
 
               {/* End Date Picker */}
               <div className="space-y-2">
-                <Label htmlFor="end-date-btn" className="text-sm font-medium">{t.dashboard?.ends || 'End Date'}</Label>
+                <Label htmlFor="end-date-btn" className="text-sm font-medium">{t.editGoal.endDate}</Label>
                 <Button
                   id="end-date-btn"
                   type="button"
@@ -122,7 +122,7 @@ export function GoalForm() {
                   }}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {endDate ? format(endDate, 'PPP') : <span>Pick a date</span>}
+                  {endDate ? format(endDate, 'PPP') : <span>{t.editGoal.pickDate}</span>}
                 </Button>
                 {showEndCalendar && (
                   <>
@@ -155,8 +155,8 @@ export function GoalForm() {
             {startDate && endDate && (
               <div className="mt-3 p-3 bg-background rounded-lg border border-border">
                 <p className="text-sm text-muted-foreground">
-                  Duration: <span className="font-semibold text-foreground">
-                    {Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))} days
+                  {t.editGoal.duration}: <span className="font-semibold text-foreground">
+                    {Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))} {t.editGoal.days}
                   </span>
                 </p>
               </div>
@@ -164,8 +164,8 @@ export function GoalForm() {
           </div>
 
           <div className="space-y-4 p-4 bg-muted/50 rounded-xl border border-border">
-            <Label className="text-base font-semibold">{t.goal?.intensity || 'Intensity'}</Label>
-            <p className="text-sm text-muted-foreground -mt-2">{t.goal?.intensityHelp || 'How much daily commitment are you making?'}</p>
+            <Label className="text-base font-semibold">{t.goal.intensity}</Label>
+            <p className="text-sm text-muted-foreground -mt-2">{t.goal.intensityHelp}</p>
             <RadioGroup
               value={intensity}
               onValueChange={setIntensity}
@@ -180,8 +180,8 @@ export function GoalForm() {
               >
                 <RadioGroupItem value="low" id="intensity-low" />
                 <span className="font-medium cursor-pointer flex-1">
-                  <span className="block">{t.goal?.intensityLow || 'Low'}</span>
-                  <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityLowDesc || 'Light daily commitment'}</span>
+                  <span className="block">{t.goal.intensityLow}</span>
+                  <span className="text-sm text-muted-foreground font-normal">{t.goal.intensityLowDesc}</span>
                 </span>
               </label>
               <label 
@@ -193,8 +193,8 @@ export function GoalForm() {
               >
                 <RadioGroupItem value="medium" id="intensity-medium" />
                 <span className="font-medium cursor-pointer flex-1">
-                  <span className="block">{t.goal?.intensityMedium || 'Medium'}</span>
-                  <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityMediumDesc || 'Moderate daily commitment'}</span>
+                  <span className="block">{t.goal.intensityMedium}</span>
+                  <span className="text-sm text-muted-foreground font-normal">{t.goal.intensityMediumDesc}</span>
                 </span>
               </label>
               <label 
@@ -206,8 +206,8 @@ export function GoalForm() {
               >
                 <RadioGroupItem value="high" id="intensity-high" />
                 <span className="font-medium cursor-pointer flex-1">
-                  <span className="block">{t.goal?.intensityHigh || 'High'}</span>
-                  <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityHighDesc || 'Significant daily commitment'}</span>
+                  <span className="block">{t.goal.intensityHigh}</span>
+                  <span className="text-sm text-muted-foreground font-normal">{t.goal.intensityHighDesc}</span>
                 </span>
               </label>
             </RadioGroup>
@@ -223,10 +223,10 @@ export function GoalForm() {
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t.goal?.creating || 'Creating Goal...'}
+                {t.goal.creating}
               </>
             ) : (
-              t.goal?.create || 'Create Goal'
+              t.goal.create
             )}
           </Button>
         </form>

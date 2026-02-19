@@ -15,7 +15,7 @@ type GoalCalendarProps = {
 };
 
 export function GoalCalendar({ tasks, startDate, endDate }: GoalCalendarProps) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const goalStart = new Date(startDate);
   const goalEnd = new Date(endDate);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -46,7 +46,9 @@ export function GoalCalendar({ tasks, startDate, endDate }: GoalCalendarProps) {
     setCurrentMonth(addMonths(currentMonth, 1));
   };
 
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const weekDays = Array.from({ length: 7 }, (_, i) =>
+    new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(new Date(2021, 7, 1 + i))
+  );
 
   return (
     <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
@@ -54,7 +56,7 @@ export function GoalCalendar({ tasks, startDate, endDate }: GoalCalendarProps) {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-primary" />
-            {t.calendar?.taskCalendar || 'Task Calendar'}
+            {t.calendar.taskCalendar}
           </CardTitle>
           <div className="flex items-center gap-2">
             <Button
@@ -66,7 +68,7 @@ export function GoalCalendar({ tasks, startDate, endDate }: GoalCalendarProps) {
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <div className="text-sm font-semibold min-w-[120px] text-center">
-              {format(currentMonth, 'MMMM yyyy')}
+              {new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(currentMonth)}
             </div>
             <Button
               variant="outline"
@@ -144,15 +146,15 @@ export function GoalCalendar({ tasks, startDate, endDate }: GoalCalendarProps) {
         <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded border-2 border-indigo-600 dark:border-indigo-400" />
-            <span>{t.calendar?.today || 'Today'}</span>
+            <span>{t.calendar.today}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900" />
-            <span>{t.calendar?.hasTasks || 'Has tasks'}</span>
+            <span>{t.calendar.hasTasks}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-muted/50 border-transparent" />
-            <span>{t.calendar?.outsideRange || 'Outside goal range'}</span>
+            <span>{t.calendar.outsideRange}</span>
           </div>
         </div>
       </CardContent>

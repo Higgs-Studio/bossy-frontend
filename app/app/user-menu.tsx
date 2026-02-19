@@ -39,19 +39,19 @@ export function UserMenu({ user }: UserMenuProps) {
         <DropdownMenuItem className="cursor-pointer">
           <Link href="/app/dashboard" className="flex w-full items-center">
             <Home className="mr-2 h-4 w-4" />
-            <span>{t.nav?.dashboard || 'Dashboard'}</span>
+            <span>{t.nav.dashboard}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer">
           <Link href="/app/profile" className="flex w-full items-center">
             <Settings className="mr-2 h-4 w-4" />
-            <span>{t.nav?.profile || 'Profile'}</span>
+            <span>{t.nav.profile}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer">
           <Link href="/app/pricing" className="flex w-full items-center">
             <CreditCard className="mr-2 h-4 w-4" />
-            <span>{t.common?.pricing || 'Pricing'}</span>
+            <span>{t.common.pricing}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -59,7 +59,7 @@ export function UserMenu({ user }: UserMenuProps) {
           <button type="submit" className="flex w-full">
             <DropdownMenuItem className="w-full flex-1 cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
-              <span>{t.nav?.signOut || 'Sign out'}</span>
+              <span>{t.nav.signOut}</span>
             </DropdownMenuItem>
           </button>
         </form>

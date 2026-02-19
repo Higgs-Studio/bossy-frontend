@@ -14,6 +14,7 @@ import { ActionState } from '@/lib/auth/middleware';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { useTranslation } from '@/contexts/translation-context';
+import { formatTemplate } from '@/lib/i18n/format';
 
 export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const { t } = useTranslation();
@@ -27,7 +28,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const [isResending, setIsResending] = useState(false);
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
     otpSent ? verifyOtp : sendOtp,
-    { error: '' }
+    {}
   );
 
   // Watch for otpSent in state
@@ -59,7 +60,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
       
       const result = await sendOtp({} as ActionState, formData);
       
-      if (result && 'success' in result && result.success) {
+      if (result && 'successCode' in result && result.successCode === 'otpSent') {
         setResendCooldown(60); // Reset cooldown
       }
     } catch (error) {
@@ -80,7 +81,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
         <div className="flex justify-center mb-8">
           <Image 
             src="/logo.png" 
-            alt="Bossy" 
+            alt={t.common.appName}
             width={200} 
             height={75}
             className="h-16 w-auto"
@@ -89,13 +90,13 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
         </div>
         <h2 className="text-center text-3xl sm:text-4xl font-bold text-slate-900 mb-2">
           {mode === 'signin'
-            ? (t.auth?.signIn?.title || 'Welcome Back')
-            : (t.auth?.signUp?.title || 'Hire Your AI Boss')}
+            ? t.auth.signIn.title
+            : t.auth.signUp.title}
         </h2>
         <p className="text-center text-sm sm:text-base text-slate-600 mb-8">
           {mode === 'signin'
-            ? (t.auth?.signIn?.subtitle || 'Sign in with your phone number')
-            : (t.auth?.signUp?.subtitle || 'Get started with your phone number')}
+            ? t.auth.signIn.subtitle
+            : t.auth.signUp.subtitle}
         </p>
       </div>
 
@@ -111,9 +112,9 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 <PhoneInput
                   value={phoneNumber}
                   onChange={(value) => setPhoneNumber(value)}
-                  label={t.auth?.phone || 'Phone Number'}
-                  placeholder="1234 5678"
-                  error={state?.error && state.error.includes('phone') ? state.error : undefined}
+                  label={t.auth.phone}
+                  placeholder={t.auth.phonePlaceholder}
+                  error={state?.errorCode === 'invalidPhone' ? t.auth.errors.invalidPhone : undefined}
                 />
                 <input type="hidden" name="phone" value={phoneNumber ? `+${phoneNumber}` : ''} />
               </div>
@@ -124,7 +125,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                     htmlFor="phone-display"
                     className="block text-sm font-medium text-slate-700"
                   >
-                    {t.auth?.phone || 'Phone Number'}
+                    {t.auth.phone}
                   </Label>
                   <div className="mt-1">
                     <Input
@@ -143,7 +144,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                     htmlFor="otp"
                     className="block text-sm font-medium text-slate-700"
                   >
-                    {t.auth?.otp || 'Verification Code'}
+                    {t.auth.otp}
                   </Label>
                   <div className="mt-1">
                     <Input
@@ -156,13 +157,13 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                       defaultValue={state.otp}
                       required
                       maxLength={6}
-                      placeholder={t.auth?.enterOtp || 'Enter 6-digit code'}
+                      placeholder={t.auth.enterOtp}
                       className="border-slate-300"
                     />
                   </div>
                   <div className="mt-2 flex items-center justify-between">
                     <p className="text-xs text-slate-500">
-                      {t.auth?.otpHint || 'Check your phone for the verification code'}
+                      {t.auth.otpHint}
                     </p>
                     <button
                       type="button"
@@ -175,24 +176,24 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                       }`}
                     >
                       {isResending
-                        ? 'Sending...'
+                        ? t.auth.sending
                         : resendCooldown > 0
-                        ? `Resend (${resendCooldown}s)`
-                        : t.auth?.resendCode || 'Resend Code'}
+                        ? formatTemplate(t.auth.resendWithCooldown, { seconds: resendCooldown })
+                        : t.auth.resendCode}
                     </button>
                   </div>
                 </div>
               </>
             )}
 
-            {state?.error && (
+            {state?.errorCode && (
               <div className="text-red-700 text-sm bg-red-50 p-4 rounded-lg border border-red-200 font-medium">
-                {state.error}
+                {t.auth.errors[state.errorCode as keyof typeof t.auth.errors] ?? t.auth.errors.sendOtpFailed}
               </div>
             )}
-            {state?.success && (
+            {state?.successCode && (
               <div className="text-green-700 text-sm bg-green-50 p-4 rounded-lg border border-green-200 font-medium">
-                {state.success}
+                {t.auth.success[state.successCode as keyof typeof t.auth.success]}
               </div>
             )}
 
@@ -206,14 +207,14 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 {pending ? (
                   <>
                     <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                    {t.nav?.loading || 'Loading...'}
+                    {t.nav.loading}
                   </>
                 ) : otpSent ? (
-                  t.auth?.verifyCode || 'Verify Code'
+                  t.auth.verifyCode
                 ) : mode === 'signin' ? (
-                  t.auth?.sendCode || 'Send Code'
+                  t.auth.sendCode
                 ) : (
-                  t.auth?.sendCode || 'Send Code'
+                  t.auth.sendCode
                 )}
               </Button>
             </div>
@@ -225,7 +226,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                   onClick={() => setOtpSent(false)}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  {t.auth?.changePhone || 'Change phone number'}
+                  {t.auth.changePhone}
                 </button>
               </div>
             )}
@@ -240,8 +241,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-slate-50 text-slate-500">
                 {mode === 'signin'
-                  ? (t.auth?.newToPlatform || 'New to Bossy?')
-                  : (t.auth?.alreadyHaveAccount || 'Already have an account?')}
+                  ? t.auth.newToPlatform
+                  : t.auth.alreadyHaveAccount}
               </span>
             </div>
           </div>
@@ -253,8 +254,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               className="w-full flex justify-center py-3 px-4 border-2 border-slate-200 rounded-lg shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 hover:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
             >
               {mode === 'signin'
-                ? (t.auth?.createAccount || 'Create an account')
-                : (t.auth?.signInExisting || 'Sign in to existing account')}
+                ? t.auth.createAccount
+                : t.auth.signInExisting}
             </Link>
           </div>
         </div>

@@ -37,7 +37,7 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
             <CardHeader className="border-b border-border pb-4">
                 <CardTitle className="flex items-center gap-3 text-xl">
                     <Target className="h-5 w-5 text-primary" />
-                    {t.editGoal?.editDetails || 'Edit Goal Details'}
+                    {t.editGoal.editDetails}
                 </CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
@@ -50,14 +50,14 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                     <input type="hidden" name="status" value={currentStatus} />
 
                     <div className="space-y-3">
-                        <Label htmlFor="title" className="text-base font-semibold text-foreground">{t.goal?.title || 'Goal Title'}</Label>
+                        <Label htmlFor="title" className="text-base font-semibold text-foreground">{t.goal.title}</Label>
                         <Input
                             id="title"
                             name="title"
                             type="text"
                             required
                             maxLength={200}
-                            placeholder={t.goal?.titlePlaceholder || 'e.g., Build a SaaS product'}
+                            placeholder={t.goal.titlePlaceholder}
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             className="h-11 text-base"
@@ -66,8 +66,8 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
 
                     <div className="space-y-4 p-5 bg-muted/50 rounded-xl border border-border">
                         <div className="space-y-1">
-                            <Label className="text-base font-semibold text-foreground">{t.editGoal?.goalStatus || 'Goal Status'}</Label>
-                            <p className="text-sm text-muted-foreground">{t.editGoal?.updateStatus || 'Update the current status of your goal'}</p>
+                            <Label className="text-base font-semibold text-foreground">{t.editGoal.goalStatus}</Label>
+                            <p className="text-sm text-muted-foreground">{t.editGoal.updateStatus}</p>
                         </div>
                         <div className="mt-3 grid grid-cols-3 gap-3">
                             <button
@@ -81,7 +81,7 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                                 )}
                             >
                                 <Zap className={cn("h-6 w-6 mb-2", currentStatus === 'active' ? "text-emerald-600" : "text-muted-foreground")} />
-                                <span className="font-medium text-sm">{t.goals?.status?.active || 'Active'}</span>
+                                <span className="font-medium text-sm">{t.goals.filterActive}</span>
                             </button>
                             <button
                                 type="button"
@@ -94,7 +94,7 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                                 )}
                             >
                                 <CheckCircle2 className={cn("h-6 w-6 mb-2", currentStatus === 'completed' ? "text-blue-600" : "text-muted-foreground")} />
-                                <span className="font-medium text-sm">{t.goals?.status?.completed || 'Completed'}</span>
+                                <span className="font-medium text-sm">{t.goals.filterCompleted}</span>
                             </button>
                             <button
                                 type="button"
@@ -107,21 +107,21 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                                 )}
                             >
                                 <XCircle className={cn("h-6 w-6 mb-2", currentStatus === 'abandoned' ? "text-slate-600" : "text-muted-foreground")} />
-                                <span className="font-medium text-sm">{t.goals?.status?.abandoned || 'Abandoned'}</span>
+                                <span className="font-medium text-sm">{t.goals.filterAbandoned}</span>
                             </button>
                         </div>
                     </div>
 
                     <div className="space-y-4 p-5 bg-muted/50 rounded-xl border border-border">
                         <div className="space-y-1">
-                            <Label className="text-base font-semibold text-foreground">{t.editGoal?.goalTimeline || 'Goal Timeline'}</Label>
-                            <p className="text-sm text-muted-foreground">{t.editGoal?.chooseDates || 'Choose your start and end dates'}</p>
+                            <Label className="text-base font-semibold text-foreground">{t.editGoal.goalTimeline}</Label>
+                            <p className="text-sm text-muted-foreground">{t.editGoal.chooseDates}</p>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* Start Date Picker */}
                             <div className="space-y-2.5">
-                                <Label htmlFor="edit-start-date" className="text-sm font-semibold text-foreground">{t.editGoal?.startDate || 'Start Date'}</Label>
+                                <Label htmlFor="edit-start-date" className="text-sm font-semibold text-foreground">{t.editGoal.startDate}</Label>
                                 <Input
                                     id="edit-start-date"
                                     type="date"
@@ -143,7 +143,7 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
 
                             {/* End Date Picker */}
                             <div className="space-y-2.5">
-                                <Label htmlFor="edit-end-date" className="text-sm font-semibold text-foreground">{t.editGoal?.endDate || 'End Date'}</Label>
+                                <Label htmlFor="edit-end-date" className="text-sm font-semibold text-foreground">{t.editGoal.endDate}</Label>
                                 <Input
                                     id="edit-end-date"
                                     type="date"
@@ -160,8 +160,8 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                         {startDate && endDate && (
                             <div className="mt-3 p-3 bg-background rounded-lg border border-border">
                                 <p className="text-sm text-muted-foreground">
-                                    {t.editGoal?.duration || 'Duration'}: <span className="font-semibold text-foreground">
-                                        {Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24))} {t.editGoal?.days || 'days'}
+                                    {t.editGoal.duration}: <span className="font-semibold text-foreground">
+                                        {Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24))} {t.editGoal.days}
                                     </span>
                                 </p>
                             </div>
@@ -170,8 +170,8 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
 
                     <div className="space-y-4 p-5 bg-muted/50 rounded-xl border border-border">
                         <div className="space-y-1">
-                            <Label className="text-base font-semibold text-foreground">{t.goal?.intensity || 'Intensity'}</Label>
-                            <p className="text-sm text-muted-foreground">{t.goal?.intensityHelp || 'How much daily commitment are you making?'}</p>
+                            <Label className="text-base font-semibold text-foreground">{t.goal.intensity}</Label>
+                            <p className="text-sm text-muted-foreground">{t.goal.intensityHelp}</p>
                         </div>
                         <RadioGroup
                             value={intensity}
@@ -188,8 +188,8 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                                 <RadioGroupItem value="low" id="edit-intensity-low" />
                                 <TrendingDown className={cn("h-5 w-5", intensity === 'low' ? 'text-green-600 dark:text-green-400' : 'text-muted-foreground')} />
                                 <span className="font-medium cursor-pointer flex-1">
-                                    <span className="block text-base mb-1">{t.goal?.intensityLow || 'Low'}</span>
-                                    <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityLowDesc || 'Light daily commitment'}</span>
+                                    <span className="block text-base mb-1">{t.goal.intensityLow}</span>
+                                    <span className="text-sm text-muted-foreground font-normal">{t.goal.intensityLowDesc}</span>
                                 </span>
                             </label>
                             <label 
@@ -202,8 +202,8 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                                 <RadioGroupItem value="medium" id="edit-intensity-medium" />
                                 <TrendingUp className={cn("h-5 w-5", intensity === 'medium' ? 'text-yellow-600 dark:text-yellow-400' : 'text-muted-foreground')} />
                                 <span className="font-medium cursor-pointer flex-1">
-                                    <span className="block text-base mb-1">{t.goal?.intensityMedium || 'Medium'}</span>
-                                    <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityMediumDesc || 'Moderate daily commitment'}</span>
+                                    <span className="block text-base mb-1">{t.goal.intensityMedium}</span>
+                                    <span className="text-sm text-muted-foreground font-normal">{t.goal.intensityMediumDesc}</span>
                                 </span>
                             </label>
                             <label 
@@ -216,8 +216,8 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                                 <RadioGroupItem value="high" id="edit-intensity-high" />
                                 <Flame className={cn("h-5 w-5", intensity === 'high' ? 'text-red-600 dark:text-red-400' : 'text-muted-foreground')} />
                                 <span className="font-medium cursor-pointer flex-1">
-                                    <span className="block text-base mb-1">{t.goal?.intensityHigh || 'High'}</span>
-                                    <span className="text-sm text-muted-foreground font-normal">{t.goal?.intensityHighDesc || 'Significant daily commitment'}</span>
+                                    <span className="block text-base mb-1">{t.goal.intensityHigh}</span>
+                                    <span className="text-sm text-muted-foreground font-normal">{t.goal.intensityHighDesc}</span>
                                 </span>
                             </label>
                         </RadioGroup>
@@ -235,16 +235,16 @@ export function EditGoalForm({ goal, timeHorizon }: EditGoalFormProps) {
                             variant="outline"
                             asChild
                         >
-                            <a href="/app/goals">{t.editGoal?.cancel || 'Cancel'}</a>
+                            <a href="/app/goals">{t.editGoal.cancel}</a>
                         </Button>
                         <Button type="submit" disabled={isPending} size="lg" className="flex-1">
                             {isPending ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    {t.editGoal?.updatingGoal || 'Updating Goal...'}
+                                    {t.editGoal.updatingGoal}
                                 </>
                             ) : (
-                                t.editGoal?.updateGoal || 'Update Goal'
+                                t.editGoal.updateGoal
                             )}
                         </Button>
                     </div>

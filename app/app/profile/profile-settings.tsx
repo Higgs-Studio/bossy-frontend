@@ -8,10 +8,10 @@ import { useTranslation } from '@/contexts/translation-context';
 import type { Locale } from '@/i18n.config';
 
 const LANGUAGE_OPTIONS = [
-  { code: 'en' as Locale, label: 'English', flag: '🇺🇸', nativeName: 'English' },
-  { code: 'zh-CN' as Locale, label: 'Simplified Chinese', flag: '🇨🇳', nativeName: '简体中文' },
-  { code: 'zh-TW' as Locale, label: 'Traditional Chinese', flag: '🇹🇼', nativeName: '繁體中文' },
-  { code: 'zh-HK' as Locale, label: 'Cantonese', flag: '🇭🇰', nativeName: '粵語' },
+  { code: 'en' as Locale, flag: '🇺🇸' },
+  { code: 'zh-CN' as Locale, flag: '🇨🇳' },
+  { code: 'zh-TW' as Locale, flag: '🇹🇼' },
+  { code: 'zh-HK' as Locale, flag: '🇭🇰' },
 ];
 
 export function ProfileSettings() {
@@ -22,13 +22,13 @@ export function ProfileSettings() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <Globe className="h-5 w-5 text-muted-foreground" />
-          <CardTitle>{t.profile?.appLanguage || 'App Language'}</CardTitle>
+          <CardTitle>{t.profile.appLanguage}</CardTitle>
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            {t.profile?.appLanguageDesc || 'Choose your preferred language for the app interface'}
+            {t.profile.appLanguageDesc}
           </p>
           <RadioGroup
             value={locale}
@@ -50,8 +50,8 @@ export function ProfileSettings() {
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{lang.flag}</span>
                     <div>
-                      <span className="font-medium text-sm block">{lang.nativeName}</span>
-                      <span className="text-xs text-muted-foreground">{lang.label}</span>
+                      <span className="font-medium text-sm block">{t.languages[lang.code]}</span>
+                      <span className="text-xs text-muted-foreground">{lang.code}</span>
                     </div>
                   </div>
                 </div>
