@@ -69,6 +69,13 @@
     }
   },
   "whatsapp": {
+    "banner": {
+      "headline": "别等了，立即通过 WhatsApp 联系你的老板！",
+      "hasPhoneDescription": "你的问责伙伴就在一条消息之外",
+      "chatNow": "立即聊天",
+      "noPhoneDescription": "添加你的电话号码以解锁直接联系问责伙伴",
+      "unlockAccess": "解锁访问"
+    },
     "nav": {
       "ariaLabel": "WhatsApp 联系",
       "button": "发消息给老板",
@@ -222,6 +229,9 @@
     "verifyCode": "验证验证码",
     "sendCode": "发送验证码",
     "changePhone": "更改电话号码",
+    "agreeToDisclaimerPrefix": "我同意",
+    "agreeToDisclaimerLink": "免责声明",
+    "agreeToDisclaimerSuffix": "，并确认我不是欧盟/欧洲经济区公民或加州居民",
     "errors": {
       "invalidPhone": "电话号码必须包含国家/地区代码（例如：+1234567890）",
       "otpSixDigits": "验证码必须为6位数字",
@@ -229,7 +239,8 @@
       "invalidOtp": "验证码无效，请重试。",
       "sessionFailed": "创建会话失败，请重试。",
       "invalidEmailOrPassword": "邮箱或密码错误，请重试。",
-      "signUpFailed": "创建用户失败，请重试。"
+      "signUpFailed": "创建用户失败，请重试。",
+      "disclaimerRequired": "您必须同意免责声明才能创建账户。"
     },
     "success": {
       "otpSent": "验证码已发送到你的手机！",
@@ -608,6 +619,8 @@
     }
   },
   "pricing": {
+    "pageTitle": "简单定价",
+    "pageSubtitle": "免费开始。当你需要更多问责力量时再升级。",
     "interval": {
       "month": "月",
       "year": "年",
@@ -746,6 +759,7 @@
   "legal": {
     "privacyPolicy": "隐私政策",
     "termsOfService": "服务条款",
+    "disclaimer": "免责声明",
     "privacy": "隐私",
     "terms": "条款"
   },
@@ -870,6 +884,30 @@
           ],
           "email": "legal@bossy.app",
           "addressPlaceholder": "[你的公司地址]"
+        }
+      }
+    },
+    "disclaimer": {
+      "title": "注册免责声明",
+      "sections": {
+        "dataProtection": {
+          "title": "1. 数据与隐私保护",
+          "paragraphs": [
+            "我们将尽力保护您在我们系统中的数据和隐私。我们采取适当的安全措施，保护您的个人信息免受未经授权的访问、丢失或滥用。"
+          ]
+        },
+        "eligibility": {
+          "title": "2. 资格声明",
+          "paragraphs": [
+            "注册使用Bossy即表示您声明并确认：您不是欧盟（EU）或欧洲经济区（EEA）的公民或居民，也不是美国加利福尼亚州的居民。",
+            "本服务不适用于受GDPR（通用数据保护条例）或CCPA（加州消费者隐私法）管辖的用户。如果您是欧盟/欧洲经济区公民或加州居民，请勿使用本服务。"
+          ]
+        },
+        "acknowledgment": {
+          "title": "3. 确认",
+          "paragraphs": [
+            "创建账户即表示您已阅读、理解并同意本免责声明。您确认您提供的关于资格的信息准确无误，并且您不会因对您的居住地或公民身份的错误陈述而产生的任何法律后果追究Bossy的责任。"
+          ]
         }
       }
     },

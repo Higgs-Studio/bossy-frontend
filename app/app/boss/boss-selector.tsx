@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { BOSS_PERSONALITIES, getBossPersonality, type BossType, type BossLanguage } from '@/lib/boss/reactions';
+import { isFreeBossType } from '@/lib/subscriptions/limits';
 import { changeBossAction } from './actions';
 import { Loader2, CheckCircle2, Globe, Crown } from 'lucide-react';
 import { useTranslation } from '@/contexts/translation-context';
@@ -50,8 +51,7 @@ export function BossSelector({ currentBossType, currentBossLanguage, hasActiveSu
   const hasChanges = selectedBoss !== currentBossType || selectedLanguage !== currentBossLanguage;
   
   // Check if user selected a paid boss without subscription
-  const isFreeBoss = (bossType: BossType) => bossType === 'supportive'; // Only Pip is free
-  const selectedPaidBossWithoutSubscription = !hasActiveSubscription && !isFreeBoss(selectedBoss) && selectedBoss !== currentBossType;
+  const selectedPaidBossWithoutSubscription = !hasActiveSubscription && !isFreeBossType(selectedBoss) && selectedBoss !== currentBossType;
   
   const handleUpgradeClick = () => {
     router.push('/app/profile#subscription');
@@ -130,7 +130,7 @@ export function BossSelector({ currentBossType, currentBossLanguage, hasActiveSu
                   const personality = t.boss.personalities[bossOption.id];
                   const translatedNickname = personality.nickname;
                   const translatedDescription = personality.description;
-                  const isFree = isFreeBoss(bossOption.id);
+                  const isFree = isFreeBossType(bossOption.id);
                   const isPaid = !isFree;
                   return (
                     <label

@@ -69,6 +69,13 @@
     }
   },
   "whatsapp": {
+    "banner": {
+      "headline": "Don't wait, message your boss via WhatsApp now!",
+      "hasPhoneDescription": "Your accountability partner is just a message away",
+      "chatNow": "Chat Now",
+      "noPhoneDescription": "Add your phone number to unlock direct access to your accountability partner",
+      "unlockAccess": "Unlock Access"
+    },
     "nav": {
       "ariaLabel": "WhatsApp contact",
       "button": "Text Boss",
@@ -222,6 +229,9 @@
     "verifyCode": "Verify Code",
     "sendCode": "Send Code",
     "changePhone": "Change Phone Number",
+    "agreeToDisclaimerPrefix": "I agree to the ",
+    "agreeToDisclaimerLink": "disclaimer",
+    "agreeToDisclaimerSuffix": " and confirm I am not an EU/EEA citizen or California resident",
     "errors": {
       "invalidPhone": "Phone number must include country code (e.g., +1234567890)",
       "otpSixDigits": "Verification code must be 6 digits",
@@ -229,7 +239,8 @@
       "invalidOtp": "Invalid verification code. Please try again.",
       "sessionFailed": "Failed to create session. Please try again.",
       "invalidEmailOrPassword": "Invalid email or password. Please try again.",
-      "signUpFailed": "Failed to create user. Please try again."
+      "signUpFailed": "Failed to create user. Please try again.",
+      "disclaimerRequired": "You must agree to the disclaimer to create an account."
     },
     "success": {
       "otpSent": "Verification code sent to your phone!",
@@ -608,6 +619,8 @@
     }
   },
   "pricing": {
+    "pageTitle": "Simple Pricing",
+    "pageSubtitle": "Start free. Upgrade when you need more accountability power.",
     "interval": {
       "month": "month",
       "year": "year",
@@ -746,6 +759,7 @@
   "legal": {
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
+    "disclaimer": "Disclaimer",
     "privacy": "Privacy",
     "terms": "Terms"
   },
@@ -870,6 +884,30 @@
           ],
           "email": "legal@bossy.app",
           "addressPlaceholder": "[Your Company Address]"
+        }
+      }
+    },
+    "disclaimer": {
+      "title": "Sign-Up Disclaimer",
+      "sections": {
+        "dataProtection": {
+          "title": "1. Data and Privacy Protection",
+          "paragraphs": [
+            "We will try our best to protect your data and privacy in our system. We implement appropriate security measures to safeguard your personal information against unauthorized access, loss, or misuse."
+          ]
+        },
+        "eligibility": {
+          "title": "2. Eligibility Declaration",
+          "paragraphs": [
+            "By signing up for Bossy, you declare and confirm that you are NOT a citizen or resident of the European Union (EU) or the European Economic Area (EEA), and you are NOT a resident of the State of California, United States.",
+            "Our service is not intended for users subject to GDPR (General Data Protection Regulation) or CCPA (California Consumer Privacy Act) jurisdiction. If you are an EU/EEA citizen or California resident, please do not use this service."
+          ]
+        },
+        "acknowledgment": {
+          "title": "3. Acknowledgment",
+          "paragraphs": [
+            "By creating an account, you acknowledge that you have read, understood, and agree to this disclaimer. You confirm that the information you have provided regarding your eligibility is accurate and that you will not hold Bossy liable for any legal consequences arising from misrepresentation of your residency or citizenship status."
+          ]
         }
       }
     },

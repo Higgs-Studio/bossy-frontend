@@ -861,6 +861,7 @@ export default function HomePage() {
               <ul className="space-y-3">
                 <li><Link href="/privacy" className="hover:text-white dark:hover:text-slate-100 transition-colors">{t.legal.privacyPolicy}</Link></li>
                 <li><Link href="/terms" className="hover:text-white dark:hover:text-slate-100 transition-colors">{t.legal.termsOfService}</Link></li>
+                <li><Link href="/disclaimer" className="hover:text-white dark:hover:text-slate-100 transition-colors">{t.legal.disclaimer}</Link></li>
               </ul>
             </div>
             <div>
@@ -880,6 +881,7 @@ export default function HomePage() {
               <LanguageSwitcher />
               <Link href="/privacy" className="text-sm hover:text-white dark:hover:text-slate-100 transition-colors">{t.legal.privacy}</Link>
               <Link href="/terms" className="text-sm hover:text-white dark:hover:text-slate-100 transition-colors">{t.legal.terms}</Link>
+              <Link href="/disclaimer" className="text-sm hover:text-white dark:hover:text-slate-100 transition-colors">{t.legal.disclaimer}</Link>
             </div>
           </div>
         </div>

@@ -24,6 +24,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const inviteId = searchParams.get('inviteId');
   const [otpSent, setOtpSent] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [agreeToDisclaimer, setAgreeToDisclaimer] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [isResending, setIsResending] = useState(false);
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
@@ -57,6 +58,10 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
     try {
       const formData = new FormData();
       formData.append('phone', `+${phoneNumber}`);
+      if (mode === 'signup') {
+        formData.append('mode', 'signup');
+        formData.append('agreeToDisclaimer', 'true');
+      }
       
       const result = await sendOtp({} as ActionState, formData);
       
@@ -106,9 +111,11 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             <input type="hidden" name="redirect" value={redirect || ''} />
             <input type="hidden" name="priceId" value={priceId || ''} />
             <input type="hidden" name="inviteId" value={inviteId || ''} />
+            {mode === 'signup' && <input type="hidden" name="mode" value="signup" />}
+            {mode === 'signup' && agreeToDisclaimer && <input type="hidden" name="agreeToDisclaimer" value="true" />}
             
             {!otpSent ? (
-              <div>
+              <div className="space-y-4">
                 <PhoneInput
                   value={phoneNumber}
                   onChange={(value) => setPhoneNumber(value)}
@@ -117,6 +124,35 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                   error={state?.errorCode === 'invalidPhone' ? t.auth.errors.invalidPhone : undefined}
                 />
                 <input type="hidden" name="phone" value={phoneNumber ? `+${phoneNumber}` : ''} />
+                {mode === 'signup' && (
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="agree-disclaimer"
+                      name="agreeToDisclaimer"
+                      value="true"
+                      checked={agreeToDisclaimer}
+                      onChange={(e) => setAgreeToDisclaimer(e.target.checked)}
+                      className="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <Label
+                      htmlFor="agree-disclaimer"
+                      className="text-sm text-slate-700 cursor-pointer leading-tight"
+                    >
+                      {t.auth.agreeToDisclaimerPrefix}
+                      <Link
+                        href="/disclaimer"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline text-indigo-600 hover:text-indigo-700 font-medium"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {t.auth.agreeToDisclaimerLink}
+                      </Link>
+                      {t.auth.agreeToDisclaimerSuffix}
+                    </Label>
+                  </div>
+                )}
               </div>
             ) : (
               <>
@@ -202,7 +238,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 type="submit"
                 className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
                 size="lg"
-                disabled={pending}
+                disabled={pending || (mode === 'signup' && !otpSent && !agreeToDisclaimer)}
               >
                 {pending ? (
                   <>
