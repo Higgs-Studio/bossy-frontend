@@ -26,6 +26,10 @@ export function TranslationProvider({ children, initialTranslations }: { childre
     }
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   const setLocale = async (newLocale: Locale) => {
     setLocaleState(newLocale);
     localStorage.setItem('preferred-language', newLocale);

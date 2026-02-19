@@ -16,7 +16,7 @@ export function PersonalInfo({ initialPhone }: PersonalInfoProps) {
   
   // Format phone number for display
   const formatPhoneNumber = (phone: string | null | undefined) => {
-    if (!phone) return t.profile?.notSet || 'Not set';
+    if (!phone) return t.profile.notSet;
     
     try {
       // Add '+' if not present
@@ -40,14 +40,14 @@ export function PersonalInfo({ initialPhone }: PersonalInfoProps) {
       <CardHeader>
         <div className="flex items-center gap-2">
           <User className="h-5 w-5 text-muted-foreground" />
-          <CardTitle>{t.profile?.personalInfo || 'Personal Information'}</CardTitle>
+          <CardTitle>{t.profile.personalInfo}</CardTitle>
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="phone" className="text-sm font-medium text-muted-foreground">
-              {t.profile?.phoneNumber || 'Mobile Phone'}
+              {t.profile.phoneNumber}
             </Label>
             <div className="relative">
               <Input
@@ -62,7 +62,7 @@ export function PersonalInfo({ initialPhone }: PersonalInfoProps) {
             </div>
             <p className="text-xs text-muted-foreground flex items-center gap-1.5">
               <Lock className="h-3 w-3" />
-              {t.profile?.phoneReadOnly || 'Phone number cannot be changed for security reasons'}
+              {t.profile.phoneReadOnly}
             </p>
           </div>
         </div>

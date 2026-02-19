@@ -16,7 +16,137 @@
     "error": "Something went wrong",
     "tryAgain": "Try again",
     "allCaughtUp": "All caught up!",
-    "upgradePlus": "Upgrade to Plus"
+    "upgradePlus": "Upgrade to Plus",
+    "free": "Free",
+    "plus": "Plus",
+    "currentPlan": "Current Plan",
+    "popular": "Popular"
+  },
+  "languages": {
+    "en": "English",
+    "zh-TW": "繁體中文",
+    "zh-CN": "简体中文",
+    "zh-HK": "粵語"
+  },
+  "a11y": {
+    "toggleMenu": "Toggle menu",
+    "toggleTheme": "Toggle theme",
+    "copyToClipboard": "Copy to clipboard",
+    "whatsAppContact": "WhatsApp contact",
+    "languageSwitcher": "Change language"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "time": {
+    "dueToday": "Due today",
+    "daysLeft": {
+      "one": "{count} day left",
+      "other": "{count} days left"
+    },
+    "daysOverdue": {
+      "one": "{count} day overdue",
+      "other": "{count} days overdue"
+    }
+  },
+  "notifications": {
+    "tasks": {
+      "created": "Task created successfully.",
+      "updated": "Task updated successfully.",
+      "deleted": "Task deleted successfully.",
+      "bulkDeleted": {
+        "one": "{count} task deleted successfully.",
+        "other": "{count} tasks deleted successfully."
+      },
+      "statusUpdated": "Task status updated to {status}."
+    },
+    "goals": {
+      "deleted": "\"{title}\" has been successfully deleted.",
+      "statusUpdated": "\"{title}\" status updated to {status}.",
+      "intensityUpdated": "\"{title}\" intensity updated to {intensity}."
+    }
+  },
+  "whatsapp": {
+    "nav": {
+      "ariaLabel": "WhatsApp contact",
+      "button": "Text Boss",
+      "hasPhone": {
+        "title": "Message your boss!",
+        "description": "Your boss is just a click away"
+      },
+      "noPhone": {
+        "title": "Unlock boss access",
+        "description": "Add your phone to enable WhatsApp support",
+        "cta": "Add Phone"
+      }
+    },
+    "landing": {
+      "badge": "💬 WhatsApp Integration",
+      "title": "Chat with Your AI Boss",
+      "titleHighlight": "Anytime, Anywhere",
+      "subtitle": "Your AI boss is always available on WhatsApp. Get real-time accountability, motivation, and guidance directly on your phone.",
+      "chatHeaderTitle": "The Execution Boss",
+      "chatHeaderStatus": "Active now",
+      "inputPlaceholder": "Message your boss...",
+      "messages": {
+        "user1": "Hey boss! I just completed today's task - 90 minutes of focused work on my MVP! 🎉",
+        "time1": "10:32 AM",
+        "boss1": "Good. You did what you said you'd do. That's 3 days straight now.",
+        "user2": "Feeling great! What should I focus on tomorrow?",
+        "time2": "10:33 AM",
+        "boss2Line1": "Tomorrow is the same: Work 90 minutes on: Launch my SaaS MVP",
+        "boss2Line2": "You're building momentum. Don't break the streak. Show up tomorrow like you did today.",
+        "user3": "I'm feeling tired today... maybe I should rest?",
+        "time3": "2 days later, 11:15 AM",
+        "boss3Line1": "No. You've already missed yesterday.",
+        "boss3Line2": "You have 2 overdue tasks piling up. \"Tired\" is not an excuse. Either do the work or quit the goal. Which is it?",
+        "user4": "You're right. I'll do it now. Just finished! ✅",
+        "time4": "2:45 PM",
+        "boss4Line1": "That's better. You just saved your streak.",
+        "boss4Line2": "Remember this moment next time you want to quit. You're capable of pushing through. Prove it again tomorrow."
+      },
+      "right": {
+        "title": "Your Boss in Your Pocket",
+        "description": "Connect with your AI accountability boss directly through WhatsApp. No app switching required.",
+        "features": [
+          {
+            "title": "Instant Accountability",
+            "description": "Get immediate feedback on your progress. Your boss responds in real-time to keep you on track."
+          },
+          {
+            "title": "No-Nonsense Approach",
+            "description": "Your boss doesn't sugarcoat. When you're slipping, you'll know it. When you're crushing it, you'll be acknowledged."
+          },
+          {
+            "title": "Always Available",
+            "description": "24/7 access to accountability. Update your progress, ask for guidance, or get a reality check anytime."
+          },
+          {
+            "title": "Goal-Focused Conversations",
+            "description": "Every conversation is about your goals and progress. No distractions, just results-driven dialogue."
+          }
+        ],
+        "cta": "Start Chatting with Your Boss"
+      }
+    }
+  },
+  "errors": {
+    "app": {
+      "title": "Something went wrong",
+      "description": "An error occurred while loading this page. Please try again or go back to the dashboard.",
+      "dashboardCta": "Dashboard"
+    },
+    "global": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. Please try again."
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+      "backToHome": "Back to Home"
+    }
   },
   "hero": {
     "badge": "AI-Powered Accountability Boss",
@@ -40,6 +170,7 @@
   },
   "bossSection": {
     "badge": "AI-Powered",
+    "introBadge": "⚡ AI-Powered Accountability",
     "title": "Meet Your",
     "titleHighlight": "AI Accountability Boss",
     "description": "Unlike traditional goal tracking apps, Bossy gives you a direct, no-nonsense AI boss who monitors your progress and holds you accountable every single day.",
@@ -56,6 +187,10 @@
       "pattern": {
         "title": "Pattern Recognition",
         "description": "AI tracks your consistency and escalates feedback when you fall off track"
+      },
+      "availability": {
+        "title": "24/7 Availability",
+        "description": "Access your boss anytime via WhatsApp or the dashboard for instant accountability"
       }
     }
   },
@@ -77,13 +212,29 @@
     "createAccount": "Create an account",
     "signInExisting": "Sign in to existing account",
     "phone": "Phone Number",
+    "phonePlaceholder": "1234 5678",
     "otp": "Verification Code",
     "enterOtp": "Enter verification code",
     "otpHint": "Enter the 6-digit code sent to your phone",
     "resendCode": "Resend Code",
+    "resendWithCooldown": "Resend ({seconds}s)",
+    "sending": "Sending...",
     "verifyCode": "Verify Code",
     "sendCode": "Send Code",
-    "changePhone": "Change Phone Number"
+    "changePhone": "Change Phone Number",
+    "errors": {
+      "invalidPhone": "Phone number must include country code (e.g., +1234567890)",
+      "otpSixDigits": "Verification code must be 6 digits",
+      "sendOtpFailed": "Failed to send verification code. Please try again.",
+      "invalidOtp": "Invalid verification code. Please try again.",
+      "sessionFailed": "Failed to create session. Please try again.",
+      "invalidEmailOrPassword": "Invalid email or password. Please try again.",
+      "signUpFailed": "Failed to create user. Please try again."
+    },
+    "success": {
+      "otpSent": "Verification code sent to your phone!",
+      "checkEmailToConfirm": "Please check your email to confirm your account before signing in."
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -94,6 +245,11 @@
     },
     "performanceReport": "Performance Report to",
     "bossFeedback": "Boss Feedback",
+    "badges": {
+      "today": "Today",
+      "overdue": "Overdue",
+      "pending": "Pending"
+    },
     "overdueTasks": "Overdue Tasks",
     "overdueTasksDesc": "Tasks from previous days that are not yet completed",
     "todaysTasks": "Today's Tasks",
@@ -153,6 +309,14 @@
     "title": "Goals",
     "manageAll": "Manage all your goals",
     "createGoal": "Create Goal",
+    "untitled": "Goal",
+    "limits": {
+      "activeLimitReached": "Active Goal Limit Reached ({active}/{max})",
+      "activeGoals": "Active Goals: {active}/{max}",
+      "limitReachedDesc": "You've reached the maximum number of active goals on the Free plan. Complete or abandon a goal to create a new one, or upgrade to Plus for unlimited goals.",
+      "nearLimitDesc": "You're on the Free plan. Upgrade to Plus for unlimited active goals and more features.",
+      "upgradeUnlimited": "Upgrade to Plus for Unlimited Goals"
+    },
     "filterAll": "All",
     "filterActive": "Active",
     "filterCompleted": "Completed",
@@ -164,6 +328,7 @@
     "progress": "Progress",
     "edit": "Edit",
     "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete {title}? This action cannot be undone. All associated tasks and progress will be permanently deleted.",
     "status": {
       "active": "active",
       "completed": "completed",
@@ -216,7 +381,27 @@
   },
   "testimonials": {
     "title": "Trusted by Achievers",
-    "subtitle": "See what our users are saying about their transformation"
+    "subtitle": "See what our users are saying about their transformation",
+    "items": [
+      {
+        "quote": "\"Bossy completely changed how I approach my goals. The daily accountability kept me on track when I would have normally given up.\"",
+        "name": "Sarah Johnson",
+        "role": "Entrepreneur",
+        "initials": "SJ"
+      },
+      {
+        "quote": "\"I've tried every productivity app out there. Bossy is different—it actually makes you accountable. No more empty promises to myself.\"",
+        "name": "Michael Chen",
+        "role": "Product Manager",
+        "initials": "MC"
+      },
+      {
+        "quote": "\"The no-excuses approach is exactly what I needed. I've completed 3 major goals this year thanks to Bossy's accountability system.\"",
+        "name": "Emily Parker",
+        "role": "Designer",
+        "initials": "EP"
+      }
+    ]
   },
   "cta": {
     "badge": "Your AI Boss is Ready",
@@ -229,6 +414,9 @@
   },
   "preview": {
     "seeItInAction": "See It In Action",
+    "sectionTitle": "Everything You Need at a Glance",
+    "commandCenterBadge": "📊 Your Command Center",
+    "description": "A clean, powerful dashboard that shows your goals, tasks, and progress with crystal-clear accountability",
     "dashboard": "Dashboard",
     "activeGoal": "Active Goal",
     "inProgress": "In Progress",
@@ -243,7 +431,12 @@
     "pending": "Pending",
     "markDone": "Mark Done",
     "activityHistory": "Activity History",
-    "lastMessages": "Last 3 messages"
+    "lastMessages": "Last 3 messages",
+    "bossFeedbackExample": "\"Good. You're staying on track. Don't let up.\"",
+    "sampleGoalTitle": "Launch my SaaS MVP",
+    "proTipLabel": "Pro tip:",
+    "proTipText": "Track multiple goals simultaneously with paid plans",
+    "sampleTask2": "Review user feedback and prioritize features"
   },
   "boss": {
     "title": "Your AI Boss",
@@ -260,6 +453,7 @@
     "saveChanges": "Save Changes",
     "changingBoss": "Changing Boss...",
     "bossChanged": "Boss changed successfully!",
+    "upgradeToUnlock": "Upgrade to Plus to Unlock",
     "moods": {
       "execution": {
         "thrilled": [
@@ -413,6 +607,43 @@
       }
     }
   },
+  "pricing": {
+    "interval": {
+      "month": "month",
+      "year": "year",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "savePercent": "Save {percent}%",
+    "forever": "forever",
+    "perInterval": "per {interval}",
+    "monthlyEquivalent": "{amount}/month",
+    "features": {
+      "free": [
+        "1 active goal",
+        "Default boss only",
+        "7 days of history",
+        "Daily check-ins"
+      ],
+      "plus": [
+        "Unlimited active goals",
+        "All boss personalities",
+        "Unlimited history",
+        "Priority support"
+      ]
+    },
+    "buttons": {
+      "getStarted": "Get Started",
+      "goToDashboard": "Go to Dashboard",
+      "currentPlan": "Current Plan",
+      "popular": "Popular",
+      "manageSubscription": "Manage Subscription",
+      "cancelSubscription": "Cancel Subscription",
+      "switchToMonthly": "Switch to Monthly",
+      "switchToYearly": "Switch to Yearly",
+      "upgradeToPlus": "Upgrade to Plus"
+    }
+  },
   "profile": {
     "title": "Profile",
     "subtitle": "Manage your account and subscription",
@@ -437,13 +668,27 @@
     "phonePlaceholder": "+1 (555) 123-4567",
     "phoneDescription": "Optional. Used for account recovery and notifications.",
     "phoneInvalid": "Please enter a valid phone number",
+    "phoneInputHelp": "Enter phone number without country code (e.g., {example})",
     "saveChanges": "Save Changes",
     "saving": "Saving...",
     "phoneSaved": "Phone number saved successfully",
     "phoneSaveError": "Failed to save phone number",
-    "phoneReadOnly": "Phone number cannot be changed"
+    "phoneReadOnly": "Phone number cannot be changed",
+    "unknown": "Unknown",
+    "billed": "(Billed {interval})",
+    "billingInterval": {
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "subscriptionStatus": {
+      "active": "Active",
+      "trialing": "Trialing",
+      "canceling": "Canceling",
+      "free": "Free"
+    }
   },
   "nav": {
+    "account": "Account",
     "dashboard": "Dashboard",
     "goals": "Goals",
     "boss": "Boss",
@@ -497,6 +742,313 @@
     "today": "Today",
     "hasTasks": "Has tasks",
     "outsideRange": "Outside goal range"
+  },
+  "legal": {
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "legalPages": {
+    "common": {
+      "backToHome": "← Back to Home",
+      "lastUpdated": "Last updated: {date}",
+      "labels": {
+        "email": "Email",
+        "address": "Address"
+      }
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "sections": {
+        "acceptance": {
+          "title": "1. Acceptance of Terms",
+          "paragraphs": [
+            "By accessing and using Bossy (\"the Service\"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service."
+          ]
+        },
+        "useLicense": {
+          "title": "2. Use License",
+          "paragraphs": [
+            "Permission is granted to temporarily access and use the Service for personal, non-commercial purposes. This is the grant of a license, not a transfer of title, and under this license you may not:"
+          ],
+          "bullets": [
+            "Modify or copy the materials",
+            "Use the materials for any commercial purpose or for any public display",
+            "Attempt to decompile or reverse engineer any software contained in the Service",
+            "Remove any copyright or other proprietary notations from the materials",
+            "Transfer the materials to another person or \"mirror\" the materials on any other server"
+          ]
+        },
+        "accountRegistration": {
+          "title": "3. Account Registration",
+          "paragraphs": [
+            "To use certain features of the Service, you must register for an account. When you register, you agree to:"
+          ],
+          "bullets": [
+            "Provide accurate, current, and complete information",
+            "Maintain and promptly update your account information",
+            "Maintain the security of your password and accept all risks of unauthorized access",
+            "Notify us immediately of any unauthorized use of your account"
+          ]
+        },
+        "userConduct": {
+          "title": "4. User Conduct",
+          "paragraphs": [
+            "You agree not to use the Service to:"
+          ],
+          "bullets": [
+            "Violate any local, state, national, or international law",
+            "Infringe on the intellectual property rights of others",
+            "Transmit any harmful or malicious code",
+            "Harass, abuse, or harm another person",
+            "Collect or track personal information of others without consent"
+          ]
+        },
+        "subscriptionPayment": {
+          "title": "5. Subscription and Payment",
+          "paragraphs": [
+            "Some parts of the Service are billed on a subscription basis. You will be billed in advance on a recurring and periodic basis (such as monthly or annually). Billing cycles are set either on a monthly or annual basis, depending on the type of subscription plan you select when purchasing a subscription.",
+            "At the end of each billing cycle, your subscription will automatically renew unless you cancel it or we cancel it. You may cancel your subscription renewal through your account settings or by contacting our support team."
+          ]
+        },
+        "refundPolicy": {
+          "title": "6. Refund Policy",
+          "paragraphs": [
+            "We offer a 7-day money-back guarantee for new subscriptions. If you are not satisfied with the Service within the first 7 days of your subscription, you may request a full refund by contacting our support team. After 7 days, all payments are non-refundable."
+          ]
+        },
+        "goalCommitments": {
+          "title": "7. Goal Commitments",
+          "paragraphs": [
+            "When you set a goal in Bossy, you are making a commitment to yourself. While we provide accountability features to help you stay on track, you understand that:"
+          ],
+          "bullets": [
+            "Goals cannot be edited once set, as part of the commitment mechanism",
+            "Your progress is tracked and recorded for accountability purposes",
+            "The Service provides feedback based on your check-in patterns",
+            "You are solely responsible for your own actions and goal achievement"
+          ]
+        },
+        "disclaimer": {
+          "title": "8. Disclaimer",
+          "paragraphs": [
+            "The materials on Bossy are provided on an 'as is' basis. Bossy makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.",
+            "Bossy is not a medical, therapeutic, or counseling service. The Service is designed for goal tracking and accountability only. If you are experiencing mental health issues, please consult with a qualified professional."
+          ]
+        },
+        "limitations": {
+          "title": "9. Limitations",
+          "paragraphs": [
+            "In no event shall Bossy or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Bossy, even if Bossy or a Bossy authorized representative has been notified orally or in writing of the possibility of such damage."
+          ]
+        },
+        "termination": {
+          "title": "10. Termination",
+          "paragraphs": [
+            "We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms.",
+            "Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service or contact us to delete your account."
+          ]
+        },
+        "changesToTerms": {
+          "title": "11. Changes to Terms",
+          "paragraphs": [
+            "We reserve the right to modify these terms at any time. We will notify users of any material changes by posting the new Terms of Service on this page and updating the \"Last updated\" date.",
+            "Your continued use of the Service after any such changes constitutes your acceptance of the new Terms of Service."
+          ]
+        },
+        "governingLaw": {
+          "title": "12. Governing Law",
+          "paragraphs": [
+            "These terms shall be governed and construed in accordance with the laws of the jurisdiction in which Bossy operates, without regard to its conflict of law provisions."
+          ]
+        },
+        "contactInformation": {
+          "title": "13. Contact Information",
+          "paragraphs": [
+            "If you have any questions about these Terms, please contact us at:"
+          ],
+          "email": "legal@bossy.app",
+          "addressPlaceholder": "[Your Company Address]"
+        }
+      }
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "sections": {
+        "introduction": {
+          "title": "1. Introduction",
+          "paragraphs": [
+            "Bossy (\"we,\" \"our,\" or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our service. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the service."
+          ]
+        },
+        "informationWeCollect": {
+          "title": "2. Information We Collect",
+          "personalInformationTitle": "Personal Information",
+          "personalInformationIntro": "We collect information that you provide directly to us when you:",
+          "personalInformationBullets": [
+            "Register for an account (email address, name)",
+            "Create and track goals",
+            "Complete daily check-ins",
+            "Communicate with us through support channels",
+            "Subscribe to our paid services (payment information)"
+          ],
+          "usageInformationTitle": "Usage Information",
+          "usageInformationIntro": "We automatically collect certain information about your device when you use our Service, including:",
+          "usageInformationBullets": [
+            "Log data (IP address, browser type, operating system)",
+            "Device information (device type, unique device identifiers)",
+            "Usage data (pages visited, time spent, features used)",
+            "Cookies and similar tracking technologies"
+          ]
+        },
+        "howWeUse": {
+          "title": "3. How We Use Your Information",
+          "intro": "We use the information we collect to:",
+          "bullets": [
+            "Provide, maintain, and improve our Service",
+            "Process your transactions and manage your subscriptions",
+            "Send you technical notices, updates, and support messages",
+            "Respond to your comments and questions",
+            "Track your goal progress and provide accountability features",
+            "Analyze usage patterns to improve user experience",
+            "Detect, prevent, and address technical issues and fraudulent activity",
+            "Send you marketing communications (with your consent)"
+          ]
+        },
+        "sharing": {
+          "title": "4. Information Sharing and Disclosure",
+          "intro": "We do not sell, trade, or rent your personal information to third parties. We may share your information in the following circumstances:",
+          "bullets": [
+            {
+              "label": "Service Providers",
+              "description": "We may share your information with third-party service providers who perform services on our behalf (payment processing, data analysis, email delivery, hosting services)"
+            },
+            {
+              "label": "Legal Requirements",
+              "description": "We may disclose your information if required to do so by law or in response to valid requests by public authorities"
+            },
+            {
+              "label": "Business Transfers",
+              "description": "We may share or transfer your information in connection with, or during negotiations of, any merger, sale of company assets, financing, or acquisition of all or a portion of our business"
+            },
+            {
+              "label": "With Your Consent",
+              "description": "We may share your information with your consent or at your direction"
+            }
+          ]
+        },
+        "dataSecurity": {
+          "title": "5. Data Security",
+          "intro": "We implement appropriate technical and organizational security measures to protect your personal information against unauthorized or unlawful processing, accidental loss, destruction, or damage. These measures include:",
+          "bullets": [
+            "Encryption of data in transit and at rest",
+            "Regular security assessments and audits",
+            "Access controls and authentication mechanisms",
+            "Regular backups of your data"
+          ],
+          "outro": "However, no method of transmission over the Internet or electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your personal information, we cannot guarantee its absolute security."
+        },
+        "dataRetention": {
+          "title": "6. Data Retention",
+          "paragraphs": [
+            "We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. When we no longer need your information, we will securely delete or anonymize it.",
+            "If you delete your account, we will delete your personal information within 30 days, except for information we are required to retain for legal, accounting, or security purposes."
+          ]
+        },
+        "rights": {
+          "title": "7. Your Rights and Choices",
+          "intro": "Depending on your location, you may have certain rights regarding your personal information:",
+          "bullets": [
+            {
+              "label": "Access",
+              "description": "You can request access to the personal information we hold about you"
+            },
+            {
+              "label": "Correction",
+              "description": "You can request that we correct inaccurate or incomplete information"
+            },
+            {
+              "label": "Deletion",
+              "description": "You can request deletion of your personal information"
+            },
+            {
+              "label": "Portability",
+              "description": "You can request a copy of your data in a machine-readable format"
+            },
+            {
+              "label": "Objection",
+              "description": "You can object to our processing of your personal information"
+            },
+            {
+              "label": "Withdrawal of Consent",
+              "description": "You can withdraw your consent for marketing communications at any time"
+            }
+          ],
+          "outro": "To exercise these rights, please contact us at privacy@bossy.app."
+        },
+        "cookies": {
+          "title": "8. Cookies and Tracking Technologies",
+          "paragraphs": [
+            "We use cookies and similar tracking technologies to track activity on our Service and store certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our Service.",
+            "Types of cookies we use:"
+          ],
+          "bullets": [
+            {
+              "label": "Essential Cookies",
+              "description": "Required for the operation of our Service"
+            },
+            {
+              "label": "Analytics Cookies",
+              "description": "Help us understand how visitors use our Service"
+            },
+            {
+              "label": "Preference Cookies",
+              "description": "Remember your preferences and settings"
+            }
+          ]
+        },
+        "thirdParty": {
+          "title": "9. Third-Party Services",
+          "paragraphs": [
+            "Our Service may contain links to third-party websites or services that are not owned or controlled by Bossy. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party websites or services."
+          ]
+        },
+        "children": {
+          "title": "10. Children's Privacy",
+          "paragraphs": [
+            "Our Service is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you become aware that a child has provided us with personal information, please contact us. If we discover that a child under 13 has provided us with personal information, we will delete such information from our servers immediately."
+          ]
+        },
+        "internationalTransfers": {
+          "title": "11. International Data Transfers",
+          "paragraphs": [
+            "Your information may be transferred to and maintained on computers located outside of your state, province, country, or other governmental jurisdiction where the data protection laws may differ from those of your jurisdiction. We will take all necessary measures to ensure that your data is treated securely and in accordance with this Privacy Policy."
+          ]
+        },
+        "changes": {
+          "title": "12. Changes to This Privacy Policy",
+          "paragraphs": [
+            "We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the \"Last updated\" date. We will also notify you via email or through a prominent notice on our Service prior to the change becoming effective."
+          ]
+        },
+        "contact": {
+          "title": "13. Contact Us",
+          "paragraphs": [
+            "If you have any questions about this Privacy Policy, please contact us:"
+          ],
+          "email": "privacy@bossy.app",
+          "addressPlaceholder": "[Your Company Address]"
+        }
+      }
+    }
+  },
+  "footer": {
+    "product": "Product",
+    "legal": "Legal",
+    "company": "Company",
+    "tagline": "Execution-First Accountability",
+    "copyright": "© {year} {appName}. All rights reserved."
   }
 }
 

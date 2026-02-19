@@ -6,6 +6,8 @@ import { checkoutAction } from '@/lib/payments/actions';
 import { SubmitButton } from './submit-button';
 import { Button } from '@/components/ui/button';
 import type { SubscriptionData } from '@/lib/subscriptions/types';
+import { useTranslation } from '@/contexts/translation-context';
+import { formatTemplate } from '@/lib/i18n/format';
 
 type BillingInterval = 'month' | 'year';
 
@@ -26,6 +28,8 @@ export function PricingCards({
   currentSubscription,
   isLoggedIn,
 }: PricingCardsProps) {
+  const { t } = useTranslation();
+
   // Set initial interval based on current subscription or default to monthly
   const defaultInterval: BillingInterval =
     currentSubscription?.billing_interval === 'year' ? 'year' : 'month';
@@ -61,7 +65,7 @@ export function PricingCards({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
           >
-            Monthly
+            {t.pricing.interval.monthly}
           </button>
           <button
             onClick={() => setInterval('year')}
@@ -70,10 +74,10 @@ export function PricingCards({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
           >
-            Yearly
+            {t.pricing.interval.yearly}
             {savingsPercent > 0 && (
               <span className="absolute -top-3 -right-3 bg-emerald-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
-                Save {savingsPercent}%
+                {formatTemplate(t.pricing.savePercent, { percent: savingsPercent })}
               </span>
             )}
           </button>
@@ -101,6 +105,7 @@ export function PricingCards({
 }
 
 function FreePlanCard({ isCurrentPlan, isLoggedIn }: { isCurrentPlan: boolean; isLoggedIn: boolean }) {
+  const { t } = useTranslation();
   return (
     <div className={`relative pt-8 border-2 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl ${isCurrentPlan
         ? 'border-primary bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 shadow-lg'
@@ -110,26 +115,21 @@ function FreePlanCard({ isCurrentPlan, isLoggedIn }: { isCurrentPlan: boolean; i
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <span className="px-4 py-1 bg-primary text-white text-sm font-semibold rounded-full shadow-lg flex items-center gap-1">
             <Crown className="h-3 w-3" />
-            Current Plan
+            {t.common.currentPlan}
           </span>
         </div>
       )}
-      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Free</h2>
+      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{t.common.free}</h2>
       <div className="mb-6">
         <p className="text-5xl font-bold text-slate-900 dark:text-white mb-1">
-          Free
+          {t.common.free}
         </p>
         <p className="text-lg text-slate-600 dark:text-slate-400">
-          forever
+          {t.pricing.forever}
         </p>
       </div>
       <ul className="space-y-4 mb-8">
-        {[
-          '1 active goal',
-          'Default boss only',
-          '7 days of history',
-          'Daily check-ins',
-        ].map((feature, index) => (
+        {t.pricing.features.free.map((feature, index) => (
           <li key={index} className="flex items-start gap-3">
             <div className="h-6 w-6 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
               <Check className="h-4 w-4 text-primary" />
@@ -140,15 +140,15 @@ function FreePlanCard({ isCurrentPlan, isLoggedIn }: { isCurrentPlan: boolean; i
       </ul>
       {isCurrentPlan ? (
         <Button className="w-full" variant="outline" size="lg" disabled>
-          Current Plan
+          {t.pricing.buttons.currentPlan}
         </Button>
       ) : isLoggedIn ? (
         <Button asChild className="w-full" variant="outline" size="lg">
-          <a href="/app/dashboard">Go to Dashboard</a>
+          <a href="/app/dashboard">{t.pricing.buttons.goToDashboard}</a>
         </Button>
       ) : (
         <Button asChild className="w-full" variant="outline" size="lg">
-          <a href="/sign-up">Get Started</a>
+          <a href="/sign-up">{t.pricing.buttons.getStarted}</a>
         </Button>
       )}
     </div>
@@ -172,20 +172,23 @@ function ProPlanCard({
   currentBillingInterval: BillingInterval | null | undefined;
   isLoggedIn: boolean;
 }) {
+  const { t } = useTranslation();
+  const intervalLabel = interval === 'month' ? t.pricing.interval.month : t.pricing.interval.year;
+
   // Determine button text and action
-  let buttonText = 'Get Started';
+  let buttonText = t.pricing.buttons.getStarted;
   let buttonAction: 'checkout' | 'dashboard' | 'disabled' = 'checkout';
 
   if (isCurrentPlan) {
-    buttonText = 'Current Plan';
+    buttonText = t.pricing.buttons.currentPlan;
     buttonAction = 'disabled';
   } else if (isOnPlusPlan) {
     // User is on Plus but different billing interval
-    buttonText = interval === 'month' ? 'Switch to Monthly' : 'Switch to Yearly';
+    buttonText = interval === 'month' ? t.pricing.buttons.switchToMonthly : t.pricing.buttons.switchToYearly;
     buttonAction = 'checkout';
   } else if (isLoggedIn) {
     // User is on Free plan
-    buttonText = 'Upgrade to Plus';
+    buttonText = t.pricing.buttons.upgradeToPlus;
     buttonAction = 'checkout';
   }
 
@@ -198,35 +201,30 @@ function ProPlanCard({
         {isCurrentPlan ? (
           <span className="px-4 py-1 bg-primary text-white text-sm font-semibold rounded-full shadow-lg flex items-center gap-1">
             <Crown className="h-3 w-3" />
-            Current Plan
+            {t.common.currentPlan}
           </span>
         ) : (
           <span className="px-4 py-1 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold rounded-full shadow-lg">
-            Popular
+            {t.common.popular}
           </span>
         )}
       </div>
-      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Plus</h2>
+      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{t.common.plus}</h2>
       <div className="mb-6">
         <p className="text-5xl font-bold text-slate-900 dark:text-white mb-1">
           ${amount / 100}
         </p>
         <p className="text-lg text-slate-600 dark:text-slate-400">
-          per {interval}
+          {formatTemplate(t.pricing.perInterval, { interval: intervalLabel })}
           {interval === 'year' && (
             <span className="text-sm block text-emerald-600 dark:text-emerald-400 font-semibold mt-1">
-              ${((amount / 100) / 12).toFixed(2)}/month
+              {formatTemplate(t.pricing.monthlyEquivalent, { amount: `$${((amount / 100) / 12).toFixed(2)}` })}
             </span>
           )}
         </p>
       </div>
       <ul className="space-y-4 mb-8">
-        {[
-          'Unlimited active goals',
-          'All boss personalities',
-          'Unlimited history',
-          'Priority support',
-        ].map((feature, index) => (
+        {t.pricing.features.plus.map((feature, index) => (
           <li key={index} className="flex items-start gap-3">
             <div className="h-6 w-6 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
               <Check className="h-4 w-4 text-primary" />

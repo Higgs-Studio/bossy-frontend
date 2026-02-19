@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useTranslation } from '@/contexts/translation-context';
 
 interface MobileMenuProps {
   links: Array<{
@@ -15,6 +15,7 @@ interface MobileMenuProps {
 
 export function MobileMenu({ links, actions }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -26,7 +27,7 @@ export function MobileMenu({ links, actions }: MobileMenuProps) {
         onClick={toggleMenu}
         className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 transition-colors min-h-[44px] min-w-[44px]"
         aria-expanded={isOpen}
-        aria-label="Toggle menu"
+        aria-label={t.a11y.toggleMenu}
       >
         {isOpen ? (
           <X className="h-6 w-6" aria-hidden="true" />

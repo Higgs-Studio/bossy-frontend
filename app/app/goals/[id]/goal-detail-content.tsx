@@ -46,11 +46,11 @@ export function GoalDetailContent({ goal: initialGoal, tasks: initialTasks }: Go
                     <Button asChild variant="outline" size="sm" className="gap-2">
                         <Link href="/app/goals">
                             <ArrowLeft className="h-4 w-4" />
-                            {t.nav?.back || 'Back'}
+                            {t.nav.back}
                         </Link>
                     </Button>
                     <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
-                        {t.editGoal?.title || 'Edit Goal'}: {goal.title}
+                        {t.editGoal.title}: {goal.title}
                     </h1>
                 </div>
 

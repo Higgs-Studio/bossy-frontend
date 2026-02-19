@@ -3,10 +3,12 @@
 import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useWhatsAppContact } from '@/lib/hooks/use-whatsapp-contact';
+import { useTranslation } from '@/contexts/translation-context';
 
 export function WhatsAppNavIcon() {
   const { hasPhone, loading, openWhatsApp } = useWhatsAppContact();
   const [isHovered, setIsHovered] = useState(false);
+  const { t } = useTranslation();
 
   if (loading) return null;
 
@@ -21,10 +23,10 @@ export function WhatsAppNavIcon() {
             ? 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:text-green-300 dark:hover:bg-green-950/30'
             : 'text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:text-orange-400 dark:hover:text-orange-300 dark:hover:bg-orange-950/30'
         }`}
-        aria-label="WhatsApp Contact"
+        aria-label={t.whatsapp.nav.ariaLabel}
       >
         <MessageCircle className="h-5 w-5" />
-        <span className="text-sm font-medium">Text Boss</span>
+        <span className="text-sm font-medium">{t.whatsapp.nav.button}</span>
       </button>
 
       {isHovered && (
@@ -36,8 +38,8 @@ export function WhatsAppNavIcon() {
                   <MessageCircle className="h-5 w-5 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-green-900 dark:text-green-100 mb-1">Message your boss!</p>
-                  <p className="text-xs text-green-700 dark:text-green-300">Your boss is just a click away</p>
+                  <p className="text-sm font-bold text-green-900 dark:text-green-100 mb-1">{t.whatsapp.nav.hasPhone.title}</p>
+                  <p className="text-xs text-green-700 dark:text-green-300">{t.whatsapp.nav.hasPhone.description}</p>
                 </div>
               </div>
             </div>
@@ -48,13 +50,13 @@ export function WhatsAppNavIcon() {
                   <MessageCircle className="h-5 w-5 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-orange-900 dark:text-orange-100 mb-1">Unlock boss access</p>
-                  <p className="text-xs text-orange-700 dark:text-orange-300 mb-3">Add your phone to enable WhatsApp support</p>
+                  <p className="text-sm font-bold text-orange-900 dark:text-orange-100 mb-1">{t.whatsapp.nav.noPhone.title}</p>
+                  <p className="text-xs text-orange-700 dark:text-orange-300 mb-3">{t.whatsapp.nav.noPhone.description}</p>
                   <button
                     onClick={openWhatsApp}
                     className="w-full px-3 py-1.5 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-md transition-colors"
                   >
-                    Add Phone
+                    {t.whatsapp.nav.noPhone.cta}
                   </button>
                 </div>
               </div>

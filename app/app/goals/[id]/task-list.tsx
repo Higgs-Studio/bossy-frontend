@@ -12,6 +12,7 @@ import type { DailyTask } from '@/lib/supabase/queries';
 import { useTranslation } from '@/contexts/translation-context';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { formatPluralTemplate, formatTemplate } from '@/lib/i18n/format';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,7 +29,7 @@ type TaskListProps = {
 };
 
 export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTasksChange }: TaskListProps) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [createState, createFormAction, isCreatePending] = useActionState(createTaskAction, null);
   const [updateState, updateFormAction, isUpdatePending] = useActionState(updateTaskAction, null);
   const [deleteState, deleteFormAction, isDeletePending] = useActionState(deleteTaskAction, null);
@@ -71,7 +72,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
   useEffect(() => {
     if (!isCreatePending && createState === null && wasCreating) {
       // Task was successfully created - hide form, show notification and refresh
-      showNotification('Task created successfully.');
+      showNotification(t.notifications.tasks.created);
       setShowAddForm(false);
       setWasCreating(false);
       onTasksChange?.();
@@ -91,7 +92,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
   useEffect(() => {
     if (!isUpdatePending && updateState === null && wasUpdating) {
       // Task was successfully updated - close edit form and refresh
-      showNotification('Task updated successfully.');
+      showNotification(t.notifications.tasks.updated);
       setEditingTaskId(null);
       setEditText('');
       setShowEditCalendar(false);
@@ -113,7 +114,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
   useEffect(() => {
     if (!isDeletePending && deleteState === null && wasDeleting) {
       // Task was successfully deleted - show notification and refresh the list
-      showNotification('Task deleted successfully.');
+      showNotification(t.notifications.tasks.deleted);
       setWasDeleting(false);
       onTasksChange?.();
     }
@@ -168,7 +169,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
       await bulkDeleteTasksAction(goalId, taskIdsArray);
       
       // Show success message
-      showNotification(`${count} task${count > 1 ? 's' : ''} deleted successfully.`);
+      showNotification(formatPluralTemplate(locale, count, t.notifications.tasks.bulkDeleted));
       
       // Refresh data
       await onTasksChange?.();
@@ -189,12 +190,8 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
       setUpdatingTaskId(null);
       
       // Show success message
-      const statusLabels = {
-        todo: 'To Do',
-        in_progress: 'In Progress',
-        done: 'Done'
-      };
-      showNotification(`Task status updated to ${statusLabels[newStatus]}.`);
+      const statusLabel = t.tasks.statusOptions[newStatus];
+      showNotification(formatTemplate(t.notifications.tasks.statusUpdated, { status: statusLabel }));
       
       // Refresh data
       await onTasksChange?.();
@@ -220,12 +217,9 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
   };
 
   const getTaskStatusLabel = (status: string) => {
-    const labels: Record<string, string> = {
-      todo: 'To Do',
-      in_progress: 'In Progress',
-      done: 'Done',
-    };
-    return labels[status] || labels.todo;
+    const options = t.tasks.statusOptions;
+    const key = status as keyof typeof options;
+    return options[key] ?? options.todo;
   };
 
   const calculateProgress = () => {
@@ -251,11 +245,11 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                   checked={sortedTasks.length > 0 && selectedTasks.size === sortedTasks.length}
                   onChange={handleToggleAll}
                   className="h-4 w-4 rounded border-border"
-                  title={t.tasks?.selectAll || 'Select all tasks'}
+                  title={t.tasks.selectAll}
                 />
               )}
               <ListTodo className="h-5 w-5 text-primary" />
-              {t.tasks?.title || 'Tasks'} ({optimisticTasks.length})
+              {t.tasks.title} ({optimisticTasks.length})
             </CardTitle>
             {optimisticTasks.length > 0 && (
               <div className="flex items-center gap-2 px-3 py-1 bg-muted rounded-full text-sm">
@@ -282,12 +276,12 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                 {isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t.tasks?.deleting || 'Deleting...'}
+                    {t.tasks.deleting}
                   </>
                 ) : (
                   <>
                     <Trash2 className="mr-2 h-4 w-4" />
-                    {t.tasks?.deleteSelected?.replace('{count}', selectedTasks.size.toString()) || `Delete ${selectedTasks.size} Selected`}
+                    {formatTemplate(t.tasks.deleteSelected, { count: selectedTasks.size })}
                   </>
                 )}
               </Button>
@@ -308,12 +302,12 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
               {showAddForm ? (
                 <>
                   <X className="mr-2 h-4 w-4" />
-                  {t.tasks?.cancel || 'Cancel'}
+                  {t.tasks.cancel}
                 </>
               ) : (
                 <>
                   <Plus className="mr-2 h-4 w-4" />
-                  {t.tasks?.addTask || 'Add Task'}
+                  {t.tasks.addTask}
                 </>
               )}
             </Button>
@@ -328,7 +322,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
             <input type="hidden" name="taskDate" value={addTaskDate.toISOString().split('T')[0]} />
             
             <div className="space-y-2">
-              <Label htmlFor="task-date-btn">{t.tasks?.taskDate || 'Task Date'}</Label>
+              <Label htmlFor="task-date-btn">{t.tasks.taskDate}</Label>
               <Button
                 id="task-date-btn"
                 type="button"
@@ -342,7 +336,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                 }}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {addTaskDate ? format(addTaskDate, 'PPP') : <span>{t.tasks?.pickDate || 'Pick a date'}</span>}
+                {addTaskDate ? format(addTaskDate, 'PPP') : <span>{t.tasks.pickDate}</span>}
               </Button>
               {showAddTaskCalendar && (
                 <>
@@ -377,13 +371,13 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="taskText">{t.tasks?.taskDescription || 'Task Description'}</Label>
+              <Label htmlFor="taskText">{t.tasks.taskDescription}</Label>
               <Input
                 id="taskText"
                 name="taskText"
                 type="text"
                 required
-                placeholder={t.tasks?.taskPlaceholder || 'What do you need to do?'}
+                placeholder={t.tasks.taskPlaceholder}
                 maxLength={500}
               />
             </div>
@@ -398,12 +392,12 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
               {isCreatePending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t.tasks?.addingTask || 'Adding Task...'}
+                  {t.tasks.addingTask}
                 </>
               ) : (
                 <>
                   <Plus className="mr-2 h-4 w-4" />
-                  {t.tasks?.addTask || 'Add Task'}
+                  {t.tasks.addTask}
                 </>
               )}
             </Button>
@@ -426,7 +420,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
         {sortedTasks.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <ListTodo className="h-12 w-12 mx-auto mb-3 text-muted-foreground/50" />
-            <p>{t.tasks?.noTasks || 'No tasks yet. Add your first task!'}</p>
+            <p>{t.tasks.noTasks}</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -453,7 +447,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                       
                       <div className="space-y-3">
                         <div className="space-y-2">
-                          <Label htmlFor={`edit-taskText-${task.id}`}>{t.tasks?.taskDescription || 'Task Description'}</Label>
+                          <Label htmlFor={`edit-taskText-${task.id}`}>{t.tasks.taskDescription}</Label>
                           <Input
                             id={`edit-taskText-${task.id}`}
                             name="taskText"
@@ -462,13 +456,13 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                             onChange={(e) => setEditText(e.target.value)}
                             required
                             maxLength={500}
-                            placeholder={t.tasks?.taskPlaceholder || 'What do you need to do?'}
+                            placeholder={t.tasks.taskPlaceholder}
                             autoFocus
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor={`edit-task-date-btn-${task.id}`}>{t.tasks?.taskDate || 'Task Date'}</Label>
+                          <Label htmlFor={`edit-task-date-btn-${task.id}`}>{t.tasks.taskDate}</Label>
                           <Button
                             id={`edit-task-date-btn-${task.id}`}
                             type="button"
@@ -480,7 +474,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                             onClick={() => setShowEditCalendar(!showEditCalendar)}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {editDate ? format(editDate, 'PPP') : <span>{t.tasks?.pickDate || 'Pick a date'}</span>}
+                            {editDate ? format(editDate, 'PPP') : <span>{t.tasks.pickDate}</span>}
                           </Button>
                           {showEditCalendar && (
                             <>
@@ -515,7 +509,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor={`edit-status-${task.id}`}>{t.tasks?.statusLabel || 'Status'}</Label>
+                          <Label htmlFor={`edit-status-${task.id}`}>{t.tasks.statusLabel}</Label>
                           <div className="flex gap-2">
                             <button
                               type="button"
@@ -528,7 +522,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                               )}
                             >
                               <Circle className="h-3.5 w-3.5 mx-auto mb-1" />
-                              To Do
+                              {t.tasks.statusOptions.todo}
                             </button>
                             <button
                               type="button"
@@ -541,7 +535,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                               )}
                             >
                               <Clock className="h-3.5 w-3.5 mx-auto mb-1" />
-                              In Progress
+                              {t.tasks.statusOptions.in_progress}
                             </button>
                             <button
                               type="button"
@@ -554,7 +548,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                               )}
                             >
                               <CheckCircle2 className="h-3.5 w-3.5 mx-auto mb-1" />
-                              Done
+                              {t.tasks.statusOptions.done}
                             </button>
                           </div>
                         </div>
@@ -564,12 +558,12 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                             {isUpdatePending ? (
                               <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                {t.tasks?.saving || 'Saving...'}
+                                {t.tasks.saving}
                               </>
                             ) : (
                               <>
                                 <Check className="mr-2 h-4 w-4" />
-                                {t.tasks?.save || 'Save'}
+                                {t.tasks.save}
                               </>
                             )}
                           </Button>
@@ -580,7 +574,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                             className="flex-1"
                           >
                             <X className="mr-2 h-4 w-4" />
-                            {t.tasks?.cancel || 'Cancel'}
+                            {t.tasks.cancel}
                           </Button>
                         </div>
                       </div>
@@ -591,11 +585,7 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <div className="text-xs text-muted-foreground">
-                            {new Date(task.task_date).toLocaleDateString('en-US', {
-                              weekday: 'short',
-                              month: 'short',
-                              day: 'numeric',
-                            })}
+                            {new Intl.DateTimeFormat(locale, { weekday: 'short', month: 'short', day: 'numeric' }).format(new Date(task.task_date))}
                           </div>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -614,21 +604,21 @@ export function TaskList({ goalId, tasks: initialTasks, startDate, endDate, onTa
                                 className="flex items-center gap-2"
                               >
                                 <Circle className="h-3.5 w-3.5" />
-                                To Do
+                                {t.tasks.statusOptions.todo}
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleTaskStatusUpdate(task.id, 'in_progress')}
                                 className="flex items-center gap-2"
                               >
                                 <Clock className="h-3.5 w-3.5" />
-                                In Progress
+                                {t.tasks.statusOptions.in_progress}
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleTaskStatusUpdate(task.id, 'done')}
                                 className="flex items-center gap-2"
                               >
                                 <CheckCircle2 className="h-3.5 w-3.5" />
-                                Done
+                                {t.tasks.statusOptions.done}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>

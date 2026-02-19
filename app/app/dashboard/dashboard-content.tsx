@@ -97,7 +97,7 @@ export function DashboardContent({
     kpis,
     dashboardTasks,
 }: DashboardContentProps) {
-    const { t } = useTranslation();
+    const { t, locale } = useTranslation();
     const { toast } = useToast();
     const router = useRouter();
     const [actionState, formAction, isPending] = useActionState(
@@ -115,17 +115,17 @@ export function DashboardContent({
         }
     }, [isPending, actionState, router, toast]);
 
-    const today = new Date().toLocaleDateString('en-US', {
+    const today = new Intl.DateTimeFormat(locale, {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-    });
+    }).format(new Date());
 
     // Calculate boss mood
     const boss = getBossPersonality(bossType);
     const bossMood = calculateBossMood(kpis);
-    const moodMessage = getBossMoodMessage(bossMood, boss.name, bossType, t.boss?.moods as BossMoods);
+    const moodMessage = getBossMoodMessage(bossMood, boss.name, bossType, t.boss.moods as BossMoods);
     const moodColor = getBossMoodColor(bossMood);
     const MoodIcon = getBossMoodEmoji(bossMood);
 
@@ -136,7 +136,7 @@ export function DashboardContent({
                     <>
                         <div>
                             <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
-                                {t.dashboard?.title || 'Dashboard'}
+                                {t.dashboard.title}
                             </h1>
                             <p className="text-muted-foreground text-base">{today}</p>
                         </div>
@@ -147,13 +147,13 @@ export function DashboardContent({
                                         <Target className="h-10 w-10 text-indigo-600 dark:text-indigo-400" />
                                     </div>
                                     <h3 className="text-xl font-semibold text-foreground mb-3">
-                                        {t.dashboard?.noGoal?.title || 'No active goal'}
+                                        {t.dashboard.noGoal.title}
                                     </h3>
                                     <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                                        {t.dashboard?.noGoal?.description || 'Create a goal to get started with daily accountability.'}
+                                        {t.dashboard.noGoal.description}
                                     </p>
                                     <Button size="lg" asChild>
-                                        <a href="/app/goal">{t.dashboard?.noGoal?.cta || 'Create Goal'}</a>
+                                        <a href="/app/goal">{t.dashboard.noGoal.cta}</a>
                                     </Button>
                                 </div>
                             </CardContent>
@@ -165,7 +165,7 @@ export function DashboardContent({
                         <div className="text-center space-y-4">
                             <div className="flex items-center justify-center gap-3 flex-wrap">
                                 <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
-                                    Performance Report to
+                                    {t.dashboard.performanceReport}
                                 </h1>
                                 <div className="relative w-10 h-10 lg:w-12 lg:h-12 rounded-full overflow-hidden border-2 border-border">
                                     <Image
@@ -192,7 +192,7 @@ export function DashboardContent({
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-2">
                                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                                                Boss Feedback
+                                                {t.dashboard.bossFeedback}
                                             </span>
                                         </div>
                                         <p className="text-base lg:text-lg font-medium text-foreground leading-relaxed">
@@ -225,10 +225,10 @@ export function DashboardContent({
                                                 {kpis.overdueCount}
                                             </p>
                                             <p className="text-sm font-semibold text-foreground">
-                                                Overdue Tasks
+                                                {t.dashboard.overdueTasks}
                                             </p>
                                             <p className="text-xs text-muted-foreground mt-1">
-                                                Tasks from previous days that are not yet completed
+                                                {t.dashboard.overdueTasksDesc}
                                             </p>
                                         </div>
                                     </div>
@@ -255,10 +255,10 @@ export function DashboardContent({
                                                 {kpis.todayPendingCount}
                                             </p>
                                             <p className="text-sm font-semibold text-foreground">
-                                                Today's Tasks
+                                                {t.dashboard.todaysTasks}
                                             </p>
                                             <p className="text-xs text-muted-foreground mt-1">
-                                                Tasks scheduled for today that are pending completion
+                                                {t.dashboard.todaysTasksDesc}
                                             </p>
                                         </div>
                                     </div>
@@ -270,9 +270,9 @@ export function DashboardContent({
                         <Card className="border border-border hover:border-border/80 hover:shadow-lg transition-all duration-200">
                             <CardHeader>
                                 <div className="flex items-center justify-between">
-                                    <CardTitle>Outstanding Tasks for Today</CardTitle>
+                                    <CardTitle>{t.dashboard.outstandingTasks}</CardTitle>
                                     <span className="text-xs font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
-                                        {dashboardTasks.length} outstanding
+                                        {dashboardTasks.length} {t.dashboard.outstanding}
                                     </span>
                                 </div>
                             </CardHeader>
@@ -280,8 +280,8 @@ export function DashboardContent({
                                 {dashboardTasks.length === 0 ? (
                                     <div className="text-center py-8 text-muted-foreground">
                                         <CheckCircle2 className="h-12 w-12 mx-auto mb-3 text-green-500" />
-                                        <p className="font-medium">All caught up!</p>
-                                        <p className="text-sm">No overdue or pending tasks</p>
+                                        <p className="font-medium">{t.common.allCaughtUp}</p>
+                                        <p className="text-sm">{t.dashboard.noOutstandingTasks}</p>
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
@@ -315,20 +315,20 @@ export function DashboardContent({
                                                                     isPending
                                                                         ? 'bg-blue-500 text-white'
                                                                         : 'bg-red-500 text-white'
-                                                                }`}>
-                                                                    {isPending ? 'TODAY' : new Date(task.task_date).toLocaleDateString('en-US', { 
+                                                                } uppercase`}>
+                                                                    {isPending ? t.dashboard.badges.today : new Intl.DateTimeFormat(locale, { 
                                                                         month: 'short', 
                                                                         day: 'numeric',
                                                                         year: 'numeric'
-                                                                    })}
+                                                                    }).format(new Date(task.task_date))}
                                                                 </span>
                                                                 {/* Status badge */}
                                                                 <span className={`text-xs font-medium px-2 py-0.5 rounded ${
                                                                     isOverdue
                                                                         ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
                                                                         : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
-                                                                }`}>
-                                                                    {isOverdue ? 'OVERDUE' : 'PENDING'}
+                                                                } uppercase`}>
+                                                                    {isOverdue ? t.dashboard.badges.overdue : t.dashboard.badges.pending}
                                                                 </span>
                                                             </div>
                                                             <p className="text-base text-foreground font-medium leading-relaxed">
@@ -344,7 +344,7 @@ export function DashboardContent({
                                                                 disabled={pendingTaskId === task.id}
                                                                 className="bg-green-600 hover:bg-green-700"
                                                             >
-                                                                {pendingTaskId === task.id ? '...' : 'Done'}
+                                                                {pendingTaskId === task.id ? t.dashboard.processing : t.common.done}
                                                             </Button>
                                                         </form>
                                                     </div>

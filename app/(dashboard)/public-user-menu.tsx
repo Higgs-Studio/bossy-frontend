@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { User, LayoutDashboard, Target, UserCircle, LogOut } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/contexts/translation-context';
 
 type User = {
   id: string;
@@ -23,6 +24,7 @@ type User = {
 export function PublicUserMenu({ user }: { user: User }) {
   const router = useRouter();
   const supabase = createClient();
+  const { t } = useTranslation();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -54,7 +56,7 @@ export function PublicUserMenu({ user }: { user: User }) {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Account</p>
+            <p className="text-sm font-medium leading-none">{t.nav.account}</p>
             <p className="text-xs leading-none text-muted-foreground truncate">
               {user.email}
             </p>
@@ -64,25 +66,25 @@ export function PublicUserMenu({ user }: { user: User }) {
         <DropdownMenuItem asChild>
           <Link href="/app/dashboard" className="cursor-pointer">
             <LayoutDashboard className="mr-2 h-4 w-4" />
-            Dashboard
+            {t.nav.dashboard}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/app/goals" className="cursor-pointer">
             <Target className="mr-2 h-4 w-4" />
-            Goals
+            {t.nav.goals}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/app/profile" className="cursor-pointer">
             <UserCircle className="mr-2 h-4 w-4" />
-            Profile
+            {t.nav.profile}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
           <LogOut className="mr-2 h-4 w-4" />
-          Sign Out
+          {t.nav.signOut}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

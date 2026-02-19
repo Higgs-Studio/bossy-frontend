@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle } from 'lucide-react';
+import { useTranslation } from '@/contexts/translation-context';
 
 export default function GlobalError({
   error,
@@ -11,6 +12,8 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const { t } = useTranslation();
+
   useEffect(() => {
     console.error('Unhandled error:', error);
   }, [error]);
@@ -21,11 +24,11 @@ export default function GlobalError({
         <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-destructive/10 mx-auto">
           <AlertTriangle className="h-8 w-8 text-destructive" />
         </div>
-        <h2 className="text-xl font-semibold text-foreground">Something went wrong</h2>
+        <h2 className="text-xl font-semibold text-foreground">{t.errors.global.title}</h2>
         <p className="text-muted-foreground">
-          An unexpected error occurred. Please try again.
+          {t.errors.global.description}
         </p>
-        <Button onClick={reset}>Try again</Button>
+        <Button onClick={reset}>{t.common.tryAgain}</Button>
       </div>
     </div>
   );

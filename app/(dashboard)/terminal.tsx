@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Copy, Check } from 'lucide-react';
+import { useTranslation } from '@/contexts/translation-context';
 
 export function Terminal() {
   const [terminalStep, setTerminalStep] = useState(0);
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation();
   const terminalSteps = [
     'git clone https://github.com/nextjs/saas-starter',
     'pnpm install',
@@ -43,7 +45,7 @@ export function Terminal() {
           <button
             onClick={copyToClipboard}
             className="text-gray-400 hover:text-white transition-colors"
-            aria-label="Copy to clipboard"
+            aria-label={t.a11y.copyToClipboard}
           >
             {copied ? (
               <Check className="h-5 w-5" />

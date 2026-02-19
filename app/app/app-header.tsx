@@ -19,9 +19,9 @@ export function AppHeader({ userMenu }: AppHeaderProps) {
   const pathname = usePathname();
 
   const navLinks = [
-    { href: '/app/dashboard', label: t.nav?.dashboard || 'Dashboard' },
-    { href: '/app/goals', label: t.nav?.goals || 'Goals' },
-    { href: '/app/boss', label: t.nav?.boss || 'Boss' },
+    { href: '/app/dashboard', label: t.nav.dashboard },
+    { href: '/app/goals', label: t.nav.goals },
+    { href: '/app/boss', label: t.nav.boss },
   ];
 
   const isActive = (href: string) => {
@@ -36,7 +36,7 @@ export function AppHeader({ userMenu }: AppHeaderProps) {
           <Link href="/app/dashboard" className="flex items-center group">
             <Image
               src="/logo.png"
-              alt="Bossy"
+              alt={t.common.appName}
               width={160}
               height={60}
               className="h-12 w-auto transition-opacity group-hover:opacity-80"

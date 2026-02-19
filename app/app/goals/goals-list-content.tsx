@@ -21,6 +21,7 @@ import { useActionState, useState, useOptimistic, useTransition } from 'react';
 import type { Goal } from '@/lib/supabase/queries';
 import { useTranslation } from '@/contexts/translation-context';
 import { useRouter } from 'next/navigation';
+import { formatPluralTemplate, formatTemplate } from '@/lib/i18n/format';
 
 type GoalsListContentProps = {
   goals: Goal[];
@@ -29,7 +30,7 @@ type GoalsListContentProps = {
 };
 
 export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, maxActiveGoals }: GoalsListContentProps) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { toast } = useToast();
   const router = useRouter();
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'abandoned'>('active');
@@ -46,6 +47,18 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
   const activeGoalsCount = optimisticGoals.filter((g) => g.status === 'active').length;
   const isAtLimit = !hasActiveSubscription && activeGoalsCount >= maxActiveGoals;
   const isNearLimit = !hasActiveSubscription && activeGoalsCount >= maxActiveGoals - 1;
+
+  const statusLabels = {
+    active: t.goals.filterActive,
+    completed: t.goals.filterCompleted,
+    abandoned: t.goals.filterAbandoned,
+  } as const;
+
+  const intensityLabels = {
+    low: t.goal.intensityLow,
+    medium: t.goal.intensityMedium,
+    high: t.goal.intensityHigh,
+  } as const;
 
   const handleCardClick = (goalId: string) => {
     router.push(`/app/goals/${goalId}`);
@@ -68,13 +81,13 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
       formData.append('goalId', goalId);
       await deleteFormAction(formData);
       setDeletingGoalId(null);
-      toast(`"${goalTitle}" has been successfully deleted.`);
+      toast(formatTemplate(t.notifications.goals.deleted, { title: goalTitle }));
     });
   };
 
   const handleStatusUpdate = async (goalId: string, newStatus: 'active' | 'completed' | 'abandoned') => {
     const goal = optimisticGoals.find(g => g.id === goalId);
-    const goalTitle = goal?.title || 'Goal';
+    const goalTitle = goal?.title || t.goals.untitled || t.common.appName;
     setUpdatingStatusGoalId(goalId);
     setShowStatusMenu(null);
 
@@ -84,18 +97,13 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
       ));
       await updateGoalStatusAction(goalId, newStatus);
       setUpdatingStatusGoalId(null);
-      const statusLabels = {
-        active: t.goals?.filterActive || 'Active',
-        completed: t.goals?.filterCompleted || 'Completed',
-        abandoned: t.goals?.filterAbandoned || 'Abandoned'
-      };
-      toast(`"${goalTitle}" status updated to ${statusLabels[newStatus]}.`);
+      toast(formatTemplate(t.notifications.goals.statusUpdated, { title: goalTitle, status: statusLabels[newStatus] }));
     });
   };
 
   const handleIntensityUpdate = async (goalId: string, newIntensity: 'low' | 'medium' | 'high') => {
     const goal = optimisticGoals.find(g => g.id === goalId);
-    const goalTitle = goal?.title || 'Goal';
+    const goalTitle = goal?.title || t.goals.untitled || t.common.appName;
     setUpdatingIntensityGoalId(goalId);
     setShowIntensityMenu(null);
 
@@ -105,7 +113,7 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
       ));
       await updateGoalIntensityAction(goalId, newIntensity);
       setUpdatingIntensityGoalId(null);
-      toast(`"${goalTitle}" intensity updated to ${newIntensity}.`);
+      toast(formatTemplate(t.notifications.goals.intensityUpdated, { title: goalTitle, intensity: intensityLabels[newIntensity] }));
     });
   };
 
@@ -173,10 +181,9 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
   };
 
   const formatDaysLeft = (daysLeft: number) => {
-    if (daysLeft < 0) return `${Math.abs(daysLeft)} days overdue`;
-    if (daysLeft === 0) return 'Due today';
-    if (daysLeft === 1) return '1 day left';
-    return `${daysLeft} days left`;
+    if (daysLeft < 0) return formatPluralTemplate(locale, Math.abs(daysLeft), t.time.daysOverdue);
+    if (daysLeft === 0) return t.time.dueToday;
+    return formatPluralTemplate(locale, daysLeft, t.time.daysLeft);
   };
 
   return (
@@ -184,19 +191,19 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">{t.goals?.title || 'Goals'}</h1>
-            <p className="text-muted-foreground text-lg">{t.goals?.manageAll || 'Manage all your goals'}</p>
+            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">{t.goals.title}</h1>
+            <p className="text-muted-foreground text-lg">{t.goals.manageAll}</p>
           </div>
           {isAtLimit ? (
             <Button size="lg" disabled>
               <Plus className="mr-2 h-4 w-4" />
-              {t.goals?.createGoal || 'Create Goal'}
+              {t.goals.createGoal}
             </Button>
           ) : (
             <Button asChild size="lg">
               <Link href="/app/goal">
                 <Plus className="mr-2 h-4 w-4" />
-                {t.goals?.createGoal || 'Create Goal'}
+                {t.goals.createGoal}
               </Link>
             </Button>
           )}
@@ -216,20 +223,20 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
                 <div className="flex-1">
                   <p className={`font-semibold ${isAtLimit ? 'text-red-900 dark:text-red-100' : isNearLimit ? 'text-yellow-900 dark:text-yellow-100' : 'text-blue-900 dark:text-blue-100'}`}>
                     {isAtLimit
-                      ? `Active Goal Limit Reached (${activeGoalsCount}/${maxActiveGoals})`
-                      : `Active Goals: ${activeGoalsCount}/${maxActiveGoals}`
+                      ? formatTemplate(t.goals.limits.activeLimitReached, { active: activeGoalsCount, max: maxActiveGoals })
+                      : formatTemplate(t.goals.limits.activeGoals, { active: activeGoalsCount, max: maxActiveGoals })
                     }
                   </p>
                   <p className={`text-sm mt-1 ${isAtLimit ? 'text-red-800 dark:text-red-200' : isNearLimit ? 'text-yellow-800 dark:text-yellow-200' : 'text-blue-800 dark:text-blue-200'}`}>
                     {isAtLimit
-                      ? 'You\'ve reached the maximum number of active goals on the Free plan. Complete or abandon a goal to create a new one, or upgrade to Plus for unlimited goals.'
-                      : `You're on the Free plan. Upgrade to Plus for unlimited active goals and more features.`
+                      ? t.goals.limits.limitReachedDesc
+                      : t.goals.limits.nearLimitDesc
                     }
                   </p>
                   <Button asChild variant={isAtLimit ? 'default' : 'outline'} size="sm" className="mt-3">
                     <Link href="/app/profile#subscription">
                       <Crown className="mr-2 h-4 w-4" />
-                      {isAtLimit ? 'Upgrade to Plus for Unlimited Goals' : 'Upgrade to Plus'}
+                      {isAtLimit ? t.goals.limits.upgradeUnlimited : t.common.upgradePlus}
                     </Link>
                   </Button>
                 </div>
@@ -241,10 +248,10 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
         <div className="flex flex-wrap gap-2 border-b border-border pb-4">
           {(['all', 'active', 'completed', 'abandoned'] as const).map((status) => {
             const labels = {
-              all: t.goals?.filterAll || 'All',
-              active: t.goals?.filterActive || 'Active',
-              completed: t.goals?.filterCompleted || 'Completed',
-              abandoned: t.goals?.filterAbandoned || 'Abandoned'
+              all: t.goals.filterAll,
+              active: t.goals.filterActive,
+              completed: t.goals.filterCompleted,
+              abandoned: t.goals.filterAbandoned,
             };
             return (
               <button
@@ -273,16 +280,16 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
               <div className="text-center py-12">
                 <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-foreground mb-2">
-                  {t.goals?.noGoalsFound || 'No goals found'}
+                  {t.goals.noGoalsFound}
                 </h3>
                 <p className="text-muted-foreground mb-6">
                   {filter === 'all'
-                    ? (t.goals?.noGoalsYet || "You haven't created any goals yet.")
-                    : (t.goals?.noFilteredGoals?.replace('{filter}', t.goals?.status?.[filter] || filter) || `You don't have any ${filter} goals.`)}
+                    ? t.goals.noGoalsYet
+                    : formatTemplate(t.goals.noFilteredGoals, { filter: t.goals.status[filter] })}
                 </p>
                 {filter === 'all' && (
                   <Button asChild>
-                    <Link href="/app/goal">{t.goals?.createFirstGoal || 'Create Your First Goal'}</Link>
+                    <Link href="/app/goal">{t.goals.createFirstGoal}</Link>
                   </Button>
                 )}
               </div>
@@ -307,7 +314,7 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
                         <button
                           onClick={(e) => { e.stopPropagation(); handleCardClick(goal.id); }}
                           className="p-1.5 rounded-md hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors"
-                          title={t.goals?.edit || 'Edit'}
+                          title={t.goals.edit}
                         >
                           <Pencil className="h-4 w-4" />
                         </button>
@@ -315,7 +322,7 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
                           onClick={(e) => handleDeleteClick(e, goal.id, goal.title)}
                           className="p-1.5 rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
                           disabled={deletingGoalId === goal.id || isPending}
-                          title={t.goals?.delete || 'Delete'}
+                          title={t.goals.delete}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -329,7 +336,7 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
                           disabled={updatingStatusGoalId === goal.id}
                         >
                           {getStatusIcon(goal.status)}
-                          <span>{updatingStatusGoalId === goal.id ? '...' : (t.goals?.status?.[goal.status as keyof typeof t.goals.status] || goal.status)}</span>
+                          <span>{updatingStatusGoalId === goal.id ? '...' : (t.goals.status[goal.status as keyof typeof t.goals.status] || goal.status)}</span>
                         </button>
                         {showStatusMenu === goal.id && (
                           <div className="absolute left-0 top-full mt-2 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 min-w-[140px]">
@@ -342,7 +349,7 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
                               >
                                 {getStatusIcon(s)}
                                 <span className={goal.status === s ? 'font-semibold' : ''}>
-                                  {s === 'active' ? (t.goals?.filterActive || 'Active') : s === 'completed' ? (t.goals?.filterCompleted || 'Completed') : (t.goals?.filterAbandoned || 'Abandoned')}
+                                  {statusLabels[s]}
                                 </span>
                               </button>
                             ))}
@@ -356,7 +363,11 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
                           disabled={updatingIntensityGoalId === goal.id}
                         >
                           {getIntensityIcon(goal.intensity)}
-                          <span className="capitalize">{updatingIntensityGoalId === goal.id ? '...' : goal.intensity}</span>
+                          <span className="capitalize">
+                            {updatingIntensityGoalId === goal.id
+                              ? '...'
+                              : (intensityLabels[goal.intensity as keyof typeof intensityLabels] ?? goal.intensity)}
+                          </span>
                         </button>
                         {showIntensityMenu === goal.id && (
                           <div className="absolute left-0 top-full mt-2 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 min-w-[120px]">
@@ -368,7 +379,9 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
                                 disabled={goal.intensity === i}
                               >
                                 {getIntensityIcon(i)}
-                                <span className={`capitalize ${goal.intensity === i ? 'font-semibold' : ''}`}>{i}</span>
+                                <span className={`capitalize ${goal.intensity === i ? 'font-semibold' : ''}`}>
+                                  {intensityLabels[i]}
+                                </span>
                               </button>
                             ))}
                           </div>
@@ -386,7 +399,7 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
                         {goal.status === 'active' && (
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs text-muted-foreground">
-                              <span>{t.goals?.progress || 'Progress'}</span>
+                              <span>{t.goals.progress}</span>
                               <span>{Math.round(progress)}%</span>
                             </div>
                             <div className="relative h-2 bg-muted rounded-full overflow-hidden">
@@ -415,19 +428,19 @@ export function GoalsListContent({ goals: initialGoals, hasActiveSubscription, m
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                {t.goals?.delete || 'Delete'} {t.goal?.title || 'Goal'}?
+                {t.goals.delete} {t.goal.title}?
               </AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete <strong>{deleteTarget?.goalTitle}</strong>? This action cannot be undone. All associated tasks and progress will be permanently deleted.
+                {formatTemplate(t.goals.deleteConfirm, { title: deleteTarget?.goalTitle ?? '' })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>{t.common?.cancel || 'Cancel'}</AlertDialogCancel>
+              <AlertDialogCancel>{t.common.cancel}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleConfirmDelete}
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
-                {t.goals?.delete || 'Delete'} {t.goal?.title || 'Goal'}
+                {t.goals.delete} {t.goal.title}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

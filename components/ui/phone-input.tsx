@@ -3,7 +3,9 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react';
-import { parsePhoneNumber, CountryCode, getCountries, getCountryCallingCode } from 'libphonenumber-js';
+import { parsePhoneNumber, CountryCode, getCountryCallingCode } from 'libphonenumber-js';
+import { useTranslation } from '@/contexts/translation-context';
+import { formatTemplate } from '@/lib/i18n/format';
 
 // Common countries with their flags
 const COUNTRY_OPTIONS = [
@@ -36,11 +38,12 @@ interface PhoneInputProps {
 export function PhoneInput({
   value,
   onChange,
-  label = 'Mobile Phone',
-  placeholder = '9542 7840',
+  label,
+  placeholder,
   error,
   className = '',
 }: PhoneInputProps) {
+  const { t } = useTranslation();
   const [countryCode, setCountryCode] = useState<CountryCode>('HK');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isValid, setIsValid] = useState(true);
@@ -106,12 +109,12 @@ export function PhoneInput({
     setIsValid(valid);
   };
 
-  const selectedCountry = COUNTRY_OPTIONS.find(c => c.code === countryCode) || COUNTRY_OPTIONS[0];
-  const callingCode = getCountryCallingCode(countryCode);
+  const effectiveLabel = label ?? t.profile.phoneNumber;
+  const effectivePlaceholder = placeholder ?? t.profile.phonePlaceholder;
 
   return (
     <div className={`space-y-2 ${className}`}>
-      {label && <Label>{label}</Label>}
+      {effectiveLabel ? <Label>{effectiveLabel}</Label> : null}
       <div className="flex gap-2">
         {/* Country Code Dropdown */}
         <div className="relative w-40">
@@ -150,7 +153,7 @@ export function PhoneInput({
         <div className="flex-1">
           <Input
             type="tel"
-            placeholder={placeholder}
+            placeholder={effectivePlaceholder}
             value={phoneNumber}
             onChange={(e) => handlePhoneChange(e.target.value)}
             className={`${!isValid && phoneNumber ? 'border-red-500' : ''}`}
@@ -160,7 +163,7 @@ export function PhoneInput({
       
       {!isValid && phoneNumber && (
         <p className="text-sm text-red-500">
-          Please enter a valid phone number for {selectedCountry.name}
+          {t.profile.phoneInvalid}
         </p>
       )}
       
@@ -169,7 +172,7 @@ export function PhoneInput({
       )}
       
       <p className="text-xs text-muted-foreground">
-        Enter phone number without country code (e.g., {placeholder})
+        {formatTemplate(t.profile.phoneInputHelp, { example: effectivePlaceholder })}
       </p>
     </div>
   );
